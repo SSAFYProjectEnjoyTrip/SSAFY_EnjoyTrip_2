@@ -136,5 +136,18 @@ public class BoardRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@ApiOperation(value="게시글 정보 조회", notes = "articleNo에 해당하는 정보 조회")
+	@GetMapping("/{articleNo}")
+	public ResponseEntity<?> searchBy(@PathVariable String articleNo){
+
+		BoardDto board = boardService.getArticle(Integer.parseInt(articleNo));
+
+		if (board != null) {
+			return new ResponseEntity(board, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 
 }
