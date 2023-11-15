@@ -4,38 +4,93 @@
 
 <mapper
 	namespace="com.ssafy.enjoytrip.member.model.dao.MemberDao">
-	<select id="idCheck" parameterType="String" resultType="MemberDto">
+
+	<resultMap type="memberDto" id="member">
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="user_password" property="userPwd" />
+		<result column="email_id" property="emailId" />
+		<result column="email_domain" property="emailDomain" />
+		<result column="join_date" property="joinDate" />
+		<result column="token" property="refreshToken" />
+	</resultMap>
+
+	<select id="idCheck" parameterType="String"
+		resultType="MemberDto">
 		select count(*)
 		from member
 		where userId=#{id}
 	</select>
-	
+
+
+
 	<insert id="joinMember" parameterType="MemberDto">
-		insert into member(userId, userName, userPwd, emailId, emailDomain, joinDate)
-		values(#{userId}, #{userName}, #{userPwd}, #{emailId}, #{emailDomain}, #{joinDate})
+		insert into member(userId,
+		userName, userPwd, emailId, emailDomain, joinDate)
+		values(#{userId},
+		#{userName}, #{userPwd}, #{emailId}, #{emailDomain}, #{joinDate})
 	</insert>
-	
-	<select id="getMemberById" parameterType="String" resultType="MemberDto">
-		select userId, userName, userPwd, emailId, emailDomain, joinDate
+
+	<select id="getMemberById" parameterType="String"
+		resultType="MemberDto">
+		select userId, userName, userPwd, emailId, emailDomain,
+		joinDate
 		from member
 		where userId=#{id}
 	</select>
-	
+
 	<update id="updatePwdById" parameterType="MemberDto">
 		update member set
 		userPwd = #{newPw2}
 		where userId = #{curId}
 	</update>
-	
+
 	<update id="updateEmailById" parameterType="MemberDto">
-		update member set 
+		update member set
 		emailDomain=#{newEmailDomain},
 		emailId = #{newEmailId}
-		where userId = #{userId}
+		where userId =
+		#{userId}
 	</update>
 
 	<update id="deleteUserById" parameterType="String">
 		delete from member
 		where userId = #{id}
+	</update>
+
+	<select id="login" parameterType="map" resultMap="member">
+		select user_id,
+		user_name, token
+		from members
+		where user_id = #{userId} and
+		user_password = #{userPwd}
+	</select>
+
+	<select id="userInfo" parameterType="string" resultMap="member">
+		select
+		user_name, user_id, email_id, email_domain, join_date
+		from members
+		where user_id = #{userId}
+	</select>
+
+	<update id="saveRefreshToken" parameterType="map">
+		update members
+		set
+		token = #{token}
+		where user_id = #{userId}
+	</update>
+
+	<select id="getRefreshToken" parameterType="string"
+		resultType="string">
+		select token
+		from members
+		where user_id = #{userId}
+	</select>
+
+	<update id="deleteRefreshToken" parameterType="map">
+		update members
+		set
+		token = #{token, jdbcType=VARCHAR}
+		where user_id = #{userId}
 	</update>
 </mapper>

@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip.util;
+package com.ssafy.enjoytrip.board.model.dto;
 
 import java.io.Serializable;
 

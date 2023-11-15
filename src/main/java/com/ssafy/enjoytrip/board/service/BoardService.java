@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ssafy.enjoytrip.board.model.dto.BoardDto;
-import com.ssafy.enjoytrip.util.PageBean;
+import com.ssafy.enjoytrip.board.model.dto.PageBean;
 import com.ssafy.enjoytrip.util.PageNavigation;
 
 public interface BoardService {

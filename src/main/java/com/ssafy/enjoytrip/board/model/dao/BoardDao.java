@@ -1,13 +1,10 @@
 package com.ssafy.enjoytrip.board.model.dao;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import org.apache.ibatis.annotations.Mapper;
-
 import com.ssafy.enjoytrip.board.model.dto.BoardDto;
-import com.ssafy.enjoytrip.util.PageBean;
+import com.ssafy.enjoytrip.board.model.dto.PageBean;
 
 @Mapper
 public interface BoardDao {
