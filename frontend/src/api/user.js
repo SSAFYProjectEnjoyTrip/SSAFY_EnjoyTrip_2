@@ -8,9 +8,9 @@ async function userConfirm(param, success, fail) {
   console.log('userConfirm ok')
 }
 
-async function findById(userid, success, fail) {
+async function findById(userId, success, fail) {
   local.defaults.headers['Authorization'] = sessionStorage.getItem('accessToken')
-  await local.get(`/user/info/${userid}`).then(success).catch(fail)
+  await local.get(`/user/info/${userId}`).then(success).catch(fail)
 }
 
 async function tokenRegeneration(user, success, fail) {
@@ -18,8 +18,12 @@ async function tokenRegeneration(user, success, fail) {
   await local.post(`/user/refresh`, user).then(success).catch(fail)
 }
 
+async function registUser(user, success, fail) {
+  local.post(`/user/register`, JSON.stringify(user)).then(success).catch(fail)
+}
+
 async function logout(userid, success, fail) {
   await local.get(`/user/logout/${userid}`).then(success).catch(fail)
 }
 
-export { userConfirm, findById, tokenRegeneration, logout }
+export { userConfirm, findById, registUser, tokenRegeneration, logout }

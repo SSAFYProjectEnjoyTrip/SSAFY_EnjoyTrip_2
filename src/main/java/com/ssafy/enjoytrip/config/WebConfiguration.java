@@ -32,15 +32,14 @@ public class WebConfiguration implements WebMvcConfigurer {
 //		Allow "simple" methods GET, HEAD and POST.
 //		Allow all headers.
 //		Set max age to 1800 seconds (30 minutes).
-		logger.info("들어오나?");
 		registry
 			.addMapping("/**")
 //			.allowedOrigins("*")
 //			.allowedOrigins("http://localhost:9000")
 			.allowedOriginPatterns("*")
-//			.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
-//						HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
-//						HttpMethod.PATCH.name())
+			.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
+						HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
+						HttpMethod.PATCH.name())
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
 			.allowCredentials(true)
 //			.exposedHeaders("*")

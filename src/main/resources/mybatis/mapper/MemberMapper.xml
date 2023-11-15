@@ -26,9 +26,8 @@
 
 	<insert id="joinMember" parameterType="MemberDto">
 		insert into member(userId,
-		userName, userPwd, emailId, emailDomain, joinDate)
-		values(#{userId},
-		#{userName}, #{userPwd}, #{emailId}, #{emailDomain}, #{joinDate})
+		userName, userPwd, emailId, emailDomain)
+		values(#{userId}, #{userName}, #{userPwd}, #{emailId}, #{emailDomain})
 	</insert>
 
 	<select id="getMemberById" parameterType="String"

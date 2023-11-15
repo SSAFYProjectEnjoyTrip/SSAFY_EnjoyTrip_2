@@ -3,9 +3,13 @@ package com.ssafy.enjoytrip.board.model.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @ApiModel(value="Board Dto" ,description="게시판을 구성하는 DTO")
+@Setter
+@NoArgsConstructor
 @Data
 public class BoardDto {
 	@ApiModelProperty(value="게시글 번호", example="0")
