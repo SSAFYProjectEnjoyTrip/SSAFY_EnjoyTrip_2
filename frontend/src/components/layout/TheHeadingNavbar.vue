@@ -1,9 +1,26 @@
-<script setup></script>
+<style scoped></style>
+
+<script setup>
+import { useMenuStore } from '@/stores/menu'
+import { storeToRefs } from 'pinia'
+
+const menuStore = useMenuStore()
+
+// 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
+// https://pinia.vuejs.kr/core-concepts/
+const { menuList } = storeToRefs(menuStore)
+const { changeMenuState } = menuStore
+
+const logout = () => {
+  console.log('로그아웃!!!!')
+  changeMenuState()
+}
+</script>
 
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
     <div class="container-fluid">
-      <router-link class="navbar-brand" :to="{ name: 'main' }">
+      <router-link :to="{ name: 'main' }" class="navbar-brand">
         <img src="@/assets/ssafy_logo.png" class="rounded mx-auto d-block" alt="..." />
       </router-link>
       <button
@@ -22,6 +39,9 @@
           class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
+          <li class="nav-item">
+            <a class="nav-link" href="#">마이캠퍼스</a>
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -42,8 +62,11 @@
           <li class="nav-item">
             <router-link class="nav-link" :to="{ name: 'list' }">게시글 목록</router-link>
           </li>
+          <!-- <li class="nav-item">
+            <router-link :to="{ name: 'estations' }" class="nav-link">전기차충전소</router-link>
+          </li> -->
         </ul>
-        <form class="d-flex" role="search">
+        <!-- <form class="d-flex" role="search">
           <input
             class="form-control me-2"
             type="search"
@@ -51,7 +74,30 @@
             aria-label="Search"
           />
           <button class="btn btn-outline-success" type="button">search</button>
-        </form>
+        </form> -->
+        <ul
+          class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
+          style="--bs-scroll-height: 100px"
+        >
+          <template v-for="menu in menuList" :key="menu.routeName">
+            <template v-if="menu.show">
+              <template v-if="menu.routeName === 'user-logout'">
+                <li class="nav-item">
+                  <router-link to="/" @click.prevent="logout" class="nav-link">{{
+                    menu.name
+                  }}</router-link>
+                </li>
+              </template>
+              <template v-else>
+                <li class="nav-item">
+                  <router-link :to="{ name: menu.routeName }" class="nav-link">{{
+                    menu.name
+                  }}</router-link>
+                </li>
+              </template>
+            </template>
+          </template>
+        </ul>
       </div>
     </div>
   </nav>

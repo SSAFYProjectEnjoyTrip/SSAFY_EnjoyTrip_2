@@ -21,7 +21,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "핫플찾기 API", description = "/hotPlace API")
-@CrossOrigin(origins = {"*"}) // 다른 서버에서 Ajax 요청이 와도 서비스 되도록 설정
 @RestController
 @RequestMapping("/hotPlace")
 public class MapController {

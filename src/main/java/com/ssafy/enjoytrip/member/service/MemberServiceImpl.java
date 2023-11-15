@@ -1,17 +1,20 @@
 package com.ssafy.enjoytrip.member.service;
 
 import java.sql.SQLException;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.member.controller.MemberController;
 import com.ssafy.enjoytrip.member.model.dao.MemberDao;
 import com.ssafy.enjoytrip.member.model.dto.MemberDto;
 
-@Service
+@Service("MemberService")
+@Repository
 public class MemberServiceImpl implements MemberService {
 
 	// private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -46,23 +49,6 @@ public class MemberServiceImpl implements MemberService {
 			e.printStackTrace();
 		}
 		return 0;
-	}
-
-	@Override
-	public MemberDto loginMember(String userId, String userPwd){
-		try {
-			MemberDto member = memberDao.getMemberById(userId);
-			if(member.getUserPwd() == userPwd) {
-				return member;
-			}
-			else {
-				return null;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	@Override
@@ -111,6 +97,37 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String getPwdById(String curId) {
 		return null;
+	}
+
+	@Override
+	public MemberDto login(MemberDto memberDto) throws Exception {
+		return memberDao.login(memberDto);
+	}
+	
+	@Override
+	public MemberDto userInfo(String userId) throws Exception {
+		return memberDao.userInfo(userId);
+	}
+
+	@Override
+	public void saveRefreshToken(String userId, String refreshToken) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		map.put("token", refreshToken);
+		memberDao.saveRefreshToken(map);
+	}
+
+	@Override
+	public Object getRefreshToken(String userId) throws Exception {
+		return memberDao.getRefreshToken(userId);
+	}
+
+	@Override
+	public void deleRefreshToken(String userId) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		map.put("token", null);
+		memberDao.deleteRefreshToken(map);
 	}
 
 }

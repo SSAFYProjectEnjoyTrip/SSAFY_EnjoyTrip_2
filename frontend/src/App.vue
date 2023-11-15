@@ -1,5 +1,6 @@
 <script setup>
-import TheHeadingNavBar from '@/components/layout/TheHeadingNavbar.vue';
+import { RouterView } from 'vue-router'
+import TheHeadingNavBar from '@/components/layout/TheHeadingNavbar.vue'
 </script>
 
 <template>
@@ -9,6 +10,4 @@ import TheHeadingNavBar from '@/components/layout/TheHeadingNavbar.vue';
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
