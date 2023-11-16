@@ -122,4 +122,21 @@ public class BoardServiceImpl implements BoardService {
 		}
 	}
 
+	// ------------- 공지사항
+	@Override
+	public List<BoardDto> listNotice(PageBean bean) {
+		
+		System.out.println("BookService.listNotice 수행 중...............");
+		try {
+			int total = boardDao.totalCount(bean);
+			PageUtility page = new PageUtility(bean.getInterval(), total, bean.getPageNo(), null);
+			bean.setPageLink(page.getPageBar());
+			return boardDao.listNotice(bean);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new MyException("공지사항 리스트 조회 중 오류 발생");
+		}
+		
+	}
+
 }

@@ -63,6 +63,35 @@ const router = createRouter({
           component: () => import('@/components/board/ArticleRegist.vue')
         }
       ]
+    },
+    // Notice 공지사항 게시판 ▼▼▼▼▼▼▼▼▼▼▼▼
+    {
+      path: '/notice',
+      name: 'notice',
+      component: () => import('@/views/TheNoticeView.vue'),
+      redirect: { name: 'noticeList' },
+      children: [
+        {
+          path: 'noticeList', // children에서는 '/'가 자동으로 붙기 때문에
+          name: 'noticeList',
+          component: () => import('@/components/notice/NoticeList.vue')
+        },
+        {
+          path: 'detail/:articleNo?',
+          name: 'noticeDetail',
+          component: () => import('@/components/notice/NoticeDetail.vue')
+        },
+        {
+          path: 'modify/:articleNo?',
+          name: 'noticeModify',
+          component: () => import('@/components/notice/NoticeModify.vue')
+        },
+        {
+          path: 'regist',
+          name: 'noticeRegist',
+          component: () => import('@/components/notice/NoticeRegist.vue')
+        }
+      ]
     }
   ]
 })

@@ -106,7 +106,7 @@ function moveList() {
 
 <template>
   <form @submit.prevent="onSubmit">
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label for="userid" class="form-label">작성자 ID : </label>
       <input
         type="text"
@@ -115,7 +115,7 @@ function moveList() {
         :disabled="isUseId"
         placeholder="작성자ID..."
       />
-    </div>
+    </div> -->
     <div class="mb-3">
       <label for="subject" class="form-label">제목 : </label>
       <input type="text" class="form-control" v-model="article.subject" placeholder="제목..." />

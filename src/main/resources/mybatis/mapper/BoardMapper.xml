@@ -28,6 +28,7 @@
 	<select id="listArticle" parameterType="PageBean" resultType="BoardDto">
 		select *
 		from board
+		where userId != 'admin'
 		order by articleNo desc
 	</select>
 
@@ -44,10 +45,19 @@
 		from board
 	</select>
 	
+	<!-- 게시글 디테일 -->
 	<select id="getArticle" parameterType="int" resultType="BoardDto">
 		select *
 		from board
 		where articleNo = #{articleNo}
 	</select> 
+	
+	<!-- 게시글 리스트 -->
+	<select id="listNotice" parameterType="PageBean" resultType="BoardDto">
+		select *
+		from board
+		where userId = 'admin'
+		order by articleNo desc
+	</select>
 
 </mapper>

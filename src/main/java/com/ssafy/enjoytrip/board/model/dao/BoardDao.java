@@ -19,4 +19,6 @@ public interface BoardDao {
 	void modifyArticle(BoardDto boardDto) throws SQLException;
 	void deleteArticle(int articleNo) throws SQLException;
 	
+	List<BoardDto> listNotice(PageBean bean) throws SQLException;
+	
 }

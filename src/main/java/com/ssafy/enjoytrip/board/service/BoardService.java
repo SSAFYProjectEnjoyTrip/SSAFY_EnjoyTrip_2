@@ -19,4 +19,7 @@ public interface BoardService {
 	void deleteArticle(int articleNo);
 	void writeArticle(BoardDto boardDto);
 	
+	// 공지사항 따로, admin만 있어야함
+	List<BoardDto> listNotice(PageBean bean);
+	
 }
