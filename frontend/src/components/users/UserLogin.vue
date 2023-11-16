@@ -1,36 +1,37 @@
 <script setup>
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
-import { useMemberStore } from "@/stores/member";
-import { useMenuStore } from "@/stores/menu";
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useMemberStore } from '@/stores/member'
+import { useMenuStore } from '@/stores/menu'
 
-const router = useRouter();
+const router = useRouter()
 
-const memberStore = useMemberStore();
+const memberStore = useMemberStore()
 
-const { isLogin } = storeToRefs(memberStore);
-const { userLogin, getUserInfo } = memberStore;
-const { changeMenuState } = useMenuStore();
+const { isLogin } = storeToRefs(memberStore)
+const { userInfo, userLogin, getUserInfo } = memberStore
+const { changeMenuState } = useMenuStore()
 
 const loginUser = ref({
-  userId: "",
-  userPwd: "",
-});
+  userId: '',
+  userPwd: ''
+})
 
 const login = async () => {
-  console.log("login ing!!!! !!!");
-  await userLogin(loginUser.value);
-  let token = sessionStorage.getItem("accessToken");
-  console.log("111. ", token);
-  console.log("isLogin: ", isLogin);
+  console.log('login ing!!!! !!!')
+  await userLogin(loginUser.value)
+  let token = sessionStorage.getItem('accessToken')
+  // console.log('111. ', token)
+  // console.log('isLogin: ', isLogin)
   if (isLogin) {
-    console.log("로그인 성공아닌가???");
-    getUserInfo(token);
-    changeMenuState();
+    console.log('로그인 성공')
+    getUserInfo(token)
+    changeMenuState()
   }
-  router.push("/");
-};
+  console.log(userInfo)
+  router.push('/')
+}
 </script>
 
 <template>
@@ -62,7 +63,6 @@ const login = async () => {
               type="password"
               class="form-control"
               v-model="loginUser.userPwd"
-              @keyup.enter="login"
               placeholder="비밀번호..."
             />
           </div>

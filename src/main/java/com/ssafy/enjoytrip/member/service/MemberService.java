@@ -20,4 +20,6 @@ public interface MemberService {
 	Object getRefreshToken(String userId) throws Exception;
 	void deleRefreshToken(String userId) throws Exception;
 	
+	void updateUser(MemberDto memberDto);
+	
 }

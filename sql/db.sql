@@ -40,6 +40,7 @@ ENGINE = InnoDB;
 insert into member (userId, userName, userPwd, emailId, emailDomain) values ("ssafy", "ssafy", "ssafy", "ssafy", "google.com");
 select * from member;
 
+delete from member;
 
 -- -----------------------------------------------------
 -- Table `ssafyenjoy`.`board`
@@ -123,6 +124,18 @@ select * from gugun;
 insert into attraction_info (contentTypeId, title, addr1, addr2, firstImage, readCount, latitude, longitude, sidoCode, gugunCode) values (1, "Ehfkdl", "또라이", "13반", "근성맨", 2, 3.088, 1.008, 1, 1);
 
 select * from attraction_info;
+
+insert into member(userId, userName, userPwd, emailId, emailDomain, joinDate)
+values('ssafy', '김싸피', '1234', 'ssafy', '@naver.com', '2000-10-10');
+
+insert into member(userId, userName, userPwd, emailId, emailDomain, joinDate)
+values('admin', '관리자', '1234', 'admin', '@naver.com', '2000-10-10');
+
+insert into board(userId, subject, content)
+values('ssafy', '제목', '내용');
+
+insert into board(userId, subject, content)
+values('admin', '공지1', '내용1');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
