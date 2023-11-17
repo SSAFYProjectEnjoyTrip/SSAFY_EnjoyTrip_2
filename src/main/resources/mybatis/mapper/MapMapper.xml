@@ -3,23 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.enjoytrip.map.model.dao.MapDao">
-
-	<select id="getGugun" parameterType="int" resultMap="gugun">
-		select
-		sidoCode, gugunCode, gugunName
-		from gugun
-		where sidoCode = #{sidoCode}
-	</select>
-
-	<select id="getMarker" parameterType="map" resultMap="marker">
-		select
-		contentTypeId, title, addr1, addr2, firstImage, readCount, latitude,
-		longitude, sidoCode, gugunCode
-		from attraction_info
-		where contentTypeId
-		= #{contentTypeId} and sidoCode = #{sidoCode} and gugunCode =
-		#{gugunCode}
-	</select>
 	
 	<select id="getSido" resultType="sidoGugunCodeDto">
 		select left(sidoCode,2)

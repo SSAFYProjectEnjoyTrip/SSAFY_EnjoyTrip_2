@@ -3,7 +3,7 @@ import { localAxios } from '@/utils/http-commons'
 const local = localAxios()
 
 function listNotice(params, success, fail) {
-  local.get('/notice').then(success).catch(fail)
+  local.get('/notice', params).then(success).catch(fail)
 }
 
 function insertNotice(notice, success, fail) {

@@ -187,20 +187,6 @@ public class BoardRestController {
 //			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 //		}
 //	}
-	
-	@ApiOperation(value="게시글 정보 조회", notes = "articleNo에 해당하는 정보 조회")
-	@GetMapping("/comment/{articleNo}")
-	public ResponseEntity<?> searchComment(@PathVariable String articleNo) {
 
-		//articleNo 받아서 관련된 모든 댓글을 긁어옴
-//		List<BoardDto> list = boardService.getComment(Integer.parseInt(articleNo));
-		List<BoardDto> list = null;
-
-		if (list != null) {
-			return new ResponseEntity(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
-	}
 
 }

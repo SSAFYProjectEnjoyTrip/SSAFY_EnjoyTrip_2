@@ -126,7 +126,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardDto> listNotice(PageBean bean) {
 		
-		System.out.println("BookService.listNotice 수행 중...............");
+		System.out.println("Notice.listNotice 수행 중...............");
 		try {
 			int total = boardDao.totalCount(bean);
 			PageUtility page = new PageUtility(bean.getInterval(), total, bean.getPageNo(), null);

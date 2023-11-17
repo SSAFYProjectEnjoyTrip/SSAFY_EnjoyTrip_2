@@ -56,34 +56,34 @@ public class MapController {
 		}
 	}
 	
-	@ApiOperation(value="구군 정보 조회")
-	@GetMapping("/getGugun")
-	public ResponseEntity<?> getGugun(@RequestParam int sidoCode) {
-		
-		List<GugunDto> gugunList = mapService.getGugun(sidoCode);
-		
-		logger.debug("map.getGugun...................gugunList:{}", gugunList);
-
-		if (gugunList != null && !gugunList.isEmpty()) {
-			return new ResponseEntity<List<GugunDto>>(gugunList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
-	}
-	
-	@ApiOperation(value="마커 정보 조회")
-	@GetMapping("/getMarker")
-	public ResponseEntity<?> getMarker(@RequestParam int contentTypeId, @RequestParam int sidoCode, @RequestParam int gugunCode) {
-		List<MarkerDto> markerList = mapService.getMarker(contentTypeId, sidoCode, gugunCode);
-		
-		logger.debug("map.getMarker...................markerList:{}", markerList);
-
-		if (markerList != null && !markerList.isEmpty()) {
-			return new ResponseEntity<List<MarkerDto>>(markerList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
-	}
+//	@ApiOperation(value="구군 정보 조회")
+//	@GetMapping("/getGugun")
+//	public ResponseEntity<?> getGugun(@RequestParam int sidoCode) {
+//		
+//		List<GugunDto> gugunList = mapService.getGugun(sidoCode);
+//		
+//		logger.debug("map.getGugun...................gugunList:{}", gugunList);
+//
+//		if (gugunList != null && !gugunList.isEmpty()) {
+//			return new ResponseEntity<List<GugunDto>>(gugunList, HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//		}
+//	}
+//	
+//	@ApiOperation(value="마커 정보 조회")
+//	@GetMapping("/getMarker")
+//	public ResponseEntity<?> getMarker(@RequestParam int contentTypeId, @RequestParam int sidoCode, @RequestParam int gugunCode) {
+//		List<MarkerDto> markerList = mapService.getMarker(contentTypeId, sidoCode, gugunCode);
+//		
+//		logger.debug("map.getMarker...................markerList:{}", markerList);
+//
+//		if (markerList != null && !markerList.isEmpty()) {
+//			return new ResponseEntity<List<MarkerDto>>(markerList, HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//		}
+//	}
 	
 	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.", response = List.class)
 	@GetMapping("/sido")

@@ -72,9 +72,10 @@ select * from board;
 DROP TABLE IF EXISTS `ssafyenjoy`.`comment` ;
 
 CREATE TABLE IF NOT EXISTS `ssafyenjoy`.`comment` (
-  `commentNo` INT NOT NULL,
+  `commentNo` INT NOT NULL auto_increment,
   `userId` VARCHAR(45) NOT NULL,
   `articleNo` INT NOT NULL,
+  `registerTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `commentContent` varchar(200) NOT NULL,
   PRIMARY KEY (`commentNo`)
   )
@@ -86,7 +87,6 @@ alter table comment add foreign key(articleNo) references board(articleNo);
 insert into comment (commentNo, userId, articleNo, commentContent) values (1, "ssafy", 1, "이건 댓글입니다");
 
 select * from comment;
-
 --
 -- Table structure for table `dongcode`
 --

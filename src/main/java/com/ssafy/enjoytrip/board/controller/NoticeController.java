@@ -101,7 +101,6 @@ public class NoticeController {
 		System.out.println(bDto);
 		boardService.writeArticle(bDto);
 
-		// return "redirect:/board/boardMain";
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 

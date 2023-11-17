@@ -6,9 +6,11 @@
 	<typeAliases>
 		<typeAlias type="com.ssafy.enjoytrip.member.model.dto.MemberDto" alias="memberDto"/>
 		<typeAlias type="com.ssafy.enjoytrip.board.model.dto.BoardDto" alias="BoardDto"/>
+		<typeAlias type="com.ssafy.enjoytrip.board.model.dto.SidoGugunCodeDto" alias="sidoGugunCodeDto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mapper/MemberMapper.xml"/>
 		<mapper resource="mybatis/mapper/BoardMapper.xml"/>
+		<mapper resource="mybatis/mapper/MapMapper.xml"/>
 	</mappers>
 </configuration>
