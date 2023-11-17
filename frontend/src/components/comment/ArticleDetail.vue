@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { listComment } from '@/api/comment'
 import { useRouter, useRoute } from 'vue-router'
-import { detailNotice, deleteNotice } from '@/api/notice'
+import { detailArticle, deleteArticle } from '@/api/board'
 
 // router로 이동 시 전달한 데이터를 받기 위해
 const route = useRoute()
@@ -12,37 +11,22 @@ const router = useRouter()
 // :to={name:'', query:{}}로 전달한 데이터를 받기 위해
 console.log(route)
 const { articleNo } = route.params
-// 목록을 표시할 comments 반응형으로 선언
-const comments = ref([])
-const notice = ref({})
+
+const article = ref({})
 
 onMounted(() => {
-  getNotice()
-  getCommentList()
+  getArticle()
 })
 
-const getNotice = () => {
-  console.log('NoticeDetail.setup..............데이터 불러오기')
+const getArticle = () => {
+  // const { articleno } = route.params;
+  console.log('ArticleDetail.setup..............데이터 불러오기')
   console.log(articleNo + '번글 얻으러 가자!!!')
-  detailNotice(
+  detailArticle(
     articleNo,
     ({ data }) => {
-      console.log('detailNotice.setup.....데이터 전송 완료 detailNotice:', data)
-      notice.value = data
-    },
-    (error) => {
-      console.log(error)
-    }
-  )
-}
-
-function getCommentList() {
-  console.log('CommentList params............: ', articleNo)
-  listComment(
-    articleNo,
-    ({ data }) => {
-      console.log('comment search......result: ', data)
-      comments.value = data.comments
+      console.log('ArticleDetail.setup.....데이터 전송 완료 article:', data)
+      article.value = data
     },
     (error) => {
       console.log(error)
@@ -54,10 +38,10 @@ function getCommentList() {
 // 수정일 경우 readonly='' 표시하기 위해 isReadonly=false로
 const isReadonly = ref(true)
 
-function onDeleteNotice() {
-  console.log('deleteNotice.remove.................')
+function onDeleteArticle() {
+  console.log('ArticleDetail.remove.................')
   console.log(articleNo + '번글 삭제하러 가자!!!')
-  deleteNotice(
+  deleteArticle(
     articleNo,
     (response) => {
       if (response.status == 200) moveList()
@@ -69,11 +53,11 @@ function onDeleteNotice() {
 }
 
 function moveList() {
-  router.push({ name: 'noticeList' })
+  router.push({ name: 'list' })
 }
 
 function moveModify() {
-  router.push({ name: 'noticeModify', params: { articleNo } })
+  router.push({ name: 'modify', params: { articleNo } })
 }
 </script>
 
@@ -83,23 +67,23 @@ function moveModify() {
       <tbody>
         <tr>
           <th>게시글 번호</th>
-          <td><input type="text" v-model.lazy="notice.articleNo" readonly="readonly" /></td>
+          <td><input type="text" v-model.lazy="article.articleNo" readonly="readonly" /></td>
         </tr>
         <tr>
           <th>게시글 작성자</th>
-          <td><input type="text" v-model.lazy="notice.userId" :readonly="isReadonly" /></td>
+          <td><input type="text" v-model.lazy="article.userId" :readonly="isReadonly" /></td>
         </tr>
         <tr>
           <th>게시글 제목</th>
-          <td><input type="text" v-model.lazy="notice.subject" :readonly="isReadonly" /></td>
+          <td><input type="text" v-model.lazy="article.subject" :readonly="isReadonly" /></td>
         </tr>
         <tr>
           <th>게시글 조회수</th>
-          <td><input type="text" v-model.lazy="notice.hit" :readonly="isReadonly" /></td>
+          <td><input type="text" v-model.lazy="article.hit" :readonly="isReadonly" /></td>
         </tr>
         <tr>
           <th>게시글 등록 시간</th>
-          <td><input type="text" v-model.lazy="notice.registerTime" :readonly="isReadonly" /></td>
+          <td><input type="text" v-model.lazy="article.registerTime" :readonly="isReadonly" /></td>
         </tr>
         <tr>
           <th colspan="2">게시글 내용</th>
@@ -109,23 +93,16 @@ function moveModify() {
             <textarea
               cols="45"
               rows="10"
-              v-model.lazy="notice.content"
+              v-model.lazy="article.content"
               :readonly="isReadonly"
             ></textarea>
           </td>
         </tr>
-        <tbody>
-        <CommentListItem
-          v-for="comment in comments"
-          :key="comment.commentNo"
-          :comment="comment"
-        ></CommentListItem>
-      </tbody>
         <tr>
           <td colspan="2" class="text-center">
             <button class="btn btn-outline-primary m-1" @click="moveModify">수정</button>
             <button class="btn btn-outline-primary m-1" @click="moveList">목록</button>
-            <button class="btn btn-outline-primary m-1" @click="onDeleteNotice">삭제</button>
+            <button class="btn btn-outline-primary m-1" @click="onDeleteArticle">삭제</button>
           </td>
         </tr>
       </tbody>

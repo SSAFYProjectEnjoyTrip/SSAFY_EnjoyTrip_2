@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TheHomeView from '@/views/TheHomeView.vue'
+import TheElectricChargingStationView from '@/views/TheElectricChargingStationView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +9,12 @@ const router = createRouter({
       path: '/', // 처음 실행 시 보여줄 main
       name: 'main',
       component: TheHomeView
+    },
+    {
+      path: '/estations',
+      name: 'estations',
+      // beforeEnter: onlyAuthUser,
+      component: TheElectricChargingStationView
     },
     {
       path: '/user',

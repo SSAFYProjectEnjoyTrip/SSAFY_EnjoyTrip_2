@@ -36,7 +36,8 @@ function onDeleteUser() {
 
         //메뉴바 변경
         changeMenuState()
-        localStorage.removeItem('memberStore')
+        // localStorage.removeItem('memberStore')
+        sessionStorage.removeItem('accessToken')
         alert(userInfo.value.userId + ' 탈퇴 완료되었습니다.')
         console.log('삭제 완료?')
       }
