@@ -4,36 +4,6 @@
 
 <mapper namespace="com.ssafy.enjoytrip.map.model.dao.MapDao">
 
-	<resultMap type="SidoDto" id="sido">
-		<result column="sidoCode" property="sidoCode" />
-		<result column="sidoName" property="sidoName" />
-	</resultMap>
-
-	<resultMap type="GugunDto" id="gugun">
-		<result column="sidoCode" property="sidoCode" />
-		<result column="gugunCode" property="gugunCode" />
-		<result column="gugunName" property="gugunName" />
-	</resultMap>
-
-	<resultMap type="MarkerDto" id="marker">
-		<result column="contentTypeId" property="contentTypeId" />
-		<result column="title" property="title" />
-		<result column="addr1" property="addr1" />
-		<result column="addr2" property="addr2" />
-		<result column="firstImage" property="firstImage" />
-		<result column="readCount" property="readCount" />
-		<result column="latitude" property="latitude" />
-		<result column="longitude" property="longitude" />
-		<result column="sidoCode" property="sidoCode" />
-		<result column="gugunCode" property="gugunCode" />
-	</resultMap>
-
-	<select id="getSido" resultMap="sido">
-		select
-		sidoCode, sidoName
-		from sido
-	</select>
-
 	<select id="getGugun" parameterType="int" resultMap="gugun">
 		select
 		sidoCode, gugunCode, gugunName
@@ -43,9 +13,26 @@
 
 	<select id="getMarker" parameterType="map" resultMap="marker">
 		select
-		contentTypeId, title, addr1, addr2, firstImage, readCount, latitude, longitude, sidoCode, gugunCode
+		contentTypeId, title, addr1, addr2, firstImage, readCount, latitude,
+		longitude, sidoCode, gugunCode
 		from attraction_info
-		where contentTypeId = #{contentTypeId} and sidoCode = #{sidoCode} and gugunCode = #{gugunCode}
+		where contentTypeId
+		= #{contentTypeId} and sidoCode = #{sidoCode} and gugunCode =
+		#{gugunCode}
+	</select>
+	
+	<select id="getSido" resultType="sidoGugunCodeDto">
+		select left(sidoCode,2)
+		sidoCode, sidoName
+		from sidocode
+		order by sidoCode
 	</select>
 
+	<select id="getGugunInSido" parameterType="string"
+		resultType="sidoGugunCodeDto">
+		select left(gugunCode,5) gugunCode, gugunName
+		from guguncode
+		where left(gugunCode,2) = #{sido}
+		order by gugunCode
+	</select>
 </mapper>

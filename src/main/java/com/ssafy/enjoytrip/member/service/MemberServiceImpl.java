@@ -19,17 +19,18 @@ public class MemberServiceImpl implements MemberService {
 
 	// private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //	private static MemberService memberService = new MemberServiceImpl();
-	
+
 	@Autowired
 	private MemberDao memberDao;
 	private Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+
 	public MemberServiceImpl(MemberDao memberDao) {
 		super();
 		this.memberDao = memberDao;
 	}
 
 	@Override
-	public int idCheck(String userId){
+	public int idCheck(String userId) {
 		try {
 			logger.debug("idCheck..................................:{}", userId);
 			return memberDao.idCheck(userId);
@@ -41,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int joinMember(MemberDto memberDto){
+	public int joinMember(MemberDto memberDto) {
 		try {
 			return memberDao.joinMember(memberDto);
 		} catch (SQLException e) {
@@ -52,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberDto getMemberById(String userId){
+	public MemberDto getMemberById(String userId) {
 		try {
 			return memberDao.getMemberById(userId);
 		} catch (SQLException e) {
@@ -69,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDto login(MemberDto memberDto) throws Exception {
 		return memberDao.login(memberDto);
 	}
-	
+
 	@Override
 	public MemberDto userInfo(String userId) throws Exception {
 		return memberDao.userInfo(userId);
@@ -128,6 +129,15 @@ public class MemberServiceImpl implements MemberService {
 		map.put("userId", userId);
 		map.put("token", null);
 		memberDao.deleteRefreshToken(map);
+	}
+
+	@Override
+	public void updateUser(MemberDto memberDto) {
+		try {
+			memberDao.updateUser(memberDto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

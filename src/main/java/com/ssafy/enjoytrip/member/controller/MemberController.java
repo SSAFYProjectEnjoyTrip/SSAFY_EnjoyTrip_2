@@ -219,10 +219,19 @@ public class MemberController {
 
 	@DeleteMapping("/{userId}")
 	@ApiOperation(value = "유저 삭제", notes = "유저 아이디로 유저 정보 삭제")
-	public ResponseEntity<?> removeUser(@RequestParam String userId) {
+	public ResponseEntity<?> removeUser(@PathVariable String userId) {
 		logger.debug("member.delete............................ Id:{}", userId);
 		memberService.deleteUserById(userId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/update")
+	@ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정")
+	public ResponseEntity<?> updateEmail(@RequestBody MemberDto memberDto) {
+		logger.debug("member.update............................ memberDto:{}", memberDto);
+		memberService.updateUser(memberDto);
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+
 	}
 
 	@PutMapping("/updateEmail")

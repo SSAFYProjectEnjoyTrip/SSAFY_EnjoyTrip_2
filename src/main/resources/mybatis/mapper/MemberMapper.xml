@@ -6,12 +6,12 @@
 	namespace="com.ssafy.enjoytrip.member.model.dao.MemberDao">
 
 	<resultMap type="memberDto" id="member">
-		<result column="user_id" property="userId" />
-		<result column="user_name" property="userName" />
-		<result column="user_password" property="userPwd" />
-		<result column="email_id" property="emailId" />
-		<result column="email_domain" property="emailDomain" />
-		<result column="join_date" property="joinDate" />
+		<result column="userId" property="userId" />
+		<result column="userName" property="userName" />
+		<result column="userPwd" property="userPwd" />
+		<result column="emailId" property="emailId" />
+		<result column="emailDomain" property="emailDomain" />
+		<result column="joinDate" property="joinDate" />
 		<result column="token" property="refreshToken" />
 	</resultMap>
 
@@ -22,12 +22,11 @@
 		where userId=#{id}
 	</select>
 
-
-
 	<insert id="joinMember" parameterType="MemberDto">
 		insert into member(userId,
 		userName, userPwd, emailId, emailDomain)
-		values(#{userId}, #{userName}, #{userPwd}, #{emailId}, #{emailDomain})
+		values(#{userId}, #{userName},
+		#{userPwd}, #{emailId}, #{emailDomain})
 	</insert>
 
 	<select id="getMemberById" parameterType="String"
@@ -52,44 +51,56 @@
 		#{userId}
 	</update>
 
+	<update id="updateUser" parameterType="MemberDto">
+		update member set
+		userName
+		= #{userName},
+		emailDomain=#{emailDomain},
+		emailId = #{emailId}
+		where
+		userId = #{userId}
+	</update>
+
 	<update id="deleteUserById" parameterType="String">
 		delete from member
-		where userId = #{id}
+		where userId = #{userId}
 	</update>
 
 	<select id="login" parameterType="map" resultMap="member">
-		select user_id,
-		user_name, token
-		from members
-		where user_id = #{userId} and
-		user_password = #{userPwd}
+		select userId,
+		userName, token
+		from member
+		where userId = #{userId} and
+		userPwd =
+		#{userPwd}
 	</select>
 
 	<select id="userInfo" parameterType="string" resultMap="member">
 		select
-		user_name, user_id, email_id, email_domain, join_date
-		from members
-		where user_id = #{userId}
+		userName, userId, emailId, emailDomain, joinDate
+		from member
+		where
+		userId = #{userId}
 	</select>
 
 	<update id="saveRefreshToken" parameterType="map">
-		update members
+		update member
 		set
 		token = #{token}
-		where user_id = #{userId}
+		where userId = #{userId}
 	</update>
 
 	<select id="getRefreshToken" parameterType="string"
 		resultType="string">
 		select token
-		from members
-		where user_id = #{userId}
+		from member
+		where userId = #{userId}
 	</select>
 
 	<update id="deleteRefreshToken" parameterType="map">
-		update members
+		update member
 		set
 		token = #{token, jdbcType=VARCHAR}
-		where user_id = #{userId}
+		where userId = #{userId}
 	</update>
 </mapper>

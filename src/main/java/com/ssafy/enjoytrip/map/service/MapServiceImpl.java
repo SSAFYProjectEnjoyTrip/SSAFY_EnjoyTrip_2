@@ -11,6 +11,7 @@ import com.ssafy.enjoytrip.map.model.dto.GugunDto;
 import com.ssafy.enjoytrip.map.model.dto.MapException;
 import com.ssafy.enjoytrip.map.model.dto.MarkerDto;
 import com.ssafy.enjoytrip.map.model.dto.SidoDto;
+import com.ssafy.enjoytrip.map.model.dto.SidoGugunCodeDto;
 
 @Service
 public class MapServiceImpl implements MapService {
@@ -20,19 +21,6 @@ public class MapServiceImpl implements MapService {
 
 	public MapServiceImpl(MapDao mapDao) {
 		this.mapDao = mapDao;
-	}
-
-	@Override
-	public List<SidoDto> getSido() {
-		try {
-			List<SidoDto> sidoList = mapDao.getSido();
-			if (sidoList == null) {
-				throw new MapException("sidoList가 없습니다.");
-			}
-			return sidoList;
-		} catch (SQLException e) {
-			throw new MapException("전체 시도 조회 중 오류 발생");
-		}
 	}
 
 	@Override
@@ -59,6 +47,16 @@ public class MapServiceImpl implements MapService {
 		} catch (SQLException e) {
 			throw new MapException("관광지 조회 중 오류 발생");
 		}
+	}
+	
+	@Override
+	public List<SidoGugunCodeDto> getSido() throws Exception {
+		return mapDao.getSido();
+	}
+
+	@Override
+	public List<SidoGugunCodeDto> getGugunInSido(String sido) throws Exception {
+		return mapDao.getGugunInSido(sido);
 	}
 
 }

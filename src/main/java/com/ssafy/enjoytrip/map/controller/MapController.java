@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.enjoytrip.map.model.dto.GugunDto;
 import com.ssafy.enjoytrip.map.model.dto.MarkerDto;
 import com.ssafy.enjoytrip.map.model.dto.SidoDto;
+import com.ssafy.enjoytrip.map.model.dto.SidoGugunCodeDto;
 import com.ssafy.enjoytrip.map.service.MapService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(value = "핫플찾기 API", description = "/hotPlace API")
 @RestController
-@RequestMapping("/hotPlace")
+@RequestMapping("/map")
 public class MapController {
 	private Logger logger = LoggerFactory.getLogger(MapController.class);
 	private MapService mapService;
@@ -37,12 +39,18 @@ public class MapController {
 	@GetMapping("/getSido")
 	public ResponseEntity<?> getSido() {
 		
-		List<SidoDto> sidoList = mapService.getSido();
+		List<SidoGugunCodeDto> sidoList = null;
+		try {
+			sidoList = mapService.getSido();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		logger.debug("map.getSido...................sidoList:{}", sidoList);
 		
 		if (sidoList != null && !sidoList.isEmpty()) {
-			return new ResponseEntity<List<SidoDto>>(sidoList, HttpStatus.OK);
+			return new ResponseEntity<List<SidoGugunCodeDto>>(sidoList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
@@ -75,6 +83,21 @@ public class MapController {
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.", response = List.class)
+	@GetMapping("/sido")
+	public ResponseEntity<List<SidoGugunCodeDto>> sido() throws Exception {
+		logger.info("sido - 호출");
+		return new ResponseEntity<List<SidoGugunCodeDto>>(mapService.getSido(), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "구군 정보", notes = "시도에 속한 구군을 반환한다.", response = List.class)
+	@GetMapping("/gugun")
+	public ResponseEntity<List<SidoGugunCodeDto>> gugun(
+			@RequestParam("sido") @ApiParam(value = "시도코드.", required = true) String sido) throws Exception {
+		logger.info("gugun - 호출");
+		return new ResponseEntity<List<SidoGugunCodeDto>>(mapService.getGugunInSido(sido), HttpStatus.OK);
 	}
 
 	

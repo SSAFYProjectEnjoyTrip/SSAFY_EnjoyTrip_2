@@ -23,5 +23,6 @@ public interface MemberDao {
 	void updatePwdById(String curId, String newPw2) throws SQLException;
 	void updateEmailById(String userId, String newEmailId, String newEmailDomain) throws SQLException;
 	void deleteUserById(String userId) throws SQLException;
+	void updateUser(MemberDto memberDto) throws SQLException;
 	
 }
