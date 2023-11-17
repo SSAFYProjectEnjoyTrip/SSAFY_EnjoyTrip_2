@@ -20,11 +20,11 @@ export default {
   },
   mounted() {
     // postId를 기반으로 서버에서 댓글 데이터를 가져옴
+    console.log('postID???? : ', this.postId)
     this.fetchComments()
   },
   methods: {
     async fetchComments() {
-      console.log('?????????????????????/')
       try {
         listComment(this.postId, ({ data }) => {
           console.log('댓글을 제대로 불러왔나용~ : ', data)

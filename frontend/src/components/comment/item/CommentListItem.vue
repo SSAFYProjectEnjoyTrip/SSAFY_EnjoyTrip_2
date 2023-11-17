@@ -1,15 +1,14 @@
-<!-- <script setup>
+<script setup>
 defineProps({ comment: Object })
+</script>
 
-</script> -->
-
-<script>
+<!-- <script>
 export default {
   props: {
     comment: Object
   }
 }
-</script>
+</script> -->
 
 <template>
   <tr class="text-center">

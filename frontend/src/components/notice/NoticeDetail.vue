@@ -116,8 +116,8 @@ function moveModify() {
           </td>
         </tr>
         <tbody>
-        <CommentListItem :postId="notice.articleNo"></CommentListItem>
-      </tbody>
+          <CommentListItem :postId="notice.articleNo"></CommentListItem>
+        </tbody>
         <tr>
           <td colspan="2" class="text-center">
             <button class="btn btn-outline-primary m-1" @click="moveModify">수정</button>
