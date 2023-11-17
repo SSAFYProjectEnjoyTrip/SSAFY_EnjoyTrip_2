@@ -12,10 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Data
 public class BoardDto {
+	
 	@ApiModelProperty(value="게시글 번호", example="0")
 	private int articleNo;
 	@ApiModelProperty(value="사용자 ID", example="ssafy")
 	private String userId;
+	@ApiModelProperty(value="리뷰 사진 파일",example="리뷰 사진 파일")
+	private String rfile;
+	@ApiModelProperty(value="별점",example="리뷰 별점")
+	private int star;
 	@ApiModelProperty(value="제목",example="테스트 제목")
 	private String subject;
 	@ApiModelProperty(value="글 내용", example="테스트 내용")
@@ -24,18 +29,6 @@ public class BoardDto {
 	private int hit;
 	@ApiModelProperty(value="작성 시각", example="1999-01-01")
 	private String registerTime;
-	
-	
-	
-	public BoardDto(int articleNo, String userId, String subject, String content, int hit, String registerTime) {
-		super();
-		this.articleNo = articleNo;
-		this.userId = userId;
-		this.subject = subject;
-		this.content = content;
-		this.hit = hit;
-		this.registerTime = registerTime;
-	}
 	
 	public int getArticleNo() {
 		return articleNo;
@@ -73,10 +66,27 @@ public class BoardDto {
 	public void setRegisterTime(String registerTime) {
 		this.registerTime = registerTime;
 	}
+	
 	@Override
 	public String toString() {
-		return "BoardDto [articleNo=" + articleNo + ", userId=" + userId + ", subject=" + subject + ", content="
-				+ content + ", hit=" + hit + ", registerTime=" + registerTime + "]";
+		return "BoardDto [articleNo=" + articleNo + ", userId=" + userId + ", rfile=" + rfile + ", star=" + star
+				+ ", subject=" + subject + ", content=" + content + ", hit=" + hit + ", registerTime=" + registerTime
+				+ "]";
 	}
+	public BoardDto(int articleNo, String userId, String rfile, int star, String subject, String content, int hit,
+			String registerTime) {
+		super();
+		this.articleNo = articleNo;
+		this.userId = userId;
+		this.rfile = rfile;
+		this.star = star;
+		this.subject = subject;
+		this.content = content;
+		this.hit = hit;
+		this.registerTime = registerTime;
+	}
+	
+	
+	
 	
 }

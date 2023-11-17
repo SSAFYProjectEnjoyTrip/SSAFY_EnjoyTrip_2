@@ -7,8 +7,8 @@
 	<!-- 게시글 등록 -->
 	<insert id="writeArticle" parameterType="BoardDto">
 		insert into
-		board(articleNo, userId, subject, content, hit)
-		values(#{articleNo},#{userId},#{subject}, #{content}, #{hit})
+		board(articleNo, userId, subject, content, hit, rfile, star)
+		values(#{articleNo},#{userId},#{subject}, #{content}, #{hit}, #{rfile}, #{star})
 	</insert>
 
 	<!-- 게시글 수정 -->

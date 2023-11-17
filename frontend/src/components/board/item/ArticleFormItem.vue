@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { registArticle, detailArticle, modifyArticle } from '@/api/board'
+import axios from 'axios'
 
 const router = useRouter()
 const route = useRoute()
@@ -12,12 +13,72 @@ const isUseId = ref(false)
 
 const article = ref({
   articleNo: 0,
+  rfile: '', // 파일
+  star: '', // 별점
   userId: '',
   subject: '',
   content: '',
   hit: 0,
   registerTime: ''
 })
+
+function showPreview(event) {
+  var input = event.target
+  var preview = document.getElementById('preview')
+
+  if (input.files && input.files[0]) {
+    var reader = new FileReader()
+    // article.value.rfile = rfile // 사용자가 선택한 파일을 article 객체에 추가
+    article.value.rfile = input.files[0] // 파일 객체 저장
+
+    reader.onload = function (e) {
+      // 파일 읽기가 완료되었을 때 실행될 함수
+      preview.src = e.target.result
+      preview.style.display = 'block'
+    }
+    reader.readAsDataURL(input.files[0])
+  }
+}
+
+async function onSubmit() {
+  // event.preventDefault();
+
+  if (subjectErrMsg.value) {
+    alert(subjectErrMsg.value)
+    return
+  } else if (contentErrMsg.value) {
+    alert(contentErrMsg.value)
+    return
+  } else {
+    props.type === 'regist' ? writeArticle() : updateArticle()
+  }
+
+  let formData = new FormData()
+  formData.append('file', article.value.rfile) // 파일 추가
+  formData.append('star', article.value.star) // 별점 추가
+  formData.append('subject', article.value.subject) // 제목 추가
+  formData.append('content', article.value.content) // 내용 추가
+
+  await registArticleWithFile(formData) // 함수 호출
+}
+
+async function registArticleWithFile(formData) {
+  try {
+    const response = await axios.post('/board/insertReview', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    // 성공 처리 로직
+    console.log(response.data)
+    alert('글등록이 완료되었습니다.')
+    moveList() // 목록 페이지로 이동
+  } catch (error) {
+    // 에러 처리 로직
+    console.error(error)
+    alert('글등록 처리시 문제가 발생했습니다.')
+  }
+}
 
 if (props.type === 'modify') {
   let { articleNo } = route.params
@@ -59,20 +120,9 @@ watch(
   { immediate: true }
 )
 
-function onSubmit() {
-  // event.preventDefault();
-
-  if (subjectErrMsg.value) {
-    alert(subjectErrMsg.value)
-  } else if (contentErrMsg.value) {
-    alert(contentErrMsg.value)
-  } else {
-    props.type === 'regist' ? writeArticle() : updateArticle()
-  }
-}
-
 function writeArticle() {
   console.log('글등록하자!!', article.value)
+  // 서버로 formData 전송하는 로직
   registArticle(
     article.value,
     (response) => {
@@ -106,34 +156,172 @@ function moveList() {
 
 <template>
   <form @submit.prevent="onSubmit">
-    <!-- <div class="mb-3">
-      <label for="userid" class="form-label">작성자 ID : </label>
+    <div class="big-box">
+      <div class="title">
+        여행 후기를 남겨주세요
+        <img
+          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Heart%20Hands%20Medium-Light%20Skin%20Tone.png"
+          alt="Heart Hands Medium-Light Skin Tone"
+          width="100"
+          height="100"
+        />
+      </div>
+
+      <!-- <form action="#" name="rb" id="rb" method="post" enctype="multipart/form-data"> -->
+      <div class="stars">만족하셨나요?</div>
+      <div class="form-group">
+        <select class="form-control" id="sel1" name="star" v-model="article.star">
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★</option>
+          <option value="3">★★★</option>
+          <option value="2">★★</option>
+          <option value="1">★</option>
+        </select>
+      </div>
+
+      <div class="share">사진을 공유해주세요</div>
+      <div class="image">
+        <img class="rounded" id="preview" :src="previewSrc" alt="Uploaded Image" />
+      </div>
+      <div class="input-div">
+        <input type="file" name="rfile" id="rfile" class="rfile" @change="showPreview" required />
+      </div>
+
       <input
         type="text"
-        class="form-control"
-        v-model="article.userId"
-        :disabled="isUseId"
-        placeholder="작성자ID..."
+        id="title"
+        name="title"
+        v-model="article.subject"
+        placeholder="Title"
+        required
       />
-    </div> -->
-    <div class="mb-3">
-      <label for="subject" class="form-label">제목 : </label>
-      <input type="text" class="form-control" v-model="article.subject" placeholder="제목..." />
-    </div>
-    <div class="mb-3">
-      <label for="content" class="form-label">내용 : </label>
-      <textarea class="form-control" v-model="article.content" rows="10"></textarea>
-    </div>
-    <div class="col-auto text-center">
-      <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
-        글작성
-      </button>
-      <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
-      <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
-        목록으로이동...
-      </button>
+
+      <textarea
+        id="content"
+        name="content"
+        v-model="article.content"
+        placeholder="Content"
+        required
+      ></textarea>
+
+      <div class="btn-div">
+        <button type="submit" class="submit-button" v-if="type === 'regist'">리뷰등록</button>
+        <button type="submit" class="submit-button" v-else>리뷰수정</button>
+        <button type="button" class="list-button" @click="moveList">목록으로</button>
+      </div>
     </div>
   </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+.big-box {
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 200px;
+  width: 90%;
+  max-width: 700px;
+  height: auto;
+  padding-top: 50px;
+  background-color: #ecf8f9;
+  border-radius: 30px;
+  border: 3px solid #b8dfd8;
+}
+
+input,
+textarea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  margin-bottom: 40px;
+  border: 3px solid pink;
+  border-radius: 6px;
+}
+
+textarea {
+  height: 200px;
+}
+
+.btn-div,
+.input-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #64ccc5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-top: 50px;
+  margin-bottom: 70px;
+  margin-right: 10px;
+}
+
+.list-button {
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #64ccc5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-top: 50px;
+  margin-bottom: 70px;
+}
+.submit-button:hover {
+  background-color: #dafffb;
+}
+.title {
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  font-size: 35px;
+  font-weight: bold;
+  color: #64ccc5;
+}
+
+.share,
+.stars {
+  display: flex;
+  justify-content: center;
+  color: #e966a0;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.form-control {
+  width: 110px;
+  border: 3px solid #ffd89c;
+  border-radius: 4px;
+}
+.form-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.image {
+  width: 300px;
+  height: 300px;
+  border: 3px dashed pink;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  background-color: white;
+}
+.rounded {
+  width: 200px;
+}
+</style>
