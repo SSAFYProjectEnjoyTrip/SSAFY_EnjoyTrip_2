@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import CommentListItem from './CommentListItem.vue'
-import { listComment } from '@/api/user'
+import CommentListItem from './item/CommentListItem.vue'
+import { listComment } from '@/api/comment'
 export default {
   props: {
     postId: String

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import CommentListItem from '@/components/comment/item/CommentListItem.vue';
+// import CommentListItem from '@/components/comment/item/CommentListItem.vue';
+import CommentList from "@/components/comment/CommentList.vue"
 import { listComment } from '@/api/comment'
 import { useRouter, useRoute } from 'vue-router'
 import { detailNotice, deleteNotice } from '@/api/notice'
@@ -116,7 +117,7 @@ function moveModify() {
           </td>
         </tr>
         <tbody>
-          <CommentListItem :postId="notice.articleNo"></CommentListItem>
+          <CommentList :postId="notice.articleNo"></CommentList>
         </tbody>
         <tr>
           <td colspan="2" class="text-center">
