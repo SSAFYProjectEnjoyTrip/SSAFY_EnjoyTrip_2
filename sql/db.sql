@@ -38,9 +38,8 @@ CREATE TABLE IF NOT EXISTS `ssafyenjoy`.`member` (
 ENGINE = InnoDB;
 
 insert into member (userId, userName, userPwd, emailId, emailDomain) values ("ssafy", "ssafy", "ssafy", "ssafy", "google.com");
+insert into member (userId, userName, userPwd, emailId, emailDomain) values ("admin", "admin", "admin", "admin", "google.com");
 select * from member;
-
-delete from member;
 
 -- -----------------------------------------------------
 -- Table `ssafyenjoy`.`board`
@@ -64,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `ssafyenjoy`.`board` (
 ENGINE = InnoDB;
 
 insert into board (articleNo, userId, subject, content) values (1, "ssafy", "hi", "bye");
+insert into board (articleNo, userId, subject, content) values (2, "admin", "hiddd", "byeddddd");
 select * from board;
 
 -- -----------------------------------------------------
@@ -85,6 +85,7 @@ alter table comment add foreign key(userId) references member(userId);
 alter table comment add foreign key(articleNo) references board(articleNo);
 
 insert into comment (commentNo, userId, articleNo, commentContent) values (1, "ssafy", 1, "이건 댓글입니다");
+insert into comment (commentNo, userId, articleNo, commentContent) values (2, "admin", 2, "이건 댓글입니다");
 
 select * from comment;
 --
