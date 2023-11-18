@@ -37,43 +37,43 @@ public class CommentDto {
 				+ ", commentContent=" + commentContent + ", registerTime=" + registerTime + "]";
 	}
 
-	int getCommentNo() {
+	public int getCommentNo() {
 		return commentNo;
 	}
 
-	void setCommentNo(int commentNo) {
+	public void setCommentNo(int commentNo) {
 		this.commentNo = commentNo;
 	}
 
-	int getArticleNo() {
+	public int getArticleNo() {
 		return articleNo;
 	}
 
-	void setArticleNo(int articleNo) {
+	public void setArticleNo(int articleNo) {
 		this.articleNo = articleNo;
 	}
 
-	String getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	void setUserId(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	String getCommentContent() {
+	public String getCommentContent() {
 		return commentContent;
 	}
 
-	void setCommentContent(String commentContent) {
+	public void setCommentContent(String commentContent) {
 		this.commentContent = commentContent;
 	}
 
-	String getRegisterTime() {
+	public String getRegisterTime() {
 		return registerTime;
 	}
 
-	void setRegisterTime(String registerTime) {
+	public void setRegisterTime(String registerTime) {
 		this.registerTime = registerTime;
 	}
 
