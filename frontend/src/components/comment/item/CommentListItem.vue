@@ -1,5 +1,6 @@
 <script setup>
-defineProps({ comment: Object })
+const comment = defineProps({ comment: Object })
+console.log("여기까지 들어오기는 하는건가 : ", comment.value)
 </script>
 
 <!-- <script>

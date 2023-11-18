@@ -20,7 +20,7 @@ const notice = ref({})
 
 onMounted(() => {
   getNotice()
-  getCommentList()
+  // getCommentList()
 })
 
 const getNotice = () => {
@@ -38,19 +38,19 @@ const getNotice = () => {
   )
 }
 
-function getCommentList() {
-  console.log('CommentList params............: ', articleNo)
-  listComment(
-    articleNo,
-    ({ data }) => {
-      console.log('comment search......result: ', data)
-      comments.value = data.comments
-    },
-    (error) => {
-      console.log(error)
-    }
-  )
-}
+// function getCommentList() {
+//   console.log('CommentList params............: ', articleNo)
+//   listComment(
+//     articleNo,
+//     ({ data }) => {
+//       console.log('comment search......result: ', data)
+//       comments.value = data.comments
+//     },
+//     (error) => {
+//       console.log(error)
+//     }
+//   )
+// }
 
 // 초기에는 Detail 화면 표시하기 위해 readonly='readonly'로 표시
 // 수정일 경우 readonly='' 표시하기 위해 isReadonly=false로
@@ -117,7 +117,7 @@ function moveModify() {
           </td>
         </tr>
         <tbody>
-          <CommentList :postId="notice.articleNo"></CommentList>
+          <CommentList :postId="String(articleNo)"></CommentList>
         </tbody>
         <tr>
           <td colspan="2" class="text-center">

@@ -8,7 +8,7 @@ import PageNavigation from '../common/PageNavigation.vue'
 
 const router = useRouter()
 
-// 목록을 표시할 articles를 반응형으로 선언
+// 목록을 표시할 notices 반응형으로 선언
 const notices = ref([])
 
 // 서버에 보낼 조회 조건을 위한 반응형 변수 선언

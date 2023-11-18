@@ -30,10 +30,10 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<CommentDto> searchComment(PageBean bean) {
+	public List<CommentDto> searchComment(int articleNo) {
 		List<CommentDto> list = null;
 		try {
-			list = commentDao.searchComment(bean);
+			list = commentDao.searchComment(articleNo);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

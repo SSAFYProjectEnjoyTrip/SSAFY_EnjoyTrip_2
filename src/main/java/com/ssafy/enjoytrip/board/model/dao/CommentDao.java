@@ -10,6 +10,6 @@ import com.ssafy.enjoytrip.board.model.dto.PageBean;
 @Mapper
 public interface CommentDao {
 
-	List<CommentDto> searchComment(PageBean bean) throws SQLException;
+	List<CommentDto> searchComment(int articleNo) throws SQLException;
 	
 }
