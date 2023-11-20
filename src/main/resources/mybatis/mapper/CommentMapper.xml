@@ -4,11 +4,37 @@
 
 <mapper namespace="com.ssafy.enjoytrip.board.model.dao.CommentDao">
 
-	<!-- 댓글 조회 -->
-	<select id="searchComment" parameterType="int" resultType="CommentDto">
+	<!-- 댓글 전체 조회 -->
+	<select id="listComment" parameterType="int" resultType="CommentDto">
 		select commentNo, articleNo, userId, commentContent, registerTime
 		from comment
 		where articleNo = #{articleNo}
 	</select>
+	
+	<!-- 댓글 단건 조회 -->
+	<select id="searchComment" parameterType="map" resultType="CommentDto">
+		select articleNo, commentNo, userId, commentContent, registerTime
+		from comment
+		where articleNo = #{articleNo} and commentNo = #{commentNo}
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id = "writeComment" parameterType="CommentDto">
+		insert into comment (commentNo, articleNo, userId, commentContent)
+		values (#{commentNo}, #{articleNo}, #{userId}, #{commentContent})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id = "deleteComment" parameterType = "CommentDto">
+		delete from comment
+		where articleNo = #{articleNo} and commentNo = #{commentNo}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id = "updateComment" parameterType = "CommentDto">
+		update comment
+		set commentContent = #{commentContent}
+		where articleNo = #{articleNo} and commentNo = #{commentNo}
+	</update>
 
 </mapper>

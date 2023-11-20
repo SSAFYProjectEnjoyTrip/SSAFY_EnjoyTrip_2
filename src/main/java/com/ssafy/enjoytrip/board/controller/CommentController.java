@@ -3,7 +3,7 @@ package com.ssafy.enjoytrip.board.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -70,32 +70,72 @@ public class CommentController {
 			return new ResponseEntity<String>(errorMsg, resHeader, HttpStatus.FAILED_DEPENDENCY);
 	}
 	
-	@ApiOperation(value="게시글 정보 조회", notes = "articleNo에 해당하는 정보 조회")
+	@ApiOperation(value="게시글 댓글 정보 조회", notes = "articleNo에 해당하는 정보 조회")
 //	@ApiResponse(code = 200, message = "success")
 	@GetMapping("/{articleNo}")
 	public ResponseEntity<?> searchComment(@PathVariable String articleNo){
 
 		//articleNo 받아서 관련된 모든 댓글을 긁어옴
-		List<CommentDto> list = commentService.searchComment(Integer.parseInt(articleNo));
+		List<CommentDto> list = commentService.listComment(Integer.parseInt(articleNo));
 		
 		Map<String, List<CommentDto>> result = new HashMap<String, List<CommentDto>>();
 		result.put("comments", list);
-		
-		logger.debug("왜 안나오는거야 list : {}", list);
-		logger.debug("그럼 result는 어케 나오는데!!! : {}", result.get("comments"));
-		
-		//여기서는 list 잘 나오는데.. 왜 vue에서는 undefined라고 뜨지????????????
-		
-//		if (list != null && !list.isEmpty()) {
-//			return new ResponseEntity<Map<String, List<CommentDto>>>(result, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//		}
-		
+			
 		if (list != null) {
-			logger.debug("안에서는 어케 되나? : {}", list);
-			logger.debug("야! : {}", new ResponseEntity(list, HttpStatus.OK));
 			return new ResponseEntity(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@ApiOperation(value="게시글 댓글 등록", notes = "cDto 댓글 정보 등록")
+	@ApiResponse(code = 200, message = "success")
+	@PostMapping
+	public ResponseEntity<?> writeComment(@RequestBody CommentDto cDto, @ApiIgnore HttpSession session){
+		MemberDto mDto = (MemberDto) session.getAttribute("loginUser");
+//		logger.debug("등록할 때 userId 뜨나? : {})", mDto.getUserId());
+		// TODO : setUserId 바꾸기
+		cDto.setUserId("admin");
+		cDto.setCommentNo(commentService.listComment(cDto.getArticleNo()).size()+1);
+		
+		commentService.writeComment(cDto);
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="댓글 정보 변경", notes = "해당하는 댓글 덮어쓰기")
+	@ApiResponse(code = 200, message = "success")
+	@PutMapping
+	public ResponseEntity<?> updateComment(@RequestBody CommentDto cDto){
+		logger.debug("BEFORE comment update......................cDto: {}", cDto);
+		commentService.updateComment(cDto);
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	}
+	
+	//TODO : 필요한 인자만 받아오기?
+	@ApiOperation(value="댓글 정보 삭제", notes = "해당하는 댓글 삭제하기")
+	@ApiResponse(code = 200, message = "success")
+	@DeleteMapping
+	public ResponseEntity<?> deleteComment(@RequestBody CommentDto cDto){
+		logger.debug("comment delete......................cDto: {}", cDto);
+		commentService.deleteComment(cDto);
+		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value="댓글 정보 조회", notes = "해당하는 댓글 조회하기")
+	@ApiResponse(code = 200, message = "success")
+	@GetMapping("/{articleNo}/{commentNo}")
+	public ResponseEntity<?> searchComment(@PathVariable String articleNo, @PathVariable String commentNo){
+//		logger.debug("comment search......................articleNo: {}", articleNo);
+//		logger.debug("comment search......................commentNo: {}", commentNo);
+		Map<String, Integer> param = new HashMap<String, Integer>();
+		param.put("articleNo", Integer.parseInt(articleNo));
+		param.put("commentNo", Integer.parseInt(commentNo));
+		
+		CommentDto cDto = commentService.searchComment(param);
+//		logger.debug("comment search.....................cDto: {}", cDto);
+		
+		if (cDto != null) {
+			return new ResponseEntity(cDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}

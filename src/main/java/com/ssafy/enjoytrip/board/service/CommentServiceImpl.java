@@ -30,14 +30,52 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<CommentDto> searchComment(int articleNo) {
+	public List<CommentDto> listComment(int articleNo) {
 		List<CommentDto> list = null;
 		try {
-			list = commentDao.searchComment(articleNo);
+			list = commentDao.listComment(articleNo);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Override
+	public void writeComment(CommentDto commentDto) {
+		try {
+			commentDao.writeComment(commentDto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void updateComment(CommentDto commentDto) {
+		try {
+			commentDao.updateComment(commentDto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteComment(CommentDto commentDto) {
+		try {
+			commentDao.deleteComment(commentDto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public CommentDto searchComment(Map<String, Integer> map) {
+		CommentDto cDto = null;
+		try {
+			cDto = commentDao.searchComment(map);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cDto;
 	}
 
 }

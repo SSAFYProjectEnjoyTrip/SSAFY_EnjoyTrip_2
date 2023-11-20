@@ -1,55 +1,48 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { registArticle, detailArticle, modifyArticle } from '@/api/board'
+import { searchComment, modifyComment, registComment } from '@/api/comment'
 
-const router = useRouter()
 const route = useRoute()
 
-const props = defineProps({ type: String, commentNo: String })
-
+const props = defineProps({ type: String, commentNo: Number })
+const { articleNo } = route.params
 const isUseId = ref(false)
 
 const comment = ref({
-  articleNo: 0,
-  commentNo : 0,
+  articleno: '',
+  commentno: '',
   userId: '',
   commentContent: '',
   registerTime: ''
 })
 
-if (props.type === 'modify') {
-  let { commentNo } = props.commentNo
+onMounted(() => {
+  if (props.type == 'modify') {
+    const commentNo = props.commentNo
+    // console.log(props.commentNo)
 
-  console.log(commentNo + '번글 얻어와서 수정할거야')
-  detailArticle(
-    commentNo,
-    ({ data }) => {
-      comment.value = data
-      isUseId.value = true
-      console.log(comment.value)
-    },
-    (error) => {
-      console.log(error)
-    }
-  )
-  isUseId.value = true
-}
+    console.log(commentNo + '번 댓글 얻어와서 수정할거야')
+    searchComment(
+      articleNo,
+      commentNo,
+      ({ data }) => {
+        console.log(data)
+        comment.value = data
+        isUseId.value = true
+        console.log('가져온 comment는 ?? ' + comment.value)
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+    // isUseId.value = true
+  }
+})
 
-const subjectErrMsg = ref('')
 const contentErrMsg = ref('')
 watch(
-  () => comment.value.subject,
-  (value) => {
-    let len = value.length
-    if (len == 0 || len > 30) {
-      subjectErrMsg.value = '제목을 확인해 주세요!!!'
-    } else subjectErrMsg.value = ''
-  },
-  { immediate: true }
-)
-watch(
-  () => comment.value.content,
+  () => comment.value.commentContent,
   (value) => {
     let len = value.length
     if (len == 0 || len > 500) {
@@ -61,79 +54,111 @@ watch(
 
 function onSubmit() {
   // event.preventDefault();
-
-  if (subjectErrMsg.value) {
-    alert(subjectErrMsg.value)
-  } else if (contentErrMsg.value) {
+  if (contentErrMsg.value) {
     alert(contentErrMsg.value)
   } else {
-    props.type === 'regist' ? writeArticle() : updateArticle()
+    props.type === 'regist' ? writeComment() : updateComment()
   }
 }
 
-function writeArticle() {
-  console.log('글등록하자!!', comment.value)
-  registArticle(
+function writeComment() {
+  console.log('댓글 등록하자!!', comment.value)
+  comment.value.articleNo = articleNo
+  registComment(
     comment.value,
     (response) => {
-      let msg = '글등록 처리시 문제 발생했습니다.'
-      if (response.status == 200) msg = '글등록이 완료되었습니다.'
+      let msg = '댓글 등록 처리 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '댓글 등록이 완료되었습니다.'
       alert(msg)
-      moveList()
+      // moveList()
+      // moveReload()
     },
     (error) => console.log(error)
   )
 }
 
-function updateArticle() {
-  console.log(comment.value.articleNo + '번글 수정하자!!', comment.value)
-  modifyArticle(
+function updateComment() {
+  console.log(
+    comment.value.articleno + '번글의 ' + comment.value.commentno + ' 번 댓글을 수정하자!!',
+    comment.value
+  )
+  modifyComment(
     comment.value,
     (response) => {
-      let msg = '글수정 처리시 문제 발생했습니다.'
-      if (response.status == 200) msg = '글정보 수정이 완료되었습니다.'
+      let msg = '댓글 수정 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '댓글 수정이 완료되었습니다.'
       alert(msg)
-      moveList()
+      // moveList()
+      // moveReload()
     },
     (error) => console.log(error)
   )
 }
 
-function moveList() {
-  router.push({ name: 'list' })
-}
+// function moveReload() {
+//   location.reload()
+// }
 </script>
 
 <template>
   <form @submit.prevent="onSubmit">
-    <!-- <div class="mb-3">
-      <label for="userid" class="form-label">작성자 ID : </label>
-      <input
-        type="text"
-        class="form-control"
-        v-model="article.userId"
-        :disabled="isUseId"
-        placeholder="작성자ID..."
-      />
-    </div> -->
-    <div class="mb-3">
-      <label for="subject" class="form-label">제목 : </label>
-      <input type="text" class="form-control" v-model="article.subject" placeholder="제목..." />
-    </div>
-    <div class="mb-3">
-      <label for="content" class="form-label">내용 : </label>
-      <textarea class="form-control" v-model="article.content" rows="10"></textarea>
-    </div>
-    <div class="col-auto text-center">
-      <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
-        글작성
-      </button>
-      <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
-      <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
-        목록으로이동...
-      </button>
+    <div class="comment-container">
+      <div class="comment">
+        <div class="comment-author">{{ comment.userId }}</div>
+        <div class="comment-date">{{ comment.registerTime }}</div>
+        <div class="comment-content">
+          <label for="content" class="form-label">댓글 내용 : </label>
+          <input type="text" class="form-control" v-model="comment.commentContent" />
+        </div>
+      </div>
+      <div class="btn-div">
+        <button
+          type="submit"
+          class="submit-button"
+          v-if="type == 'regist'"
+          onclick="writeComment()"
+        >
+          등록
+        </button>
+        <button type="submit" class="submit-button" v-else onclick="updateComment()">수정</button>
+      </div>
     </div>
   </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.comment-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment {
+  margin-bottom: 15px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-date {
+  color: #777;
+  font-size: 0.8em;
+}
+
+.comment-content {
+  margin-top: 10px;
+  color: #555;
+}
+</style>
