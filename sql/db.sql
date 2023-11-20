@@ -247,3 +247,7 @@ values('admin', '공지1', '내용1');
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIattraction_infoQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+select * from board;
+select * from comment;
+select * from member;
