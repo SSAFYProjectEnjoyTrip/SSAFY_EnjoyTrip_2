@@ -15,7 +15,7 @@ const router = useRouter()
 console.log(route)
 const { articleNo } = route.params
 // 목록을 표시할 comments 반응형으로 선언
-const comments = ref([])
+// const comments = ref([])
 const notice = ref({})
 
 onMounted(() => {

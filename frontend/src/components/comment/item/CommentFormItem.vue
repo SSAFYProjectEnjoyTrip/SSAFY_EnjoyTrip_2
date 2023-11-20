@@ -6,28 +6,28 @@ import { registArticle, detailArticle, modifyArticle } from '@/api/board'
 const router = useRouter()
 const route = useRoute()
 
-const props = defineProps({ type: String })
+const props = defineProps({ type: String, commentNo: String })
 
 const isUseId = ref(false)
 
-const article = ref({
+const comment = ref({
   articleNo: 0,
+  commentNo : 0,
   userId: '',
-  subject: '',
-  content: '',
-  hit: 0,
+  commentContent: '',
   registerTime: ''
 })
 
 if (props.type === 'modify') {
-  let { articleNo } = route.params
-  console.log(articleNo + '번글 얻어와서 수정할거야')
+  let { commentNo } = props.commentNo
+
+  console.log(commentNo + '번글 얻어와서 수정할거야')
   detailArticle(
-    articleNo,
+    commentNo,
     ({ data }) => {
-      article.value = data
+      comment.value = data
       isUseId.value = true
-      console.log(article.value)
+      console.log(comment.value)
     },
     (error) => {
       console.log(error)
@@ -39,7 +39,7 @@ if (props.type === 'modify') {
 const subjectErrMsg = ref('')
 const contentErrMsg = ref('')
 watch(
-  () => article.value.subject,
+  () => comment.value.subject,
   (value) => {
     let len = value.length
     if (len == 0 || len > 30) {
@@ -49,7 +49,7 @@ watch(
   { immediate: true }
 )
 watch(
-  () => article.value.content,
+  () => comment.value.content,
   (value) => {
     let len = value.length
     if (len == 0 || len > 500) {
@@ -72,9 +72,9 @@ function onSubmit() {
 }
 
 function writeArticle() {
-  console.log('글등록하자!!', article.value)
+  console.log('글등록하자!!', comment.value)
   registArticle(
-    article.value,
+    comment.value,
     (response) => {
       let msg = '글등록 처리시 문제 발생했습니다.'
       if (response.status == 200) msg = '글등록이 완료되었습니다.'
@@ -86,9 +86,9 @@ function writeArticle() {
 }
 
 function updateArticle() {
-  console.log(article.value.articleNo + '번글 수정하자!!', article.value)
+  console.log(comment.value.articleNo + '번글 수정하자!!', comment.value)
   modifyArticle(
-    article.value,
+    comment.value,
     (response) => {
       let msg = '글수정 처리시 문제 발생했습니다.'
       if (response.status == 200) msg = '글정보 수정이 완료되었습니다.'

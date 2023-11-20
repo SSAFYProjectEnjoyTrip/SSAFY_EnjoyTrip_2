@@ -107,7 +107,6 @@ function onPageChange(value) {
           :key="notice.articleNo"
           :notice="notice"
         ></NoticeListItem>
-        여기가티바디임ㅁ니다
       </tbody>
     </table>
   </div>
