@@ -1,4 +1,4 @@
-import { ref, provide } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'

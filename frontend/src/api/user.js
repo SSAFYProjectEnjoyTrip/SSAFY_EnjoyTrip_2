@@ -5,7 +5,7 @@ const local = localAxios()
 async function userConfirm(param, success, fail) {
   console.log('param', param)
   await local.post(`/user/login`, param).then(success).catch(fail)
-  console.log('userConfirm ok')
+  console.log('userConfirm ok??????')
 }
 
 async function findById(userId, success, fail) {
@@ -23,6 +23,7 @@ async function registUser(user, success, fail) {
 }
 
 async function logout(userid, success, fail) {
+  // console.log("로그아웃 잘 호출 되었나요??>> ", userid)
   await local.get(`/user/logout/${userid}`).then(success).catch(fail)
 }
 

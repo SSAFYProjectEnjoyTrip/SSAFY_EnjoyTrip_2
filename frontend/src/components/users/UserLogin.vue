@@ -22,10 +22,11 @@ const login = async () => {
   console.log('login ing!!!! !!!')
   await userLogin(loginUser.value)
   let token = sessionStorage.getItem('accessToken')
-  // console.log('111. ', token)
-  // console.log('isLogin: ', isLogin)
-  if (isLogin) {
-    console.log('로그인 성공')
+  console.log('111. ', token)
+  console.log('isLogin: ', isLogin.value)
+  //????????????????????????????????????????????
+  if (isLogin.value === true) {
+    console.log('로그인 정보가 있음?? 로그인 성공 아니 로그인이 안됐는데 왜 뜨는거임?')
     getUserInfo(token)
     changeMenuState()
   }
