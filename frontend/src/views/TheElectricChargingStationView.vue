@@ -82,163 +82,47 @@ const viewStation = (station) => {
 </script>
 
 <template>
-  <!-- 시도, 구군 선택 드롭다운 -->
-  <VSelect :selectOptions="sidoList" @onKeySelect="onChangeSido"></VSelect>
-  <VSelect :selectOptions="gugunList" @onKeySelect="onChangeGugun"></VSelect>
-  
   <div class="container text-center mt-3">
-    <div class="title">
-      My Plan
-      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Front-Facing%20Baby%20Chick.png" alt="Front-Facing Baby Chick" width="100" height="100" />
-    </div>
-    <div class="title-info">나만의 여행계획을 세워보세요 :)</div>
-    <div style="display: flex;" >
-      <div class="left-side">
-        <div class="left-title">
-          <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Round%20Pushpin.png" alt="Round Pushpin" width="40" height="40" />
-          Where to go
-        </div>
-        <form>
-          <div class="dropdown-box">
-            <div class="dropdown">
-              <button type="button" class="dropdown-toggle " data-bs-toggle="dropdown">
-                시도선택
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                <li><a class="dropdown-item" href="#">Link 3</a></li>
-              </ul>
-            </div>
-            <div class="dropdown">
-              <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
-                구군선택
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                <li><a class="dropdown-item" href="#">Link 3</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="search-box">
-            <input type="text" class="input-search" placeholder="Search">
-            <button class="btn btn-default" type="submit">
-              <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Magnifying%20Glass%20Tilted%20Left.png" alt="Magnifying Glass Tilted Left" width="25" height="25" />
-            </button>
-          </div>
-        </form>
-        <hr>
+    <div class="alert alert-success" role="alert">전기차 충전소1</div>
+    <div class="row mb-2">
+      <div class="col d-flex flex-row-reverse">
+        <VSelect :selectOptions="sidoList" @onKeySelect="onChangeSido"></VSelect>
       </div>
-      <VKakaoMap :stations="chargingStations" :selectStation="selectStation" />
+      <div class="col"><VSelect :selectOptions="gugunList" @onKeySelect="onChangeGugun"></VSelect></div>
     </div>
-    <div class="down-box" >
-      <div class="down-left">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Spiral%20Calendar.png" alt="Spiral Calendar" width="100" height="100" />
-      </div>
-      <div class="down-right">
-
-      </div>
-    </div>
-    <div class="info">
-      <table class="table table-hover">
-        <thead>
-          <tr class="text-center">
-            <th scope="col">관광지</th>
-            <th scope="col">위치</th>
-            <th scope="col">위도</th>
-            <th scope="col">경도</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="text-center"
-            v-for="station in chargingStations"
-            :key="station.statId + station.chgerId"
-            @click="viewStation(station)"
-          >
-            <td>{{ station.stat }}</td>
-            <td>{{ station.addr }}</td>
-            <td>{{ station.lat }}</td>
-            <td>{{ station.lng }}</td>
-          </tr>
-        </tbody>
-      </table>
-      필요없음 사실 그냥 내가 보기 위해 만들어놓은 임시
-    </div>
+    <VKakaoMap :stations="chargingStations" :selectStation="selectStation" />
+    <table class="table table-hover">
+      <thead>
+        <tr class="text-center">
+          <th scope="col">충전소명</th>
+          <th scope="col">충전소ID</th>
+          <th scope="col">충전기상태</th>
+          <th scope="col">위치</th>
+          <th scope="col">위도</th>
+          <th scope="col">경도</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="text-center"
+          v-for="station in chargingStations"
+          :key="station.statId + station.chgerId"
+          @click="viewStation(station)"
+        >
+          <th>{{ station.statNm }}</th>
+          <td>{{ station.statId }}</td>
+          <td>{{ station.stat }}</td>
+          <td>{{ station.addr }}</td>
+          <td>{{ station.lat }}</td>
+          <td>{{ station.lng }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <style>
 mark.purple {
   background: linear-gradient(to top, #c354ff 20%, transparent 30%);
-}
-.title {
-  height: 100px;
-  margin-top: 50px;
-  font-size: 50px;
-  font-weight: bold;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #F875AA;
-  text-shadow: 1px 1px 2px #F875AA;
-}
-.title-info {
-  margin-top: 10px;
-  margin-bottom: 50px;
-  color: #a8a8a8;
-  font-weight: bold;
-  font-size: 14px;
-}
-.left-side {
-  border: 1px solid lightgray;
-  width: 40%;
-}
-.left-title {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  font-size: 30px;
-  font-weight: bolder;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #64CCC5;
-  text-shadow: 1px 1px 2px #64CCC5;
-}
-.down-box {
-  display: flex;
-  height: 300px;
-  border: 2px solid lime;
-  margin-top: 20px;
-}
-.down-left {
-  width: 300px;
-  border: 2px solid pink;
-}
-.info {
-  height: 200px;
-  border: 2px solid blue;
-  margin-bottom: 100px;
-}
-.dropdown {
-  width: 160px;
-}
-.dropdown-toggle {
-  background-color: white;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  width: 100%;
-  height: 40px;
-}
-.dropdown-box {
-  display: flex; 
-  justify-content: center; 
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.input-search {
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  width: 280px;
-  height: 40px;
-  padding-left: 15px;
-  margin-bottom: 20px;
 }
 </style>

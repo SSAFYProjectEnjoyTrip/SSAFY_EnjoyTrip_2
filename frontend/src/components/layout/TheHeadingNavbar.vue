@@ -16,7 +16,8 @@ const logout = () => {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+  <!-- 상단 navbar start -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow fixed-top">
     <div class="container-fluid">
       <router-link :to="{ name: 'main' }" class="navbar-brand">
         <img src="@/assets/et.png" alt="" width="100" />
@@ -38,7 +39,10 @@ const logout = () => {
           style="--bs-scroll-height: 100px"
         >
           <li class="nav-item">
-            <a class="nav-link" href="#">마이캠퍼스</a>
+            <a class="nav-link" href="/notice"><b>공지사항</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/estations"><b>전기차충전소</b></a>
           </li>
         </ul>
         <ul
@@ -49,7 +53,8 @@ const logout = () => {
             <template v-if="menu.show">
               <template v-if="menu.routeName === 'user-logout'">
                 <li class="nav-item">
-                  <router-link to="/" @click.prevent="logout" class="nav-link">{{
+                  <router-link to="/" @click.prevent="logout" class="nav-link">
+                  {{
                     menu.name
                   }}</router-link>
                 </li>
@@ -66,7 +71,13 @@ const logout = () => {
         </ul>
       </div>
     </div>
-  </nav>
+    </nav>
+    <!-- 상단 navbar end -->
+    <div class="navbar-bottom"></div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.navbar-bottom {
+  height: 100px;
+}
+</style>
