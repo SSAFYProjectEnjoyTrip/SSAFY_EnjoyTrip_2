@@ -65,17 +65,17 @@ function moveModify() {
   <div>
     <table class="table table-bordered">
       <tbody>
-        <tr>
+        <!-- <tr>
           <th>게시글 번호</th>
           <td><input type="text" v-model.lazy="article.articleNo" readonly="readonly" /></td>
+        </tr> -->
+        <tr>
+          <th>게시글 별점</th>
+          <td><input type="text" v-model.lazy="article.star" readonly="readonly" /></td>
         </tr>
         <tr>
           <th>게시글 작성자</th>
           <td><input type="text" v-model.lazy="article.userId" :readonly="isReadonly" /></td>
-        </tr>
-        <tr>
-          <th>게시글 제목</th>
-          <td><input type="text" v-model.lazy="article.subject" :readonly="isReadonly" /></td>
         </tr>
         <tr>
           <th>게시글 조회수</th>
@@ -84,6 +84,18 @@ function moveModify() {
         <tr>
           <th>게시글 등록 시간</th>
           <td><input type="text" v-model.lazy="article.registerTime" :readonly="isReadonly" /></td>
+        </tr>
+        <tr>
+          <th>게시글 제목</th>
+          <td><input type="text" v-model.lazy="article.subject" :readonly="isReadonly" /></td>
+        </tr>
+        <tr v-if="article.rfile">
+          <th colspan="2">게시글 사진</th>
+        </tr>
+        <tr v-if="article.rfile">
+          <td colspan="2" class="text-center">
+            <img :src="article.rfile" alt="Uploaded Image" class="uploaded-image" />
+          </td>
         </tr>
         <tr>
           <th colspan="2">게시글 내용</th>
@@ -113,5 +125,9 @@ function moveModify() {
 <style scoped>
 input:read-only {
   background-color: skyblue;
+}
+.uploaded-image {
+  max-width: 50%;
+  height: auto;
 }
 </style>

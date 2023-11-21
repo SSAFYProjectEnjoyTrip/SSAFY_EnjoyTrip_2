@@ -20,11 +20,8 @@ export const useMemberStore = defineStore(
       await userConfirm(
         loginUser,
         (response) => {
-          // console.log("login ok!!!!", response.status);
-          // console.log("login ok!!!!", httpStatusCode.CREATE);
           if (response.status === httpStatusCode.CREATE) {
             let { data } = response
-            // console.log("data", data);
             let accessToken = data['access-token']
             let refreshToken = data['refresh-token']
             console.log('accessToken', accessToken)
@@ -34,7 +31,10 @@ export const useMemberStore = defineStore(
             isValidToken.value = true
             sessionStorage.setItem('accessToken', accessToken)
             sessionStorage.setItem('refreshToken', refreshToken)
+            sessionStorage.setItem('loginUser', JSON.stringify(loginUser.userId)) // 중요
             console.log('sessiontStorage에 담았다', isLogin.value)
+            console.log('loginUser : ', JSON.parse(sessionStorage.getItem('loginUser')))
+            //location.reload()
           } else {
             console.log('로그인 실패했다')
             isLogin.value = false
@@ -123,6 +123,7 @@ export const useMemberStore = defineStore(
             isLogin.value = false
             userInfo.value = null
             isValidToken.value = false
+            location.reload()
           } else {
             console.error('유저 정보 없음!!!!')
           }

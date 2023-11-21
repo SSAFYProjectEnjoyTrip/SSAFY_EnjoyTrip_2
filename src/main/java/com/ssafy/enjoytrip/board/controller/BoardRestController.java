@@ -1,11 +1,9 @@
 package com.ssafy.enjoytrip.board.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -95,43 +92,13 @@ public class BoardRestController {
 	@ApiOperation(value = "정보 공유 등록", notes = "여행 정보 리뷰를 등록한다.")
 	@ApiResponse(code = 200, message = "success")
 	@PostMapping("/insertReview")
-	public ResponseEntity<String> insertReviewBoard(@ModelAttribute BoardDto bDto, @ApiIgnore HttpSession session) {
+	public ResponseEntity<String> insertReviewBoard(@RequestBody BoardDto bDto,@ApiIgnore HttpSession session) {
+		
 		System.out.println("들어오나요?^^");
 		MemberDto mDto = (MemberDto) session.getAttribute("loginUser");
 		System.out.println(mDto);
 		// userId, subject, content 입력
-
-		// 1. 파일 업로드 처리 - [1] 업로드 디렉토리 절대경로 얻기(resources/board_upload)
-		ServletContext app = session.getServletContext();
-		String upDir = app.getRealPath("/resources/review");
-		File dir = new File(upDir);
-
-		if (!dir.exists()) {
-			dir.mkdirs();// 업로드 디렉토리 생성
-		}
-//
-//		if (!bDto.getRfile().isEmpty()) {// 첨부파일이 있다면
-//
-//			// [2] 업로드한 파일명과 파일크기 알아내기==>setFilename(파일명), setFilesize(파일크기)
-//			String fname = bDto.getRfile().getOriginalFilename();// 원본파일명
-//			long fsize = bDto.getRfile().getSize();// 파일크기
-//
-//			UUID uid = UUID.randomUUID();
-//			String rfile = uid.toString() + "_" + fname;
-//
-//			rb.set(rfile);
-//
-//			// [3] 업로드 처리
-//			try {
-//				mf.transferTo(new File(upDir, rfile));
-//				log.info("upDir: " + upDir);
-//
-//			} catch (IOException e) {
-//				log.error("파일업로드 에러: " + e);
-//			}
-//
-//		}
-
+		
 		System.out.println("파일이름" + bDto.getRfile());
 		System.out.println("별점" + bDto.getStar());
 

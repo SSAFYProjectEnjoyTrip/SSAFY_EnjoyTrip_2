@@ -17,10 +17,6 @@ public class BoardDto {
 	private int articleNo;
 	@ApiModelProperty(value="사용자 ID", example="ssafy")
 	private String userId;
-	@ApiModelProperty(value="리뷰 사진 파일",example="리뷰 사진 파일")
-	private String rfile;
-	@ApiModelProperty(value="별점",example="리뷰 별점")
-	private int star;
 	@ApiModelProperty(value="제목",example="테스트 제목")
 	private String subject;
 	@ApiModelProperty(value="글 내용", example="테스트 내용")
@@ -29,6 +25,11 @@ public class BoardDto {
 	private int hit;
 	@ApiModelProperty(value="작성 시각", example="1999-01-01")
 	private String registerTime;
+	
+	@ApiModelProperty(value="리뷰 사진 파일",example="리뷰 사진 파일")
+	private String rfile;
+	@ApiModelProperty(value="별점",example="리뷰 별점")
+	private int star;
 	
 	public int getArticleNo() {
 		return articleNo;

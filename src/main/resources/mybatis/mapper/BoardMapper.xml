@@ -14,7 +14,7 @@
 	<!-- 게시글 수정 -->
 	<update id="modifyArticle" parameterType="BoardDto">
 		update board
-		set subject = #{subject}, content = #{content}
+		set subject = #{subject}, content = #{content}, rfile=#{rfile}, star=#{star}
 		where articleNo = #{articleNo}
 	</update>
 

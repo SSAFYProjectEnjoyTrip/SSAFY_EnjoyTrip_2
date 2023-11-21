@@ -69,24 +69,24 @@ function moveModify() {
   <main class="container box">
     <div class="login-page mypage" style="margin-top: 100px">
       <div class="title">
-        <div class="mypage-title">My Page</div>
+        <div class="top">My Page</div>
       </div>
       <div id="client-information">
         <table class="table">
           <thead>
             <tr>
-              <div class="user-info">회원 정보 🥨</div>
+              <div class="info">회원 정보 🥨</div>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style="padding-top: 32px">Name</td>
-              <td style="padding-top: 32px">{{ userInfo.userName }}</td>
+              <td style="padding-top: 32px">${loginUser.userName}</td>
             </tr>
             <tr>
               <td style="padding-top: 32px">ID</td>
               <td id="currUser-userId" style="padding-top: 30px; text-align: left">
-                {{ userInfo.emailId }}
+                ${loginUser.userId}
               </td>
             </tr>
             <tr>
@@ -113,17 +113,19 @@ function moveModify() {
                         type="text"
                         class="form-control"
                         id="emailid"
+                        name="emailid"
                         style="border-radius: 20px"
-                        v-model.lazy="userInfo.emailId"
+                        value="${loginUser.emailId}"
                       />
                       <div style="padding: 7px">@</div>
                       <select
                         class="form-select"
                         style="border-radius: 20px"
                         id="emaildomain"
+                        name="emaildomain"
                         aria-label="이메일 도메인 선택"
                       >
-                        <option selected>{{ userInfo.emailDomain }}</option>
+                        <option selected>${loginUser.emailDomain}</option>
                         <option value="ssafy.com">ssafy.com</option>
                         <option value="google.com">google.com</option>
                         <option value="naver.com">naver.com</option>
@@ -216,107 +218,48 @@ function moveModify() {
   </div>
 </template>
 
-<style scoped>
-.login-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 auto;
-  border-radius: 30px;
-  background-color: white;
-  width: 95%;
-  max-width: 500px;
-  padding-bottom: 50px;
-  box-shadow: 0 0 10px #adc4ce;
-  margin-bottom: 140px;
-}
-.mypage-title {
-  margin-top: 25px;
-  margin-bottom: 80px;
-  text-align: center;
-  font-size: 40px;
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: bold;
-  color: #213555;
-  text-shadow: 0 0 3px gray;
-}
-.user-info {
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  color: #213555;
-}
-.form-control {
-  border: 1px solid #a1ccd1;
-  border-radius: 20px;
-  height: 42px;
-  margin-bottom: 20px;
-  padding-left: 15px;
-}
-.modal1-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-.modal {
-  margin-top: 100px;
-}
-.modal2-body {
-  font-size: 17px;
-}
-#currUser-email {
-  width: 70%;
-}
-.for-email {
-  display: flex;
-  flex-direction: row;
-}
+<style scoped></style>
 
-.email-update {
-  height: 30px;
-  display: block;
-  margin-left: 5px;
-}
-#curPw,
-#newPw1,
-#newPw2 {
-  width: 50%;
-}
-.make > div {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-}
-.make > div > div {
-  margin-top: 10px;
-  width: 40%;
-}
-.btns {
-  width: 70px;
-  height: 35px;
-  border: 2px solid #f1efef;
-  border-radius: 20px;
-}
-.btns:hover {
-  background-color: #d0e7d2;
-  color: white;
-}
-.delete-btn:hover {
-  background-color: #b4b4b3;
-}
-.form-select {
-  width: 140px;
-}
-#emailid {
-  width: 130px;
-  margin-top: 20px;
-}
-.for-email2 {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.login-page {
-  max-width: 600px;
-}
-</style>
+<!-- 
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
+          <mark class="orange">내정보</mark>
+        </h2>
+      </div>
+      <div class="col-lg-10">
+        <div class="card mt-3 m-auto" style="max-width: 700px">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img
+                src="https://source.unsplash.com/random/250x250/?food"
+                class="img-fluid rounded-start"
+                alt="..."
+              />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body text-start">
+                <tbody class="list-group list-group-flush">
+                  <tr>
+                    <td>
+                      <input type="text" v-model.lazy="userInfo.userId" readonly="readonly" />
+                    </td>
+                  </tr>
+                  <td>
+                    <input type="text" v-model.lazy="userInfo.userName" readonly="isReadonly" />
+                  </td>
+                  <td>
+                    <input type="text" v-model.lazy="userInfo.emailId" readonly="isReadonly" />
+                    <input type="text" v-model.lazy="userInfo.emailDomain" readonly="isReadonly" />
+                  </td>
+                </tbody>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+-->

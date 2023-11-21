@@ -103,6 +103,7 @@ public class MemberController {
 	@ApiOperation(value = "로그인", notes = "아이디와 비밀번호를 이용하여 로그인 처리.")
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(
+			HttpSession session,
 			@RequestBody @ApiParam(value = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) MemberDto memberDto) {
 		logger.debug("login user : {}", memberDto);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -114,7 +115,11 @@ public class MemberController {
 				String refreshToken = jwtUtil.createRefreshToken(loginUser.getUserId());
 				logger.debug("access token : {}", accessToken);
 				logger.debug("refresh token : {}", refreshToken);
-
+				
+				// session에 로그인된 유저 저장.
+				session.setAttribute("loginUser", loginUser);
+				System.out.println(session.getAttribute("loginUser")+" 지금 로그인된 유저임 !!");
+				
 //				발급받은 refresh token을 DB에 저장.
 				memberService.saveRefreshToken(loginUser.getUserId(), refreshToken);
 

@@ -50,33 +50,33 @@ async function onSubmit() {
     alert(contentErrMsg.value)
     return
   } else {
-    props.type === 'regist' ? writeArticle() : updateArticle()
-  }
+    if (article.value.rfile) {
+      let formData = new FormData()
+      formData.append('image', article.value.rfile)
 
-  let formData = new FormData()
-  formData.append('file', article.value.rfile) // 파일 추가
-  formData.append('star', article.value.star) // 별점 추가
-  formData.append('subject', article.value.subject) // 제목 추가
-  formData.append('content', article.value.content) // 내용 추가
+      // ImgBB API endpoint with your API key
+      const imgbbAPIEndpoint = `https://api.imgbb.com/1/upload?key=8d48b6e9b684c58e2f0d596e58a37d97`
 
-  await registArticleWithFile(formData) // 함수 호출
-}
+      try {
+        // Upload the image to ImgBB
+        const imgResponse = await axios.post(imgbbAPIEndpoint, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
 
-async function registArticleWithFile(formData) {
-  try {
-    const response = await axios.post('/board/insertReview', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+        // Set the ImgBB URL to the rfile property of your article object
+        if (imgResponse.data.success) {
+          article.value.rfile = imgResponse.data.data.url
+        }
+      } catch (error) {
+        console.error('Error uploading the image:', error)
+        return
       }
-    })
-    // 성공 처리 로직
-    console.log(response.data)
-    alert('글등록이 완료되었습니다.')
-    moveList() // 목록 페이지로 이동
-  } catch (error) {
-    // 에러 처리 로직
-    console.error(error)
-    alert('글등록 처리시 문제가 발생했습니다.')
+    }
+
+    // Continue with your existing logic to write or update the article
+    props.type === 'regist' ? writeArticle() : updateArticle()
   }
 }
 
@@ -89,6 +89,12 @@ if (props.type === 'modify') {
       article.value = data
       isUseId.value = true
       console.log(article.value)
+      if (data.rfile) {
+        // If there is an image URL, display it in the preview
+        var preview = document.getElementById('preview')
+        preview.src = data.rfile
+        preview.style.display = 'block'
+      }
     },
     (error) => {
       console.log(error)
@@ -181,10 +187,16 @@ function moveList() {
 
       <div class="share">사진을 공유해주세요</div>
       <div class="image">
-        <img class="rounded" id="preview" :src="previewSrc" alt="Uploaded Image" />
+        <img
+          class="rounded"
+          id="preview"
+          :src="article.rfile"
+          alt="Uploaded Image"
+          v-if="article.rfile"
+        />
       </div>
       <div class="input-div">
-        <input type="file" name="rfile" id="rfile" class="rfile" @change="showPreview" required />
+        <input type="file" name="rfile" id="rfile" class="rfile" @change="showPreview" />
       </div>
 
       <input
@@ -288,6 +300,7 @@ textarea {
   font-size: 35px;
   font-weight: bold;
   color: #64ccc5;
+  text-shadow: 0 0 2px #64ccc5;
 }
 
 .share,

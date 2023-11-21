@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useMenuStore } from '@/stores/menu'
 import { useMemberStore } from '@/stores/member'
 import { storeToRefs } from 'pinia'
@@ -9,15 +10,32 @@ const memberStore = useMemberStore()
 // 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
 // https://pinia.vuejs.kr/core-concepts/
 const { menuList } = storeToRefs(menuStore)
-const { userLogout  } = memberStore
+const { userLogout } = memberStore
 const { userInfo } = storeToRefs(memberStore)
-const { changeMenuState } = menuStore
 
 const logout = () => {
   userLogout(userInfo.userId)
+  // Clear session storage items
+  sessionStorage.removeItem('accessToken')
+  sessionStorage.removeItem('refreshToken')
+  sessionStorage.removeItem('loginUser')
+
   console.log('로그아웃!!!!')
-  changeMenuState()
 }
+
+const loginUser = ref(null)
+
+function checkSession() {
+  const userSession = sessionStorage.getItem('loginUser') // or localStorage
+  // console.log(sessionStorage.getItem('loginUser'))
+  // console.log(userSession)
+  // console.log('loginUser 이거슨 그냥: ', loginUser)
+  loginUser.value = userSession ? JSON.parse(userSession) : null
+}
+
+onMounted(() => {
+  checkSession()
+})
 </script>
 
 <template>
@@ -54,14 +72,35 @@ const logout = () => {
           class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
           style="--bs-scroll-height: 100px"
         >
-          <template v-for="menu in menuList" :key="menu.routeName">
+          <li class="nav-item">
+            <a class="nav-link" href="/hotplace"><b>계획세우기</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/board/list"><b>여행리뷰✨</b></a>
+          </li>
+          <li class="nav-item" v-if="loginUser">
+            <a class="nav-link" href="/user/mypage"><b>마이페이지</b></a>
+          </li>
+          <li class="nav-item" v-if="loginUser">
+            <!-- <a class="nav-link" href="/user/logout" @click.prevent="logout()"><b>로그아웃</b></a> -->
+            <router-link to="/" @click.prevent="logout()" class="nav-link"
+              ><b>로그아웃</b></router-link
+            >
+          </li>
+          <li class="nav-item" v-if="!loginUser">
+            <a class="nav-link" href="/user/join"><b>회원가입✍🏻</b></a>
+          </li>
+          <li class="nav-item" v-if="!loginUser">
+            <a class="nav-link" href="/user/login"><b>로그인</b></a>
+          </li>
+
+          <!-- <template v-for="menu in menuList" :key="menu.routeName">
             <template v-if="menu.show">
               <template v-if="menu.routeName === 'user-logout'">
                 <li class="nav-item">
                   <router-link to="/" @click.prevent="logout()" class="nav-link">
-                  {{
-                    menu.name
-                  }}</router-link>
+                    {{ menu.name }}</router-link
+                  >
                 </li>
               </template>
               <template v-else>
@@ -72,13 +111,13 @@ const logout = () => {
                 </li>
               </template>
             </template>
-          </template>
+          </template> -->
         </ul>
       </div>
     </div>
-    </nav>
-    <!-- 상단 navbar end -->
-    <div class="navbar-bottom"></div>
+  </nav>
+  <!-- 상단 navbar end -->
+  <div class="navbar-bottom"></div>
 </template>
 
 <style scoped>

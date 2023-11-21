@@ -3,15 +3,15 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
-import { useMenuStore } from '@/stores/menu'
+// import { useMenuStore } from '@/stores/menu'
 
 const router = useRouter()
 
 const memberStore = useMemberStore()
 
-const { isLogin } = storeToRefs(memberStore)
-const { userInfo, userLogin, getUserInfo } = memberStore
-const { changeMenuState } = useMenuStore()
+const { userInfo, isLogin } = storeToRefs(memberStore)
+const { userLogin, getUserInfo } = memberStore
+// const { changeMenuState } = useMenuStore()
 
 const loginUser = ref({
   userId: '',
@@ -24,56 +24,64 @@ const login = async () => {
   let token = sessionStorage.getItem('accessToken')
   console.log('111. ', token)
   console.log('isLogin: ', isLogin.value)
-  //????????????????????????????????????????????
   if (isLogin.value === true) {
-    console.log('로그인 정보가 있음?? 로그인 성공 아니 로그인이 안됐는데 왜 뜨는거임?')
+    console.log('로그인 정보가 있음 ㅇㅇㅇ 로그인 성공 아니 로그인이 안됐는데 왜 뜨는거임?')
     getUserInfo(token)
-    changeMenuState()
+
+    // changeMenuState()
+    router.push('/').then(() => {
+      // Once navigation is confirmed, reload the page
+      window.location.reload()
+    })
   }
   console.log(userInfo)
-  router.push('/')
 }
 </script>
 
 <template>
-	<main class="container box">
-		<div class="login-page" style="margin-top: 100px">
-			<div class="title">
-				<img src="@/assets/et.png" class="login-logo" />
-			</div>
-			<div class="form">
-				<form name="login-form" class="login-form" method="POST" action="">
-					<input type="hidden" name="action" value="login">
-					<div>
-						<input type="text"
+  <main class="container box">
+    <div class="login-page" style="margin-top: 100px">
+      <div class="title">
+        <img src="@/assets/et.png" class="login-logo" />
+      </div>
+      <div class="form">
+        <form name="login-form" class="login-form" method="POST" action="">
+          <input type="hidden" name="action" value="login" />
+          <div>
+            <input
+              type="text"
               class="form-control"
               v-model="loginUser.userId"
-              placeholder="ID" required />
-					</div>
-					<div>
-						<input
+              placeholder="ID"
+              required
+            />
+          </div>
+          <div>
+            <input
               type="password"
               class="form-control"
               v-model="loginUser.userPwd"
               placeholder="Password"
             />
-					</div>
+          </div>
           <div class="for-saveid">
-            <input class="form-check-input" type="checkbox" value="ok" id="saveid" name="saveid"/> 
+            <input class="form-check-input" type="checkbox" value="ok" id="saveid" name="saveid" />
             <label class="form-check-label" for="saveid">&nbsp;&nbsp;아이디저장 </label>
           </div>
-					<div>
-            <button type="button" class="btn btn-outline-primary mb-3 login-btn" @click="login">login</button>
+          <div>
+            <button type="button" class="btn btn-outline-primary mb-3 login-btn" @click="login">
+              login
+            </button>
           </div>
-					<div class="go">
-						<a href="/user/join" class="last">회원가입</a>&nbsp;|
-						<a href="#" class="last">&nbsp;아이디 찾기&nbsp;</a>| 
+          <div class="go">
+            <a href="/user/join" class="last">회원가입</a>&nbsp;|
+            <a href="#" class="last">&nbsp;아이디 찾기&nbsp;</a>|
             <a href="#" class="last">&nbsp;비밀번호 찾기</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</main>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>
@@ -124,7 +132,7 @@ const login = async () => {
   border: none;
   font-size: 20px;
   font-weight: bold;
-  font-family: "Times New Roman", Times, serif;
+  font-family: 'Times New Roman', Times, serif;
   color: #0c356a;
   border-radius: 20px;
   width: 90px;
@@ -140,6 +148,4 @@ const login = async () => {
   color: white;
   box-shadow: 0 0 3px #aed2ff;
 }
-
-
 </style>
