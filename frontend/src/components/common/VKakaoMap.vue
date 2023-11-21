@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-
+import defaultImage from '@/assets/map/dog.jpeg'
 var map
 const positions = ref([])
 const markers = ref([])
@@ -58,18 +58,18 @@ const initMap = () => {
   }
   map = new kakao.maps.Map(container, options)
 
+  //???loadMarkers만 하면 바로 에러뜨네 에이
   // loadMarkers();
 }
 
 const loadMarkers = () => {
   // 현재 표시되어있는 marker들이 있다면 map에 등록된 marker를 제거한다.
-  deleteMarkers()
+  if(markers.value.length > 0)
+    deleteMarkers()
 
-  // 마커 이미지를 생성합니다
-  //   const imgSrc = require("@/assets/map/markerStar.png");
   // 마커 이미지의 이미지 크기 입니다
-  //   const imgSize = new kakao.maps.Size(24, 35);
-  //   const markerImage = new kakao.maps.MarkerImage(imgSrc, imgSize);
+    const imgSize = new kakao.maps.Size(24, 35);
+    const markerImage = new kakao.maps.MarkerImage(defaultImage, imgSize);
 
   // 마커를 생성합니다
   markers.value = []
@@ -78,8 +78,8 @@ const loadMarkers = () => {
       map: map, // 마커를 표시할 지도
       position: position.latlng, // 마커를 표시할 위치
       title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨.
-      clickable: true // // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-      // image: markerImage, // 마커의 이미지
+      clickable: true, // // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+      image: markerImage // 마커의 이미지
     })
     markers.value.push(marker)
   })

@@ -6,12 +6,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.enjoytrip.board.model.dto.BoardDto;
+import com.ssafy.enjoytrip.hotplace.model.dao.AttractionDao;
+import com.ssafy.enjoytrip.hotplace.model.dto.AttractionInfoDto;
 import com.ssafy.enjoytrip.hotplace.service.AttractionService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 
 @Api(value = "관광지 REST-ful위한 API", description = "관광지 게시판")
 @RestController // Controller 내에서 작성하는 모든 메서드에 기본적으로 @ResponseBody로 출력됨.
@@ -47,4 +54,65 @@ public class AttractionRestController {
 		}
 		return new ResponseEntity<String>(errorMsg, resHeader, HttpStatus.FAILED_DEPENDENCY);
 	}
+	
+	@ApiOperation(value = "게시글 리스트", notes = "여행 정보 리스트")
+	@ApiResponse(code = 200, message = "success")
+	@GetMapping("/{areaCode}/{sigunguCode}")
+	public ResponseEntity<?> search(@PathVariable String areaCode, @PathVariable String sigunguCode) {
+		AttractionInfoDto board = attractionService.attractionList(attractionInfoDto));
+
+		if (board != null) {
+			return new ResponseEntity(board, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+//	private void getTripList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		int areaCode = Integer.parseInt(!request.getParameter("areaCode").isEmpty() ? request.getParameter("areaCode") : "0");
+//		int sigunguCode = Integer.parseInt(!request.getParameter("sigunguCode").isEmpty()? request.getParameter("sigunguCode") : "0");
+//		int contentTypeId = Integer.parseInt(!request.getParameter("contentTypeId").isEmpty() ? request.getParameter("contentTypeId") : "0");
+//		int numOfRows = Integer.parseInt(!request.getParameter("numOfRows").isEmpty() ? request.getParameter("numOfRows") : "10");
+//		int pageNo = Integer.parseInt(!request.getParameter("pageNo").isEmpty() ? request.getParameter("pageNo") : "1");
+//
+//
+//		AttractionInfoDto dto = new AttractionInfoDto();
+//		dto.setSidoCode(areaCode);
+//		dto.setGugunCode(sigunguCode);
+//		dto.setContentTypeId(contentTypeId);
+//
+//		System.out.println(dto.toString());
+//
+//		// 리스트로 변환
+//		List<AttractionInfoDto> pageData = service.attractionList(dto).stream()
+//				.skip((pageNo - 1) * numOfRows) // 스킵할 요소의 수 계산
+//				.limit(numOfRows) // 원하는 개수만큼 가져오기
+//				.collect(Collectors.toList());
+//
+//		System.out.println(pageData.toString());
+//
+//		BiFunction<AttractionInfoDto, ObjectMapper, ObjectNode> mapper = (i, o) -> {
+//			ObjectNode item = o.createObjectNode();
+//
+//			item.put("addr1", i.getAddr1());
+//			item.put("addr2", i.getAddr2());
+//			item.put("areacode", i.getSidoCode());
+//			item.put("contentid", i.getContentId());
+//			item.put("contenttypeid", i.getContentTypeId());
+//			item.put("firstimage", i.getFirstImage());
+//			item.put("firstimage2", i.getFirstImage2());
+//			item.put("mapx", i.getLongitude());
+//			item.put("mapy", i.getLatitude());
+//			item.put("mlevel", i.getMlevel());
+//			item.put("sigungucode", i.getGugunCode());
+//			item.put("tel", i.getTel());
+//			item.put("title", i.getTitle());
+//			item.put("zipcode", i.getZipcode());
+//
+//			return item;
+//		};
+//
+//		makeJsonResponse(pageData, mapper, request, response);
+//	}
+
 }
