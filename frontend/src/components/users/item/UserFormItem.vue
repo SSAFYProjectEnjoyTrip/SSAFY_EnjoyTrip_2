@@ -11,13 +11,22 @@ const props = defineProps({ type: String })
 
 const memberStore = useMemberStore()
 
-const user = ref({
+// 기본 상태를 정의하는 함수
+const getDefaultState = () => ({
   userId: '',
   userName: '',
   userPwd: '',
   emailId: '',
   emailDomain: ''
-})
+});
+
+// 폼 상태
+const user = ref(getDefaultState())
+
+// 폼을 리셋하는 함수
+const clear = () => {
+  user.value = getDefaultState();
+};
 
 const { userInfo, isLogin } = storeToRefs(memberStore)
 const isUseId = ref(false)
@@ -97,65 +106,95 @@ function moveMain() {
 function moveDetail() {
   router.push({ name: 'user-mypage' })
 }
+
+
 </script>
 
 <template>
   <form @submit.prevent="onSubmit">
-    <div class="mb-3">
-      <label for="userid" class="form-label">작성자 ID : </label>
-      <input
-        type="text"
-        class="form-control"
-        v-model="user.userId"
-        :disabled="isUseId"
-        placeholder="작성자ID..."
-      />
-    </div>
-    <div class="mb-3">
-      <label for="userName" class="form-label">이름 : </label>
-      <input type="text" class="form-control" v-model="user.userName" />
-    </div>
-    <!-- <div class="mb-3">
-      <label for="userId" class="form-label">아이디 : </label>
-      <input type="text" class="form-control" v-model="userInfo.userId" placeholder="아이디..." />
-    </div> -->
-    <div class="mb-3">
-      <label for="userPwd" class="form-label">비밀번호 : </label>
-      <input type="text" class="form-control" v-model="user.userPwd" placeholder="비밀번호..." />
-    </div>
-    <!-- <div class="mb-3">
-            <label for="pwdCheck" class="form-label">비밀번호확인 : </label>
-            <input type="text" class="form-control" v-model="user.userPwd" id="pwdCheck" placeholder="비밀번호확인..." />
-    </div> -->
-    <div class="mb-3">
-      <label for="emailid" class="form-label">이메일 : </label>
-      <div class="input-group">
-        <input type="text" class="form-control" v-model="user.emailId" placeholder="이메일아이디" />
-        <span class="input-group-text">@</span>
-        <select class="form-select" v-model="user.emailDomain" aria-label="이메일 도메인 선택">
-          <option selected>선택</option>
-          <option value="ssafy.com">싸피</option>
-          <option value="google.com">구글</option>
-          <option value="naver.com">네이버</option>
-          <option value="kakao.com">카카오</option>
-        </select>
+    <div class="register-page">
+      <div class="title">
+        <img src="@/assets/et.png" class="login-logo"/>
       </div>
-    </div>
-    <div class="col-auto text-center">
-      <button
-        type="submit"
-        class="btn btn-outline-primary mb-3"
-        v-if="type === 'register'"
-        @click="userRegist"
-      >
-        회원가입
-      </button>
-      <button type="submit" class="btn btn-outline-success mb-3" v-else @click="userUpdate">
-        회원 정보 수정
-      </button>
-      <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="clear">초기화</button>
+      <div class="form">
+        <div> 
+          <input id="name" type="text" class="form-control" v-model="user.userName" placeholder="name" required />
+        </div>
+        <input id="userId" type="text" class="form-control" v-model="user.userId" :disabled="isUseId" placeholder="id" required />
+        <div id="result-view" class="mb-3"></div><!--아이디 사용가능한지 보여주는 곳-->
+        <div>
+          <input type="password" id="password" class="form-control" v-model="user.userPwd" placeholder="password" required />
+        </div>
+        <input type="password" id="pwdcheck" class="form-control" placeholder="password check" />
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="text" class="form-control" id="emailid" v-model="user.emailId" style="border-radius: 20px;" placeholder="email id" /> 
+            <div style="padding: 7px;">@</div>
+            <select class="form-select" style="border-radius: 20px; height: 42px; padding-bottom: 9px;"
+              id="emaildomain" v-model="user.emailDomain" aria-label="이메일 도메인 선택">
+              <option selected>선택</option>
+              <option value="ssafy.com">ssafy.com</option>
+              <option value="google.com">google.com</option>
+              <option value="naver.com">naver.com</option>
+              <option value="kakao.com">kakao.com</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-auto text-center">
+          <button
+            type="submit"
+            class="btn btn-outline-primary mb-3"
+            v-if="type === 'register'"
+            @click="userRegist"
+          >
+            회원가입
+          </button>
+          <button type="submit" class="btn btn-outline-success mb-3" v-else @click="userUpdate">
+            회원 정보 수정
+          </button>
+          <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="clear">초기화</button>
+        </div>
+      </div>
     </div>
   </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+.login-logo {
+  width: 150px;
+  display: block;
+  margin: 0 auto;
+}
+.register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 30px;
+  background-color: white;
+  width: 90%;
+  max-width: 500px;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  box-shadow: 0 0 10px #adc4ce;
+  margin-top: 100px;
+  margin-bottom: 140px;
+}
+input {
+  border: 1px solid #a1ccd1;
+  border-radius: 20px;
+  height: 42px;
+  margin-bottom: 20px;
+  padding-left: 15px;
+  padding-bottom: 9px;
+}
+.form {
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+button {
+  width: 49%;
+  border-radius: 20px;
+}
+</style>
