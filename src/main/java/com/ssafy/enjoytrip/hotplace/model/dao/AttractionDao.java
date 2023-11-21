@@ -7,16 +7,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface AttractionDao {
 
-	List<AttractionInfoDto> attractionList(AttractionInfoDto attractionInfoDto)  throws SQLException;
+	List<AttractionInfoDto> attractionList(@Param("areaCode") int areaCode, @Param("sigunguCode") int sigunguCode)  throws SQLException;
+	
+	List<AttractionInfoDto> attractionListByType(@Param("areaCode") int areaCode, @Param("sigunguCode") int sigunguCode, @Param("areaCode") int contentTypeId) throws SQLException;
 
-	List<AttractionInfoDto> searchByTitle(String title, int sidoCode)  throws SQLException;
-
-//	List<SidoDto> stateList();
-//
-//	List<GugunDto> cityList(int stateCode);
+	List<AttractionInfoDto> searchByTitle(@Param("title") String title, @Param("areaCode") int areaCode, @Param("sigunguCode") int sigunguCode)  throws SQLException;
 
 }

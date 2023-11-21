@@ -16,10 +16,10 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<AttractionInfoDto> attractionList(AttractionInfoDto attractionInfoDto) {
+    public List<AttractionInfoDto> attractionList(int areaCode, int sigunguCode) {
     	List<AttractionInfoDto> list = null;
         try {
-			list = dao.attractionList(attractionInfoDto);
+			list = dao.attractionList(areaCode, sigunguCode);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -28,24 +28,27 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public List<AttractionInfoDto> searchByTitle(String title, int sidoCode) {
+    public List<AttractionInfoDto> searchByTitle(String title, int areaCode, int sigunguCode) {
     	List<AttractionInfoDto> list = null;
         try {
-        	list = dao.searchByTitle(title, sidoCode);
+        	list = dao.searchByTitle(title, areaCode, sigunguCode);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
         return list;
     }
 
-//    @Override
-//    public List<SidoDto> stateList() {
-//        return dao.stateList();
-//    }
-//
-//    @Override
-//    public List<GugunDto> cityList(int stateCode) {
-//        return dao.cityList(stateCode);
-//    }
+	@Override
+	public List<AttractionInfoDto> attractionListByType(int areaCode, int sigunguCode, int contentTypeId) {
+		List<AttractionInfoDto> list = null;
+		
+		try {
+			list = dao.attractionListByType(areaCode, sigunguCode, contentTypeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 }
 
