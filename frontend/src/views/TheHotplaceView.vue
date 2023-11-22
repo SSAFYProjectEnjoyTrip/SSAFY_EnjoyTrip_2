@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, toRefs } from "vue";
 import { listStations } from "@/api/estation";
 import { listSido, listGugun } from "@/api/map";
+import {searchAttractionList, searchAttractionListByType, searchByTitle} from "@/api/hotplace"
 
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import VSelect from "@/components/common/VSelect.vue";
@@ -11,6 +12,10 @@ const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env;
 
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
+
+const attractionInfos = ref([]);
+const selectAttraction = ref({});
+
 const chargingStations = ref([]);
 const selectStation = ref({});
 
@@ -20,6 +25,11 @@ const param = ref({
   numOfRows: 20,
   zscode: 0,
 });
+
+const selected = ref({
+  sidoCode : 0,
+  gugunCode : 0,
+})
 
 onMounted(() => {
   // getChargingStations();
@@ -35,6 +45,7 @@ const getSidoList = () => {
         options.push({ text: sido.sidoName, value: sido.sidoCode });
       });
       sidoList.value = options;
+      // console.log("선택한 시도는......", sidoList.value)
     },
     (err) => {
       console.log(err);
@@ -43,6 +54,8 @@ const getSidoList = () => {
 };
 
 const onChangeSido = (val) => {
+  selected.value.sidoCode = val;
+
   listGugun(
     { sido: val },
     ({ data }) => {
@@ -52,6 +65,7 @@ const onChangeSido = (val) => {
         options.push({ text: gugun.gugunName, value: gugun.gugunCode });
       });
       gugunList.value = options;
+      console.log("선택한 구군은......", gugunList.value)
     },
     (err) => {
       console.log(err);
@@ -60,14 +74,40 @@ const onChangeSido = (val) => {
 };
 
 const onChangeGugun = (val) => {
+  selected.value.gugunCode = val;
+
   param.value.zscode = val;
   getChargingStations();
+  getAttractionInfo();
+};
+
+const getAttractionInfo = () => {
+  console.log("selected value 어케 들어가는데!!!!!!!!!!!!!!!!!!!!", selected.value);
+  // const { sido, gugun } = toRefs(selected.value);
+  // console.log(sido.value, " 아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ", gugun.value)
+
+  searchAttractionList(
+    selected.value.sidoCode,
+    selected.value.gugunCode,
+    ({ data }) => {
+      console.log("찾은 데이터가 어떻게 들어오려나???", data)
+      // attractionInfos.value = data.items[0].item;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+};
+
+const viewAttraction = (attraction) => {
+  selectAttraction.value = attraction;
 };
 
 const getChargingStations = () => {
   listStations(
     param.value,
     ({ data }) => {
+      console.log("찾은 데이터가 어떻게 들어오려나???", data)
       chargingStations.value = data.items[0].item;
     },
     (err) => {
@@ -165,6 +205,18 @@ const viewStation = (station) => {
             <td>{{ station.lat }}</td>
             <td>{{ station.lng }}</td>
           </tr>
+
+          <!-- <tr
+            class="text-center"
+            v-for="attraction in attractionInfos"
+            :key="attraction.contentId + attraction.title"
+            @click="viewAttraction(attraction)"
+          >
+            <td>{{ attraction.title }}</td>
+            <td>{{ attraction.zipcode }}</td>
+            <td>{{ attraction.latitude }}</td>
+            <td>{{ attraction.longitude }}</td>
+          </tr> -->
         </tbody>
       </table>
       필요없음 사실 그냥 내가 보기 위해 만들어놓은 임시

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.board.model.dto.BoardDto;
 import com.ssafy.enjoytrip.hotplace.model.dao.AttractionDao;
+import com.ssafy.enjoytrip.hotplace.model.dto.AttractionListDto;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionInfoDto;
 import com.ssafy.enjoytrip.hotplace.service.AttractionService;
 
@@ -25,8 +26,7 @@ import io.swagger.annotations.ApiResponse;
 
 @Api(value = "관광지 REST-ful위한 API", description = "관광지 게시판")
 @RestController // Controller 내에서 작성하는 모든 메서드에 기본적으로 @ResponseBody로 출력됨.
-@RequestMapping("/hotplace") // 요청하는 자원(Domain)명을 붙인다. ==> /book이 이미 있어서 /rest로 함
-
+@RequestMapping("/hotplace")
 public class AttractionRestController {
 	private Logger logger = LoggerFactory.getLogger(AttractionRestController.class);
 	private AttractionService attractionService;
@@ -60,10 +60,10 @@ public class AttractionRestController {
 	
 	@ApiOperation(value = "위치에 따른 여행 정보 리스트", notes = "여행 정보 리스트")
 	@ApiResponse(code = 200, message = "success")
-	@GetMapping("/{areaCode}/{sigunguCode}")
-	public ResponseEntity<?> searchAttractionList(@PathVariable String areaCode, @PathVariable String sigunguCode) {
-		
-		List<AttractionInfoDto> boards = attractionService.attractionList(Integer.parseInt(areaCode), Integer.parseInt(sigunguCode));
+	@GetMapping("/{sidoCode}/{gugunCode}")
+	public ResponseEntity<?> searchAttractionList(@PathVariable String sidoCode, @PathVariable String gugunCode) {
+		AttractionListDto aDto = new AttractionListDto(Integer.parseInt(sidoCode), Integer.parseInt(gugunCode));
+		List<AttractionInfoDto> boards = attractionService.attractionList(aDto);
 		
 		if (boards != null) {
 			return new ResponseEntity(boards, HttpStatus.OK);
@@ -75,8 +75,8 @@ public class AttractionRestController {
 	@ApiOperation(value="위치와 타입에 따른 여행 정보 리스트", notes = "타입에 따른 여행 정보 리스트")
 	@ApiResponse(code = 200, message = "success")
 	@GetMapping("/{areaCode}/{sigunguCode}/{contentTypeId}")
-	public ResponseEntity<?> searchAttractionListByType(@PathVariable String areaCode, @PathVariable String sigunguCode, @PathVariable String contentTypeId) {
-		List<AttractionInfoDto> boards = attractionService.attractionListByType(Integer.parseInt(areaCode), Integer.parseInt(sigunguCode), Integer.parseInt(contentTypeId));
+	public ResponseEntity<?> searchAttractionListByType(@PathVariable String sidoCode, @PathVariable String gugunCode, @PathVariable String contentTypeId) {
+		List<AttractionInfoDto> boards = attractionService.attractionListByType(Integer.parseInt(sidoCode), Integer.parseInt(gugunCode), Integer.parseInt(contentTypeId));
 		
 		if(boards != null) {
 			return new ResponseEntity(boards, HttpStatus.OK);
@@ -88,8 +88,8 @@ public class AttractionRestController {
 	@ApiOperation(value="지역과 제목에 따른 여행 정보 리스트", notes = "지역과 제목에 따른 여행 정보 리스트")
 	@ApiResponse(code = 200, message = "success")
 	@GetMapping("/{areaCode}/{sigunguCode}/{title}")
-	public ResponseEntity<?> searchByTitle(@PathVariable String title, @PathVariable String areaCode, @PathVariable String sigunguCode) {
-		List<AttractionInfoDto> boards = attractionService.searchByTitle(title, Integer.parseInt(areaCode), Integer.parseInt(sigunguCode));
+	public ResponseEntity<?> searchByTitle(@PathVariable String title, @PathVariable String sidoCode, @PathVariable String gugunCode) {
+		List<AttractionInfoDto> boards = attractionService.searchByTitle(title, Integer.parseInt(sidoCode), Integer.parseInt(gugunCode));
 		
 		if(boards != null) {
 			return new ResponseEntity(boards, HttpStatus.OK);
