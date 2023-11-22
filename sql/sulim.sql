@@ -1,0 +1,5 @@
+
+ALTER TABLE board
+ADD COLUMN star INT,
+ADD COLUMN rfile VARCHAR(255);
+

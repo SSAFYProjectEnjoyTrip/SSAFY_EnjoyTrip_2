@@ -41,6 +41,12 @@ async function updatePwd(param, success, fail) {
   console.log('updatePwd가 await까지 했긴했음')
 }
 
+async function updateEmail(param, success, fail) {
+  console.log('param', param)
+  await local.put(`/user/updateEmail`, param).then(success).catch(fail)
+  console.log('updateEmail가 await까지 했긴했음 (user.js입니다) ')
+}
+
 export {
   userConfirm,
   findById,
@@ -49,5 +55,6 @@ export {
   logout,
   updateUser,
   deleteUser,
-  updatePwd
+  updatePwd,
+  updateEmail
 }
