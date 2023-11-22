@@ -5,24 +5,23 @@
 <mapper namespace="com.ssafy.enjoytrip.hotplace.model.dao.AttractionDao">
 
 	<!-- 이름에 따른 여행 정보 리스트 -->
-	<select id = "searchByTitle", parameterType= "map", resultType="AttractionInfoDto">
+	<select id = "searchByTitle" parameterType= "SearchByTitleDto" resultType="AttractionInfoDto">
 		select *
 		from attraction_info
 		where title = #{title} and sido_code = #{sidoCode} and gugun_code = #{gugunCode}
 	</select>
 	
 	<!-- 타입에 따른 여행 정보 리스트 -->
-	<select id = "attractionListByType", parameterType= "map", resultType="AttractionInfoDto">
+	<select id = "attractionListByType" parameterType= "map" resultType="AttractionInfoDto">
 		select *
 		from attraction_info
 		where content_type_id = #{contentTypeId} and sido_code = #{sidoCode} and gugun_code = #{gugunCode}
 	</select>
 	
 	<!-- 위치에 따른 여행 정보 리스트 -->
-	<select id = "attractionList", parameterType= "map", resultType="AttractionInfoDto">
+	<select id = "attractionList" parameterType= "AttractionListDto" resultType="AttractionInfoDto">
 		select *
 		from attraction_info
-		where sido_code = #{sidoCode} and gugun_code = #{gugunCode}
-		
+		where left(sido_code,2) = #{sidoCode} and left(gugun_code,5) = #{gugunCode}
 	</select>
 </mapper>
