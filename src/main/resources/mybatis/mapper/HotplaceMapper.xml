@@ -22,6 +22,6 @@
 	<select id = "attractionList" parameterType= "AttractionListDto" resultType="AttractionInfoDto">
 		select *
 		from attraction_info
-		where left(sido_code,2) = #{sidoCode} and left(gugun_code,5) = #{gugunCode}
+		where sido_code = #{sidoCode} and gugun_code = #{gugunCode}
 	</select>
 </mapper>

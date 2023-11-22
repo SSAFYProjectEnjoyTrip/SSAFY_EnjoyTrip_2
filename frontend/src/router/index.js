@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TheHomeView from '@/views/TheHomeView.vue'
-import TheElectricChargingStationView from '@/views/TheElectricChargingStationView.vue'
+import TheDraggableView from '@/views/TheDraggableView.vue'
 import TheHotplaceView from '@/views/TheHotplaceView.vue'
 
 const router = createRouter({
@@ -20,7 +20,7 @@ const router = createRouter({
       path: '/estations',
       name: 'estations',
       // beforeEnter: onlyAuthUser,
-      component: TheElectricChargingStationView
+      component: TheDraggableView
     },
     {
       path: '/user',

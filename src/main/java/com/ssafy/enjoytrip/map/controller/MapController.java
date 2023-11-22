@@ -7,12 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.enjoytrip.map.model.dto.GugunDto;
 import com.ssafy.enjoytrip.map.model.dto.MarkerDto;
-import com.ssafy.enjoytrip.map.model.dto.SidoGugunCodeDto;
+import com.ssafy.enjoytrip.map.model.dto.SidoDto;
 import com.ssafy.enjoytrip.map.service.MapService;
 
 import io.swagger.annotations.Api;
@@ -36,66 +38,41 @@ public class MapController {
 	@GetMapping("/getSido")
 	public ResponseEntity<?> getSido() {
 		
-		List<SidoGugunCodeDto> sidoList = null;
+		List<SidoDto> sidoList = null;
 		try {
 			sidoList = mapService.getSido();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		logger.debug("map.getSido...................sidoList:{}", sidoList);
 		
 		if (sidoList != null && !sidoList.isEmpty()) {
-			return new ResponseEntity<List<SidoGugunCodeDto>>(sidoList, HttpStatus.OK);
+			return new ResponseEntity<List<SidoDto>>(sidoList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
-//	@ApiOperation(value="구군 정보 조회")
-//	@GetMapping("/getGugun")
-//	public ResponseEntity<?> getGugun(@RequestParam int sidoCode) {
-//		
-//		List<GugunDto> gugunList = mapService.getGugun(sidoCode);
-//		
-//		logger.debug("map.getGugun...................gugunList:{}", gugunList);
-//
-//		if (gugunList != null && !gugunList.isEmpty()) {
-//			return new ResponseEntity<List<GugunDto>>(gugunList, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//		}
-//	}
-//	
-//	@ApiOperation(value="마커 정보 조회")
-//	@GetMapping("/getMarker")
-//	public ResponseEntity<?> getMarker(@RequestParam int contentTypeId, @RequestParam int sidoCode, @RequestParam int gugunCode) {
-//		List<MarkerDto> markerList = mapService.getMarker(contentTypeId, sidoCode, gugunCode);
-//		
-//		logger.debug("map.getMarker...................markerList:{}", markerList);
-//
-//		if (markerList != null && !markerList.isEmpty()) {
-//			return new ResponseEntity<List<MarkerDto>>(markerList, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//		}
-//	}
-	
-	@ApiOperation(value = "시도 정보", notes = "전국의 시도를 반환한다.", response = List.class)
-	@GetMapping("/sido")
-	public ResponseEntity<List<SidoGugunCodeDto>> sido() throws Exception {
-		logger.info("sido - 호출");
-		return new ResponseEntity<List<SidoGugunCodeDto>>(mapService.getSido(), HttpStatus.OK);
+	@ApiOperation(value="구군 정보 조회")
+	@GetMapping("/getGugun/{sidoCode}")
+	public ResponseEntity<?> getGugun(@PathVariable String sidoCode) {
+		logger.debug("여기까지 잘 왔어???: {}", sidoCode);
+		List<GugunDto> gugunList = null;
+		try {
+			logger.debug(mapService.getGugun(Integer.parseInt(sidoCode)).toString());
+			gugunList = mapService.getGugun(Integer.parseInt(sidoCode));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		logger.debug("map.getGugun...................sidoList:{}", gugunList);
+		
+		if (gugunList != null && !gugunList.isEmpty()) {
+			return new ResponseEntity<List<GugunDto>>(gugunList, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
 	}
-
-	@ApiOperation(value = "구군 정보", notes = "시도에 속한 구군을 반환한다.", response = List.class)
-	@GetMapping("/gugun")
-	public ResponseEntity<List<SidoGugunCodeDto>> gugun(
-			@RequestParam("sido") @ApiParam(value = "시도코드.", required = true) String sido) throws Exception {
-		logger.info("gugun - 호출");
-		return new ResponseEntity<List<SidoGugunCodeDto>>(mapService.getGugunInSido(sido), HttpStatus.OK);
-	}
-
-	
+		
 }

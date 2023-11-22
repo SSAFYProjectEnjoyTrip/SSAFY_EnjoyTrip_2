@@ -4,18 +4,17 @@
 
 <mapper namespace="com.ssafy.enjoytrip.map.model.dao.MapDao">
 	
-	<select id="getSido" resultType="sidoGugunCodeDto">
-		select left(sidoCode,2)
-		sidoCode, sidoName
-		from sidocode
-		order by sidoCode
+	<select id="getSido" resultType="SidoDto">
+		select *
+		from sido
+		order by sido_code
 	</select>
 
-	<select id="getGugunInSido" parameterType="string"
-		resultType="sidoGugunCodeDto">
-		select left(gugunCode,5) gugunCode, gugunName
-		from guguncode
-		where left(gugunCode,2) = #{sido}
-		order by gugunCode
+	<select id="getGugun" parameterType="int"
+		resultType="gugunDto">
+		select *
+		from gugun
+		where sido_code = #{sidoCode}
+		order by gugun_code
 	</select>
 </mapper>
