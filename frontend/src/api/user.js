@@ -35,4 +35,19 @@ async function deleteUser(userId, success, fail) {
   await local.delete(`/user/${userId}`).then(success).catch(fail)
 }
 
-export { userConfirm, findById, registUser, tokenRegeneration, logout, updateUser, deleteUser }
+async function updatePwd(param, success, fail) {
+  console.log('param', param)
+  await local.put(`/user/updatePwd`, param).then(success).catch(fail)
+  console.log('updatePwd가 await까지 했긴했음')
+}
+
+export {
+  userConfirm,
+  findById,
+  registUser,
+  tokenRegeneration,
+  logout,
+  updateUser,
+  deleteUser,
+  updatePwd
+}

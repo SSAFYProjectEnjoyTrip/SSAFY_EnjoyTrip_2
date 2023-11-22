@@ -26,8 +26,6 @@ const user = ref(getDefaultState())
 // 폼을 리셋하는 함수
 const clear = () => {
   user.value = getDefaultState()
-  // pwdcheck
-  pwdcheck.value = ''
 }
 
 const { userInfo, isLogin } = storeToRefs(memberStore)
@@ -89,23 +87,16 @@ function userUpdate() {
 
 function userRegist() {
   console.log('회원 등록 진입!!')
-  if (password.value == pwdcheck.value) {
-    registUser(
-      user.value,
-      (response) => {
-        let msg = '회원 등록 처리시 문제 발생했습니다.'
-        if (response.status == 200) msg = '회원 등록이 완료되었습니다.'
-        alert(msg)
-        moveMain()
-      },
-      (error) => {
-        console.log(error)
-        alert('이미 존재하는 아이디 입니다.')
-      }
-    )
-  } else {
-    alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
-  }
+  registUser(
+    user.value,
+    (response) => {
+      let msg = '회원 등록 처리시 문제 발생했습니다.'
+      if (response.status == 200) msg = '회원 등록이 완료되었습니다.'
+      alert(msg)
+      moveMain()
+    },
+    (error) => console.log(error)
+  )
 }
 
 function moveMain() {
@@ -126,36 +117,14 @@ function moveDetail() {
       <div class="form">
         <div>
           <input
-            id="name"
-            type="text"
-            class="form-control"
-            v-model="user.userName"
-            placeholder="name"
-            required
-          />
-        </div>
-        <input
-          id="userId"
-          type="text"
-          class="form-control"
-          v-model="user.userId"
-          :disabled="isUseId"
-          placeholder="id"
-          required
-        />
-        <div id="result-view" class="mb-3"></div>
-        <!--아이디 사용가능한지 보여주는 곳-->
-        <div>
-          <input
             type="password"
             id="password"
             class="form-control"
             v-model="user.userPwd"
-            placeholder="password"
+            placeholder="현재비밀번호"
             required
           />
         </div>
-        <input type="password" id="pwdcheck" class="form-control" placeholder="password check" />
         <div class="mb-3">
           <div class="input-group">
             <input

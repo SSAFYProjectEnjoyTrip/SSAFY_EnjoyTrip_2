@@ -1,5 +1,5 @@
 <script setup>
-import UserFormItem from './item/UserFormItem.vue'
+import UserModifyFormItem from './item/UserModifyFormItem.vue'
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import UserFormItem from './item/UserFormItem.vue'
         </h2>
       </div>
       <div class="col-lg-10 text-start">
-        <UserFormItem type="update" />
+        <UserModifyFormItem type="update" />
       </div>
     </div>
   </div>

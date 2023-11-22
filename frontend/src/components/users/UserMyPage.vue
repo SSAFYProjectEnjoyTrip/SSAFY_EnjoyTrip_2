@@ -4,15 +4,28 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { useMenuStore } from '@/stores/menu'
-import { findById, deleteUser, logout } from '@/api/user'
+import { findById, deleteUser, logout, updatePwd } from '@/api/user'
 
 const router = useRouter()
 
 const memberStore = useMemberStore()
+const { userLogout } = memberStore
 const { changeMenuState } = useMenuStore()
 const { userInfo, isLogin, isValidToken } = storeToRefs(memberStore)
 // const { getUserInfo } = memberStore
 const isReadonly = ref(true)
+
+// 기본 상태를 정의하는 함수
+const getDefaultState = () => ({
+  userId: '',
+  userName: '',
+  userPwd: '',
+  emailId: '',
+  emailDomain: ''
+})
+
+// 폼 상태
+const user = ref(getDefaultState())
 
 onMounted(() => {
   find()
@@ -27,7 +40,6 @@ function onDeleteUser() {
       if (response.status == 200) {
         //토큰 삭제를 위해 logout 함수 호출
         deleteUser(userInfo.value.userId)
-
         //메인으로 이동
         moveMain()
 
@@ -36,9 +48,15 @@ function onDeleteUser() {
         // isValidToken.value = false
 
         //메뉴바 변경
-        changeMenuState()
+        // changeMenuState()
         // localStorage.removeItem('memberStore')
         sessionStorage.removeItem('accessToken')
+        userLogout(userInfo.userId)
+        // Clear session storage items
+        sessionStorage.removeItem('accessToken')
+        sessionStorage.removeItem('refreshToken')
+        sessionStorage.removeItem('loginUser')
+        console.log('로그아웃!!!!')
         alert(userInfo.value.userId + ' 탈퇴 완료되었습니다.')
         console.log('삭제 완료?')
       }
@@ -60,8 +78,52 @@ function moveMain() {
   router.push({ name: 'main' })
 }
 
-function moveModify() {
-  router.push({ name: 'user-modify' })
+function modifyPassword() {
+  // console.log('여기서부터 테스트하겠습니다-----------------------------------')
+  // console.log(userInfo.value.userId) // 아이디
+  // console.log(sessionStorage.getItem('loginUser')) // "아이디"
+  // // console.log(document.getElementById('newPw1').value)
+  // console.log('------------------------------------------------------------')
+
+  // // 바꿀 비밀번호 2개 다 같은지 확인
+  // if (newPw1.value == newPw2.value) {
+  //   alert('변경할 비밀번호 똑같음. 다음단계 진행하셈')
+  //   // 지금 아이디랑 비밀번호 같은지 확인
+  //   // console.log(findById(userInfo.value.userId).value.userPwd)
+
+  // } else {
+  //   alert('변경할 비밀번호 다름 !!!!! 다시 설정해')
+  // }
+
+  // 입력 값 가져오기
+  const userId = userInfo.value.userId
+  const curPw = document.getElementById('curPw').value
+  const newPw1 = document.getElementById('newPw1').value
+  const newPw2 = document.getElementById('newPw2').value
+
+  // 새 비밀번호 일치 여부 확인
+  if (newPw1 === newPw2) {
+    const param = {
+      userId: userId,
+      curPw: curPw,
+      newPw1: newPw1
+    }
+
+    updatePwd(
+      param,
+      (response) => {
+        if (response.data === 'SUCCESS') {
+          // 비밀번호 변경 성공 처리
+          alert('비밀번호가 변경되었습니다.')
+        }
+      },
+      (error) => {
+        // 비밀번호 변경 실패 처리
+        console.error('비밀번호 변경 중 에러 발생: ', error)
+        alert('비밀번호 변경에 실패했습니다.')
+      }
+    )
+  }
 }
 </script>
 
@@ -75,23 +137,31 @@ function moveModify() {
         <table class="table">
           <thead>
             <tr>
-              <div class="user-info">회원 정보 🥨</div>
+              <div class="user-info">
+                회원 정보
+                <img
+                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/French%20Fries.png"
+                  alt="French Fries"
+                  width="35"
+                  height="35"
+                />
+              </div>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style="padding-top: 32px">Name</td>
-              <td style="padding-top: 32px">{{ userInfo.userName }}</td>
+              <td style="padding-top: 30px; text-align: left">{{ userInfo.userName }}</td>
             </tr>
             <tr>
-              <td style="padding-top: 32px">ID</td>
-              <td id="currUser-userId" style="padding-top: 30px; text-align: left">
-                {{ userInfo.emailId }}
+              <td style="padding-top: 15px">ID</td>
+              <td id="currUser-userId" style="padding-top: 10px; text-align: left">
+                {{ userInfo.userId }}
               </td>
             </tr>
             <tr>
-              <td style="padding-top: 32px">PW</td>
-              <td id="currUser-userpw" style="padding-top: 30px; text-align: left">
+              <td style="padding-top: 15px">PW</td>
+              <td id="currUser-userpw" style="padding-top: 10px; text-align: left">
                 <button
                   data-bs-target="#for-update"
                   data-bs-toggle="modal"
@@ -103,42 +173,30 @@ function moveModify() {
               </td>
             </tr>
             <tr>
-              <td style="padding-top: 32px">E-mail</td>
+              <td style="padding-top: 18px">E-mail</td>
               <td>
                 <div class="for-email">
-                  <form name="updateEmail-form" id="updateEmail-form" method="POST" action="">
-                    <input type="hidden" name="action" value="updateEmail" />
-                    <div class="for-email2">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="emailid"
-                        style="border-radius: 20px"
-                        v-model.lazy="userInfo.emailId"
-                      />
-                      <div style="padding: 7px">@</div>
-                      <select
-                        class="form-select"
-                        style="border-radius: 20px"
-                        id="emaildomain"
-                        aria-label="이메일 도메인 선택"
+                  <div class="for-email2">
+                    {{ userInfo.emailId }} @ {{ userInfo.emailDomain }}
+                    <!-- <div><button class="email-update btns" @click="moveModify">변경</button></div> -->
+                    <div>
+                      <button
+                        class="email-update btns"
+                        data-bs-target="#for-email-update"
+                        data-bs-toggle="modal"
+                        id="update-user-btn"
                       >
-                        <option selected>{{ userInfo.emailDomain }}</option>
-                        <option value="ssafy.com">ssafy.com</option>
-                        <option value="google.com">google.com</option>
-                        <option value="naver.com">naver.com</option>
-                        <option value="kakao.com">kakao.com</option>
-                      </select>
-                      <div><button class="email-update btns">변경</button></div>
+                        변경
+                      </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="form" style="width: 90%">
+      <div class="form">
         <form name="login-form" class="login-form">
           <div>
             <button
@@ -147,7 +205,12 @@ function moveModify() {
               data-bs-toggle="modal"
               type="button"
             >
-              탈퇴하기 😢
+              탈퇴하기&nbsp;<img
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Face%20Holding%20Back%20Tears.png"
+                alt="Face Holding Back Tears"
+                width="25"
+                height="25"
+              />
             </button>
           </div>
         </form>
@@ -158,7 +221,15 @@ function moveModify() {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <div class="modal1-title">❗ 비밀번호 변경</div>
+            <div class="modal1-title">
+              <img
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Triangular%20Flag.png"
+                alt="Triangular Flag"
+                width="35"
+                height="35"
+              />
+              비밀번호 변경
+            </div>
           </div>
           <form name="updatePwd-form" id="updatePwd-form" method="POST" action="">
             <input type="hidden" name="action" value="updatePwd" />
@@ -166,17 +237,82 @@ function moveModify() {
             <div class="modal-body make">
               <div>
                 <div>현재 비밀번호</div>
-                <input type="password" id="curPw" name="curPw" required />
+                <input type="password" id="curPw" v-model="user.userPwd" required />
               </div>
               <div>
                 <div>변경할 비밀번호</div>
-                <input type="password" id="newPw1" name="newPw1" required />
+                <input type="password" id="newPw1" required />
               </div>
               <div>
                 <div>변경할 비밀번호 확인</div>
-                <input type="password" id="newPw2" name="newPw2" required />
+                <input type="password" id="newPw2" required />
               </div>
               <div class="new-pw-check"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" @click="modifyPassword" class="btn btn-primary updatePwdBtn">
+                변경하기
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- 모달 end -->
+    <!-- 모달 start -->
+    <div class="modal fade" id="for-email-update" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal1-title">
+              <img
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Triangular%20Flag.png"
+                alt="Triangular Flag"
+                width="35"
+                height="35"
+              />
+              이메일 변경
+            </div>
+          </div>
+          <form>
+            <div class="mb-3">
+              <div class="modal-body make">
+                <div style="width: 100%; padding-right: 50px">
+                  <div>현재 비밀번호</div>
+                  <input
+                    type="password"
+                    id="curPw"
+                    style="border-radius: 20px; height: 40px"
+                    required
+                  />
+                </div>
+                <div>
+                  <div class="input-group" style="width: 100%">
+                    <div style="margin-right: 20px; padding-top: 8px">변경할 이메일</div>
+                    <input
+                      type="text"
+                      id="emailid"
+                      v-model="user.emailId"
+                      style="border-radius: 20px"
+                      placeholder="email id"
+                    />
+                    <div style="width: 30px; padding-top: 5px">@</div>
+                    <select
+                      id="emaildomain"
+                      v-model="user.emailDomain"
+                      aria-label="이메일 도메인 선택"
+                      style="border-radius: 20px"
+                    >
+                      <option selected>선택</option>
+                      <option value="ssafy.com">ssafy.com</option>
+                      <option value="google.com">google.com</option>
+                      <option value="naver.com">naver.com</option>
+                      <option value="kakao.com">kakao.com</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -194,14 +330,32 @@ function moveModify() {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <div class="modal2-title">❗</div>
+            <div class="modal2-title">
+              <img
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Triangular%20Flag.png"
+                alt="Triangular Flag"
+                width="35"
+                height="35"
+              />
+            </div>
           </div>
           <div class="modal-body">
-            <div class="modal2-body">정말 탈퇴하시겠습니까 ?</div>
+            <div class="modal2-body" style="margin-top: 20px; margin-bottom: 20px">
+              <h4>
+                <b
+                  >정말 탈퇴하시겠습니까 ?
+                  <img
+                    src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Face%20Holding%20Back%20Tears.png"
+                    alt="Face Holding Back Tears"
+                    width="35"
+                    height="35"
+                /></b>
+              </h4>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">취소</button>
-            <button type="button" onclick="deleteUser()" class="btn btn-danger">탈퇴</button>
+            <button type="button" class="btn btn-danger" @click="onDeleteUser">탈퇴</button>
           </div>
         </div>
       </div>
@@ -210,10 +364,10 @@ function moveModify() {
   </main>
 
   <!-- 수정탈퇴ㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣㅣ -->
-  <div>
+  <!-- <div>
     <button type="button" class="btn btn-outline-secondary mt-2" @click="moveModify">수정</button>
     <button class="btn btn-outline-primary m-1" @click="onDeleteUser">탈퇴</button>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
@@ -240,6 +394,11 @@ function moveModify() {
   color: #213555;
   text-shadow: 0 0 3px gray;
 }
+#client-information {
+  width: 92%;
+  display: block;
+  margin: 0 auto;
+}
 .user-info {
   font-size: 20px;
   font-weight: bold;
@@ -250,8 +409,7 @@ function moveModify() {
 .form-control {
   border: 1px solid #a1ccd1;
   border-radius: 20px;
-  height: 42px;
-  margin-bottom: 20px;
+  height: 40px;
   padding-left: 15px;
 }
 .modal1-title {
@@ -281,6 +439,9 @@ function moveModify() {
 #newPw1,
 #newPw2 {
   width: 50%;
+  border: 1px solid #a1ccd1;
+  border-radius: 5px;
+  padding: 5px;
 }
 .make > div {
   margin-top: 10px;
@@ -297,26 +458,47 @@ function moveModify() {
   border: 2px solid #f1efef;
   border-radius: 20px;
 }
+.delete-btn {
+  width: 40%;
+  height: 40px;
+  background-color: #eeeeee;
+  border: none;
+  border-radius: 20px;
+  margin-top: 50px;
+}
 .btns:hover {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   background-color: #d0e7d2;
   color: white;
 }
 .delete-btn:hover {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   background-color: #b4b4b3;
-}
-.form-select {
-  width: 140px;
+  color: white;
 }
 #emailid {
   width: 130px;
-  margin-top: 20px;
+  border: 1px solid #a1ccd1;
+  padding: 7px;
+}
+#emaildomain {
+  padding: 7px;
 }
 .for-email2 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  margin-top: 6px;
 }
 .login-page {
   max-width: 600px;
+}
+.input-group {
+  display: flex;
+  justify-content: center;
 }
 </style>

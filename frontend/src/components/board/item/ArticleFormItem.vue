@@ -24,7 +24,7 @@ const article = ref({
 
 function showPreview(event) {
   var input = event.target
-  var preview = document.getElementById('preview')
+  // var preview = document.getElementById('preview') 밑으로 옮김
 
   if (input.files && input.files[0]) {
     var reader = new FileReader()
@@ -33,6 +33,8 @@ function showPreview(event) {
 
     reader.onload = function (e) {
       // 파일 읽기가 완료되었을 때 실행될 함수
+      // preview.src = e.target.result
+      var preview = document.getElementById('preview')
       preview.src = e.target.result
       preview.style.display = 'block'
     }

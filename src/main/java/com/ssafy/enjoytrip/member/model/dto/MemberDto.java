@@ -36,4 +36,7 @@ public class MemberDto {
 	@ApiModelProperty(value = "refreshToken")
 	private String refreshToken;
 
+	private String curPw;
+	private String newPw1;
+	
 }

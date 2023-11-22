@@ -253,13 +253,23 @@ public class MemberController {
 	}
 
 	@PutMapping("/updatePwd")
-	@ApiOperation(value = "이메일 수정", notes = "유저의 이메일을 수정")
-	public ResponseEntity<?> updatePwd(@RequestParam String userId, @RequestParam String newPwd) {
-		logger.debug("member.updatePwd............................ Id:{}", userId);
-		logger.debug("member.updatePwd............................ Pwd:{}", newPwd);
-
-		memberService.updatePwdById(userId, newPwd);
-		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	@ApiOperation(value = "비밀번호 수정", notes = "유저의 비밀번호를 수정")
+	public ResponseEntity<?> updatePwd(@RequestBody MemberDto memberDto) {
+		logger.debug("member.updatePwd............................ Id:{}", memberDto.getUserId());
+		logger.debug("member.updatePwd............................ Id:{}", memberDto.getCurPw());
+		logger.debug("member.updatePwd............................ Pwd:{}", memberDto.getNewPw1());
+		
+		String originPwd = memberService.getPwdById(memberDto.getUserId());
+		logger.debug("현재비번................... Pwd:{}", originPwd);
+		if(originPwd.equals(memberDto.getCurPw())) {
+			memberService.updatePwdById(memberDto.getUserId(), memberDto.getNewPw1());
+//			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
 
 	}
+	
+	
 }

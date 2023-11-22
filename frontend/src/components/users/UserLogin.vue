@@ -33,6 +33,8 @@ const login = async () => {
       // Once navigation is confirmed, reload the page
       window.location.reload()
     })
+  } else {
+    alert('아이디랑 비밀번호를 다시 확인해주세요')
   }
   console.log(userInfo)
 }

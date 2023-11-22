@@ -110,14 +110,15 @@ const openInNewTab = (url) => {
 }
 .img1 {
   border: 1px solid gray;
-  width: 25%;
+  width: 30%;
+  max-width: 300px;
   height: 400px;
   border-radius: 30px;
   overflow: hidden;
   box-shadow: 0 0 2px;
 }
 .img1:hover {
-  border: 2px solid gray;
+  border: 2px solid rgb(168, 167, 167);
 }
 .img-info {
   text-decoration: none;
