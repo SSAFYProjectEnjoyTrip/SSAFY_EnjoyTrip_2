@@ -1,14 +1,12 @@
 <script setup>
-import { ref, onMounted, toRefs } from 'vue'
+import { ref, onMounted, defineComponent } from 'vue'
 import { listSido, listGugun } from '@/api/map'
 import { searchAttractionList, searchAttractionListByType, searchByTitle } from '@/api/hotplace'
-import defaultImage from '@/assets/map/dog.jpeg'
 import VKakaoMap from '@/components/common/VKakaoMap.vue'
 import VSelect from '@/components/common/VSelect.vue'
-import draggable from '@/utils/vuedraggable'
+import { VueDraggableNext } from 'vue-draggable-next'
 
-// const serviceKey = import.meta.env.VITE_OPEN_API_SERVICE_KEY;
-const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env
+// const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env
 
 const sidoList = ref([])
 const gugunList = ref([{ text: '구군선택', value: '' }])
@@ -20,6 +18,12 @@ const selected = ref({
   sido_code: 0,
   gugun_code: 0
 })
+
+const draggable = defineComponent(VueDraggableNext);
+
+const log = (event) => {
+  console.log(event)
+}
 
 onMounted(() => {
   // getChargingStations();
@@ -86,22 +90,15 @@ const viewAttraction = (attraction) => {
   selectAttraction.value = attraction
 }
 
-const list1 = ref([
-  { name: 'John', id: 1 },
-  { name: 'Joao', id: 2 },
-  { name: 'Jean', id: 3 },
-  { name: 'Gerard', id: 4 }
-])
+const myList = ref([]);
 
-const list2 = ref([
-  { name: 'Juan', id: 5 },
-  { name: 'Edgard', id: 6 },
-  { name: 'Johnson', id: 7 }
-])
+function deleteAttraction (contentId) {
+  const index = myList.value.findIndex(item => item.contentId === contentId);
+  if (index !== -1) {
+    myList.value.splice(index, 1);
+  }
+};
 
-const log = (evt) => {
-  console.log(evt)
-}
 </script>
 
 <template>
@@ -176,7 +173,7 @@ const log = (evt) => {
                 <th scope="col">주소</th>
               </tr>
             </thead>
-            <tbody>
+            <!-- <tbody>
               <tr
                 class="text-center"
                 v-for="attraction in attractionInfos"
@@ -186,10 +183,22 @@ const log = (evt) => {
                 <td>{{ attraction.title }}</td>
                 <img :src="attraction.firstImage" alt="Spiral Calendar" width="100" height="100" />
                 <td>{{ attraction.addr1 }}</td>
-                <!-- <button @onClick="">등록</button> -->
                 <button>찜</button>
               </tr>
-            </tbody>
+            </tbody> -->
+            <tbody>
+      <draggable class="dragArea list-group" :list="attractionInfos" :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="contentId">
+        <div
+        class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+        v-for="element in attractionInfos"
+        :key="element.contentId"
+      >
+       <td> {{ element.title }}</td>
+      <td><img :src="element.firstImage" alt="Spiral Calendar" width="100" height="100" /></td>
+        <td>{{ element.addr1 }}</td>
+      </div>
+      </draggable>
+    </tbody>
           </table>
         </div>
       </div>
@@ -204,7 +213,28 @@ const log = (evt) => {
           height="100"
         />
       </div>
-      <div class="down-right"></div>
+      <div class="down-right">
+        <div class="row">
+    <div class="col-3">
+    </div>
+
+    <div class="col-3">
+      <h3>내 여행지</h3>
+      <draggable class="dragArea list-group" :list="myList" group="people" @change="log" :direction="horizontal" item-key="contentId">
+        <div
+        class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+        v-for="element in myList"
+        :key="element.contentId"
+      >
+      {{ element.title }}
+        <img :src="element.firstImage" alt="Spiral Calendar" width="100" height="100" />
+        {{ element.addr1 }}
+        <button @click="deleteAttraction(element.contentId)">삭제용</button>
+      </div>
+      </draggable>
+    </div>
+  </div>
+      </div>
     </div>
   </div>
 </template>
@@ -273,4 +303,16 @@ mark.purple {
   padding-left: 15px;
   margin-bottom: 20px;
 }
+
+.dragArea {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.list-group-item {
+  flex: 0 0 auto;
+  margin-right: 10px;
+} 
+
 </style>
