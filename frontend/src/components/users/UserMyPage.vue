@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/member'
 import { useMenuStore } from '@/stores/menu'
-import { findById, deleteUser, logout, updatePwd } from '@/api/user'
+import { findById, deleteUser, logout, updatePwd, updateEmail } from '@/api/user'
 
 const router = useRouter()
 
@@ -14,6 +14,8 @@ const { changeMenuState } = useMenuStore()
 const { userInfo, isLogin, isValidToken } = storeToRefs(memberStore)
 // const { getUserInfo } = memberStore
 const isReadonly = ref(true)
+
+console.log(userInfo.value.userId);
 
 // 기본 상태를 정의하는 함수
 const getDefaultState = () => ({
@@ -79,23 +81,8 @@ function moveMain() {
 }
 
 function modifyPassword() {
-  // console.log('여기서부터 테스트하겠습니다-----------------------------------')
-  // console.log(userInfo.value.userId) // 아이디
-  // console.log(sessionStorage.getItem('loginUser')) // "아이디"
-  // // console.log(document.getElementById('newPw1').value)
-  // console.log('------------------------------------------------------------')
 
-  // // 바꿀 비밀번호 2개 다 같은지 확인
-  // if (newPw1.value == newPw2.value) {
-  //   alert('변경할 비밀번호 똑같음. 다음단계 진행하셈')
-  //   // 지금 아이디랑 비밀번호 같은지 확인
-  //   // console.log(findById(userInfo.value.userId).value.userPwd)
-
-  // } else {
-  //   alert('변경할 비밀번호 다름 !!!!! 다시 설정해')
-  // }
-
-  // 입력 값 가져오기
+  // 입력 값 가져오기 user.emailId
   const userId = userInfo.value.userId
   const curPw = document.getElementById('curPw').value
   const newPw1 = document.getElementById('newPw1').value
@@ -114,7 +101,15 @@ function modifyPassword() {
       (response) => {
         if (response.data === 'SUCCESS') {
           // 비밀번호 변경 성공 처리
-          alert('비밀번호가 변경되었습니다.')
+          alert('비밀번호가 변경되었습니다. 로그아웃됩니다.')
+          userLogout(userInfo.userId)
+          // Clear session storage items
+          sessionStorage.removeItem('accessToken')
+          sessionStorage.removeItem('refreshToken')
+          sessionStorage.removeItem('loginUser')
+          moveMain()
+        } else {
+          alert('현재 비밀번호가 일치하지 않습니다.')
         }
       },
       (error) => {
@@ -123,7 +118,48 @@ function modifyPassword() {
         alert('비밀번호 변경에 실패했습니다.')
       }
     )
+  } else {
+    alert('비밀번호 확인을 체크해주세요.')
   }
+}
+
+function modifyEmail() {
+
+  // 입력 값 가져오기
+  const userId = userInfo.value.userId
+  const curPw = document.getElementById('curPw').value
+  const emailid = document.getElementById('emailid').value
+  const emaildomain = document.getElementById('emaildomain').value
+  // 현재아이디랑 비밀번호 같으면 이메일 바꿔주기
+
+  const param = {
+    userId: userId,
+    curPw: curPw,
+    emailId: emailid,
+    emailDomain: emaildomain
+  }
+
+  updateEmail (
+    param,
+    (response) => {
+      if (response.data === 'SUCCESS') {
+        alert('이메일 정보가 변경되었습니다. 로그아웃됩니다.')
+        userLogout(userInfo.userId)
+        // Clear session storage items
+        sessionStorage.removeItem('accessToken')
+        sessionStorage.removeItem('refreshToken')
+        sessionStorage.removeItem('loginUser')
+        moveMain()
+      } else {
+        alert('비밀번호가 일치하지 않습니다.')
+      }
+    },
+    (error) => {
+      console.error('이메일 정보 변경 중 에러 발생: ', error)
+      alert('이메일 정보 변경에 실패했습니다.')
+    }
+  )
+  
 }
 </script>
 
@@ -232,8 +268,6 @@ function modifyPassword() {
             </div>
           </div>
           <form name="updatePwd-form" id="updatePwd-form" method="POST" action="">
-            <input type="hidden" name="action" value="updatePwd" />
-            <input type="hidden" name="curId" value="${loginUser.userId}" />
             <div class="modal-body make">
               <div>
                 <div>현재 비밀번호</div>
@@ -283,6 +317,7 @@ function modifyPassword() {
                   <input
                     type="password"
                     id="curPw"
+                    v-model="user.userPwd"
                     style="border-radius: 20px; height: 40px"
                     required
                   />
@@ -316,7 +351,7 @@ function modifyPassword() {
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" onclick="updatePwd()" class="btn btn-primary updatePwdBtn">
+              <button type="button" @click="modifyEmail" class="btn btn-primary updatePwdBtn">
                 변경하기
               </button>
             </div>

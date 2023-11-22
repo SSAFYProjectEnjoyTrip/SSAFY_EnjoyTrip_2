@@ -97,6 +97,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public String getPwdById(String curId) {
+		
+		try {
+			return memberDao.getPwdById(curId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

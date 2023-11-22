@@ -229,26 +229,24 @@ public class MemberController {
 		memberService.deleteUserById(userId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
-	@PostMapping("/update")
-	@ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정")
-	public ResponseEntity<?> updateEmail(@RequestBody MemberDto memberDto) {
-		logger.debug("member.update............................ memberDto:{}", memberDto);
-		memberService.updateUser(memberDto);
-		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-
-	}
 
 	@PutMapping("/updateEmail")
 	@ApiOperation(value = "이메일 수정", notes = "유저의 이메일을 수정")
-	public ResponseEntity<?> updateEmail(@RequestParam String userId, @RequestParam String newEmailDomain,
-			@RequestParam String newEmailId) {
-		logger.debug("member.updateEmail............................ Id:{}", userId);
-		logger.debug("member.updateEmail............................ Domain:{}", newEmailDomain);
-		logger.debug("member.updateEmail............................ EmailId:{}", newEmailId);
-
-		memberService.updateEmailById(userId, newEmailId, newEmailDomain);
-		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+	public ResponseEntity<?> updateEmail (@RequestBody MemberDto memberDto) {
+		logger.debug("member.updateEmail............................ getUserId:{}", memberDto.getUserId());
+		logger.debug("member.updateEmail............................ getCurPw:{}", memberDto.getCurPw());
+		logger.debug("member.updateEmail............................ getEmailId:{}", memberDto.getEmailId());
+		logger.debug("member.updateEmail............................ getEmailDomain:{}", memberDto.getEmailDomain());
+		
+		String originPwd = memberService.getPwdById(memberDto.getUserId());
+		logger.debug("현재비번................... Pwd:{}", originPwd);
+		
+		if(originPwd.equals(memberDto.getCurPw())) {
+			memberService.updateEmailById(memberDto.getUserId(), memberDto.getEmailId(), memberDto.getEmailDomain());
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
 
 	}
 

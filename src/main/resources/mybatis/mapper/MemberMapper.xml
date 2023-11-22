@@ -103,4 +103,10 @@
 		token = #{token, jdbcType=VARCHAR}
 		where userId = #{userId}
 	</update>
+	
+	<select id="getPwdById" parameterType="String" resultType="String">
+		select userPwd
+		from member
+		where userId = #{userId}
+	</select>
 </mapper>
