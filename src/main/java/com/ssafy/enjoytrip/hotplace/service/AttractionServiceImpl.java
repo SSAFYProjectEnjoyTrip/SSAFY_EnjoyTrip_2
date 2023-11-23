@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.hotplace.model.dao.AttractionDao;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionListDto;
+import com.ssafy.enjoytrip.hotplace.model.dto.ZzimDto;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionInfoDto;
 
 
@@ -57,5 +58,6 @@ public class AttractionServiceImpl implements AttractionService {
 		
 		return list;
 	}
+
 }
 

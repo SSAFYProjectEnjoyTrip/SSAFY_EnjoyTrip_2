@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted, defineComponent } from 'vue'
 import { listSido, listGugun } from '@/api/map'
+import { storeToRefs } from 'pinia'
+import { getZzimList, addZzimList, deleteZzim } from '@/api/zzim'
 import { searchAttractionList, searchAttractionListByType, searchByTitle } from '@/api/hotplace'
 import VKakaoMap from '@/components/common/VKakaoMap.vue'
 import VSelect from '@/components/common/VSelect.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { Slide } from 'vue3-burger-menu'
+import { useMemberStore } from '@/stores/member'
+import planeImage from '@/assets/map/planeImage.png'
 
 const leftMenuOpen = ref(false)
 const rightMenuOpen = ref(false)
@@ -18,18 +22,25 @@ const toggleRightMenu = () => {
   rightMenuOpen.value = !rightMenuOpen.value
 }
 
-// const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env
+//탭 전환을 위한 변수
+const currentTab = ref('result')
 
+//검색을 위한 변수
 const sidoList = ref([])
 const gugunList = ref([{ text: '구군선택', value: '' }])
 
 const attractionInfos = ref([])
 const selectAttraction = ref({})
+const memberStore = useMemberStore()
+const { userInfo } = storeToRefs(memberStore)
 
 const selected = ref({
   sido_code: 0,
   gugun_code: 0
 })
+
+//찜 목록을 위한 변수
+const zzimList = ref([])
 
 const draggable = defineComponent(VueDraggableNext)
 
@@ -38,7 +49,6 @@ const log = (event) => {
 }
 
 onMounted(() => {
-  // getChargingStations();
   getSidoList()
 })
 
@@ -51,7 +61,6 @@ const getSidoList = () => {
         options.push({ text: sido.sido_name, value: sido.sido_code })
       })
       sidoList.value = options
-      // console.log("선택한 시도는......", sidoList.value)
     },
     (err) => {
       console.log(err)
@@ -109,6 +118,58 @@ function deleteAttraction(contentId) {
   if (index !== -1) {
     myList.value.splice(index, 1)
   }
+}
+
+//찜!!!!!!!!!!!!!!!!!목록 관련
+function addToZzim(element) {
+  console.log(element)
+  const zzimTmp = ref({
+    userId: userInfo.value.userId,
+    content_id: element.contentId,
+    first_image: element.firstImage,
+    addr1: element.addr1,
+    title: element.title
+  })
+  addZzimList(
+    zzimTmp,
+    (response) => {
+      let msg = '찜목록 등록 처리 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '찜목록 등록 완료'
+      alert(msg)
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+}
+
+function searchZzimList() {
+  getZzimList(
+    userInfo.value.userId,
+    ({ data }) => {
+      zzimList.value = data
+      console.log(attractionInfos.value)
+    },
+    (err) => {
+      console.log(err)
+    }
+  )
+}
+
+function deleteZzimList(element) {
+  deleteZzim(
+    userInfo.value.userId,
+    element.content_id,
+    (response) => {
+      let msg = '찜목록 삭제 처리 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '찜목록 삭제 완료'
+      alert(msg)
+      searchZzimList()
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
 }
 </script>
 
@@ -170,21 +231,24 @@ function deleteAttraction(contentId) {
           </form>
           <hr />
           <div>
-            <table class="table table-hover">
-              <!-- <tbody>
-              <tr
-                class="text-center"
-                v-for="attraction in attractionInfos"
-                :key="attraction.contentId + attraction.title"
-                @click="viewAttraction(attraction)"
+            <ul class="nav-tabs">
+              <li
+                @click="currentTab = 'result'"
+                :class="{ active: currentTab === 'zzim' }"
+                active-class="active"
               >
-                <td>{{ attraction.title }}</td>
-                <img :src="attraction.firstImage" alt="Spiral Calendar" width="100" height="100" />
-                <td>{{ attraction.addr1 }}</td>
-                <button>찜</button>
-              </tr>
-            </tbody> -->
-
+                조회 결과
+              </li>
+              <li
+                @click="(currentTab = 'zzim'), searchZzimList()"
+                :class="{ active: currentTab === 'result' }"
+                active-class="active"
+              >
+                찜 목록
+              </li>
+            </ul>
+            <!-- 조회 결과 -->
+            <table v-if="currentTab === 'result'" class="table table-hover">
               <draggable
                 class="dragArea list-group"
                 :list="attractionInfos"
@@ -196,27 +260,43 @@ function deleteAttraction(contentId) {
                   class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
                   v-for="element in attractionInfos"
                   :key="element.contentId"
+                  @click="viewAttraction(element)"
                 >
                   <div class="left-item-title" style="color: #265073">{{ element.title }}</div>
-                  <div v-if="element.firstImage">
+                  <div>
                     <img
+                      v-if="element.firstImage"
                       class="rounded"
                       :src="element.firstImage"
                       alt="Spiral Calendar"
                       width="200"
                       height="150"
                     />
+                    <img v-else :src="planeImage" alt="보이나요?" width="100" height="100" />
                   </div>
                   <div style="font-size: 15px; width: 200px; display: block; margin: 0 auto">
                     {{ element.addr1 }}
                   </div>
+                  <button @click="addToZzim(element)">찜</button>
                 </div>
               </draggable>
+            </table>
+            <!-- 찜목록 -->
+            <table v-else>
+              <div v-for="(zzim, index) in zzimList" :key="index">
+                User ID: {{ zzim.user_id }}, Content ID: {{ zzim.content_id }}
+                <button @click="deleteZzimList(zzim)">삭제</button>
+              </div>
             </table>
           </div>
         </div>
       </Slide>
-      <VKakaoMap :attractions="attractionInfos" :selectAttraction="selectAttraction" class="map" />
+      <VKakaoMap
+        :attractions="attractionInfos"
+        :selectAttraction="selectAttraction"
+        :myList="myList"
+        class="map"
+      />
     </div>
 
     <Slide
@@ -268,14 +348,16 @@ function deleteAttraction(contentId) {
           <div style="color: #265073; margin-bottom: 10px">
             <b>{{ element.title }}</b>
           </div>
-          <div v-if="element.firstImage">
+          <div>
             <img
+              v-if="element.firstImage"
               class="rounded"
               :src="element.firstImage"
               alt="Spiral Calendar"
               width="200"
               height="150"
             />
+            <img v-else :src="planeImage" alt="보이나요?" width="100" height="100" />
           </div>
           <div
             style="
@@ -346,5 +428,29 @@ function deleteAttraction(contentId) {
 .for-right-menu > img {
   display: block;
   margin: 0 auto;
+}
+
+/* 탭 두개로 나누기? */
+.nav-tabs {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  text-decoration: none;
+  color: black;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  background-color: #eee;
+}
+
+.active {
+  background-color: #ddd;
 }
 </style>

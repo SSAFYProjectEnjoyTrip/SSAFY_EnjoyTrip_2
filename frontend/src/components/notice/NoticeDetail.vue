@@ -38,20 +38,6 @@ const getNotice = () => {
   )
 }
 
-// function getCommentList() {
-//   console.log('CommentList params............: ', articleNo)
-//   listComment(
-//     articleNo,
-//     ({ data }) => {
-//       console.log('comment search......result: ', data)
-//       comments.value = data.comments
-//     },
-//     (error) => {
-//       console.log(error)
-//     }
-//   )
-// }
-
 // 초기에는 Detail 화면 표시하기 위해 readonly='readonly'로 표시
 // 수정일 경우 readonly='' 표시하기 위해 isReadonly=false로
 const isReadonly = ref(true)

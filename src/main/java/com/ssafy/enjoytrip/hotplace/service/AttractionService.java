@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionListDto;
+import com.ssafy.enjoytrip.hotplace.model.dto.ZzimDto;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionInfoDto;
 
 public interface AttractionService {

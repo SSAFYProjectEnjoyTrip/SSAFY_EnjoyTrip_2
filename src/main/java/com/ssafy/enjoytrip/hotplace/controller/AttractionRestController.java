@@ -11,12 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.board.model.dto.BoardDto;
 import com.ssafy.enjoytrip.hotplace.model.dao.AttractionDao;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionListDto;
+import com.ssafy.enjoytrip.hotplace.model.dto.ZzimDto;
 import com.ssafy.enjoytrip.hotplace.model.dto.AttractionInfoDto;
 import com.ssafy.enjoytrip.hotplace.service.AttractionService;
 
@@ -97,5 +100,4 @@ public class AttractionRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
-
 }

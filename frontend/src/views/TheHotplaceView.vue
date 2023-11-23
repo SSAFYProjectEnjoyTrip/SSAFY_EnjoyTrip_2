@@ -1,25 +1,29 @@
 <script setup>
 import { ref, onMounted, defineComponent } from 'vue'
+import { storeToRefs } from 'pinia'
 import { listSido, listGugun } from '@/api/map'
+import { getZzimList, addZzimList, deleteZzim } from '@/api/zzim'
 import { searchAttractionList, searchAttractionListByType, searchByTitle } from '@/api/hotplace'
 import VKakaoMap from '@/components/common/VKakaoMap.vue'
 import VSelect from '@/components/common/VSelect.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-
-// const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env
+import { useMemberStore } from '@/stores/member'
+import planeImage from '@/assets/map/planeImage.png'
 
 const sidoList = ref([])
 const gugunList = ref([{ text: '구군선택', value: '' }])
 
 const attractionInfos = ref([])
 const selectAttraction = ref({})
+const memberStore = useMemberStore()
+const { userInfo } = storeToRefs(memberStore)
 
 const selected = ref({
   sido_code: 0,
   gugun_code: 0
 })
 
-const draggable = defineComponent(VueDraggableNext);
+const draggable = defineComponent(VueDraggableNext)
 
 const log = (event) => {
   console.log(event)
@@ -90,15 +94,30 @@ const viewAttraction = (attraction) => {
   selectAttraction.value = attraction
 }
 
-const myList = ref([]);
+const myList = ref([])
 
-function deleteAttraction (contentId) {
-  const index = myList.value.findIndex(item => item.contentId === contentId);
+function deleteAttraction(contentId) {
+  const index = myList.value.findIndex((item) => item.contentId === contentId)
   if (index !== -1) {
-    myList.value.splice(index, 1);
+    myList.value.splice(index, 1)
   }
-};
+}
 
+function addToZzim(element) {
+  console.log(element)
+  addZzimList(
+    userInfo.value.userId,
+    element.contentId,
+    (response) => {
+      let msg = '찜목록 등록 처리 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '찜목록 등록 완료'
+      alert(msg)
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+}
 </script>
 
 <template>
@@ -173,36 +192,44 @@ function deleteAttraction (contentId) {
                 <th scope="col">주소</th>
               </tr>
             </thead>
-            <!-- <tbody>
-              <tr
-                class="text-center"
-                v-for="attraction in attractionInfos"
-                :key="attraction.contentId + attraction.title"
-                @click="viewAttraction(attraction)"
-              >
-                <td>{{ attraction.title }}</td>
-                <img :src="attraction.firstImage" alt="Spiral Calendar" width="100" height="100" />
-                <td>{{ attraction.addr1 }}</td>
-                <button>찜</button>
-              </tr>
-            </tbody> -->
             <tbody>
-      <draggable class="dragArea list-group" :list="attractionInfos" :group="{ name: 'people', pull: 'clone', put: false }" @change="log" item-key="contentId">
-        <div
-        class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
-        v-for="element in attractionInfos"
-        :key="element.contentId"
-      >
-       <td> {{ element.title }}</td>
-      <td><img :src="element.firstImage" alt="Spiral Calendar" width="100" height="100" /></td>
-        <td>{{ element.addr1 }}</td>
-      </div>
-      </draggable>
-    </tbody>
+              <draggable
+                class="dragArea list-group"
+                :list="attractionInfos"
+                :group="{ name: 'people', pull: 'clone', put: false }"
+                @change="log"
+                item-key="contentId"
+              >
+                <div
+                  class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+                  v-for="element in attractionInfos"
+                  :key="element.contentId"
+                  @click="viewAttraction(element)"
+                >
+                  <td>{{ element.title }}</td>
+                  <td>
+                    <img
+                      v-if="element.firstImage"
+                      :src="element.firstImage"
+                      alt="Spiral Calendar"
+                      width="100"
+                      height="100"
+                    />
+                    <img v-else :src="planeImage" alt="보이나요?" width="100" height="100" />
+                  </td>
+                  <td>{{ element.addr1 }}</td>
+                  <button @click="addToZzim(element)">찜</button>
+                </div>
+              </draggable>
+            </tbody>
           </table>
         </div>
       </div>
-      <VKakaoMap :attractions="attractionInfos" :selectAttraction="selectAttraction" />
+      <VKakaoMap
+        :attractions="attractionInfos"
+        :selectAttraction="selectAttraction"
+        :myList="myList"
+      />
     </div>
     <div class="down-box">
       <div class="down-left">
@@ -215,25 +242,30 @@ function deleteAttraction (contentId) {
       </div>
       <div class="down-right">
         <div class="row">
-    <div class="col-3">
-    </div>
+          <div class="col-3"></div>
 
-    <div class="col-3">
-      <h3>내 여행지</h3>
-      <draggable class="dragArea list-group" :list="myList" group="people" @change="log" :direction="horizontal" item-key="contentId">
-        <div
-        class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
-        v-for="element in myList"
-        :key="element.contentId"
-      >
-      {{ element.title }}
-        <img :src="element.firstImage" alt="Spiral Calendar" width="100" height="100" />
-        {{ element.addr1 }}
-        <button @click="deleteAttraction(element.contentId)">삭제용</button>
-      </div>
-      </draggable>
-    </div>
-  </div>
+          <div class="col-3">
+            <h3>내 여행지</h3>
+            <draggable
+              class="dragArea list-group"
+              :list="myList"
+              group="people"
+              @change="log"
+              item-key="contentId"
+            >
+              <div
+                class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+                v-for="element in myList"
+                :key="element.contentId"
+              >
+                {{ element.title }}
+                <img :src="element.firstImage" alt="Spiral Calendar" width="100" height="100" />
+                {{ element.addr1 }}
+                <button @click="deleteAttraction(element.contentId)">삭제용</button>
+              </div>
+            </draggable>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -313,6 +345,5 @@ mark.purple {
 .list-group-item {
   flex: 0 0 auto;
   margin-right: 10px;
-} 
-
+}
 </style>
