@@ -65,55 +65,84 @@ function onPageChange(value) {
 </script>
 
 <template>
-  <div class="col-6">
-    <button class="btn btn-outline-primary" @click="moveHandler">등록</button>
-  </div>
-  <div v-if="articles.length > 0">
-    <h3>등록된 글 목록</h3>
-    <div class="row">
-      <div class="col-6">
-        <div class="input-group">
-          <span class="input-group-text">검색조건</span>
-          <v-select :selectOptions="selectOptions" @on-key-select="changeKey" />
-          <input
-            type="text"
-            class="input-control"
-            placeholder="검색어를 입력하세요"
-            v-model="params.word"
-            @keyup.enter="searchList"
-          />
-          <button class="btn btn-dark" @click="searchList">검색</button>
+  <div class="bg">
+    <div v-if="articles.length > 0">
+      <div class="board-title">Review Board</div>
+      <div class="title-info">여러분의 여행을 공유해주세요 :)</div>
+      <div class="regi-btn-box">
+        <button class="btn btn-success" @click="moveHandler">등록</button>
+      </div>
+      <div class="row search-box">
+        <div class="col-6">
+          <div class="input-group">
+            <span class="input-group-text">검색조건</span>
+            <v-select :selectOptions="selectOptions" @on-key-select="changeKey" />
+            <input
+              type="text"
+              class="input-control"
+              placeholder="검색어를 입력하세요"
+              v-model="params.word"
+              @keyup.enter="searchList"
+            />
+            <button class="btn btn-dark" @click="searchList">검색</button>
+          </div>
         </div>
       </div>
+      <table class="table table-hover">
+        <thead>
+          <colgroup>
+            <col width="10%" />
+            <col width="15%" />
+            <col width="25%" />
+            <col width="25%" />
+            <col width="25%" />
+          </colgroup>
+          <tr class="text-center">
+            <th width="12%">리뷰번호</th>
+            <th width="30%">별점</th>
+            <th width="31%">제목</th>
+            <th width="15%">글쓴이</th>
+            <th width="12%">조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ArticleListItem
+            v-for="article in articles"
+            :key="article.articleNo"
+            :article="article"
+          ></ArticleListItem>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-hover">
-      <thead>
-        <colgroup>
-          <col width="10%" />
-          <col width="30%" />
-          <col width="30%" />
-          <col width="30%" />
-        </colgroup>
-        <tr class="text-center">
-          <th>게시글 번호</th>
-          <th>제목</th>
-          <th>저자</th>
-          <th>조회수</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ArticleListItem
-          v-for="article in articles"
-          :key="article.articleNo"
-          :article="article"
-        ></ArticleListItem>
-      </tbody>
-    </table>
+    <div v-else>
+      <h3>등록된 게시물 정보가 없습니다</h3>
+    </div>
+    <div style="height: 50px"></div>
+    <PageNavigation :currentPage="currentPage" :totalPage="totalPage" @page-change="onPageChange" />
   </div>
-  <div v-else>
-    <h3>등록된 게시물 정보가 없습니다</h3>
-  </div>
-  <PageNavigation :currentPage="currentPage" :totalPage="totalPage" @page-change="onPageChange" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.board-title {
+  margin-top: 50px;
+  font-size: 50px;
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+  text-shadow: 0 0 5px gray;
+}
+.title-info {
+  margin-top: 10px;
+  margin-bottom: 50px;
+  color: #a8a8a8;
+  font-weight: bold;
+  font-size: 14px;
+}
+.regi-btn-box {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}
+.input-group {
+  margin-bottom: 40px;
+}
+</style>
