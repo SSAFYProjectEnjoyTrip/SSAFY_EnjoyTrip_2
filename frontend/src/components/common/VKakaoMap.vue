@@ -154,7 +154,7 @@ function drawLine(myList) {
     if (index == 0) {
       //출발 마커?
       imgContent = departureImg
-    } else if (index == myList.lenght - 1) {
+    } else if (index == myList.length - 1) {
       //마지막 마커?
       imgContent = arrivalImg
     } else {

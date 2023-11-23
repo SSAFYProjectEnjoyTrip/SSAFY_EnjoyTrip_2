@@ -105,18 +105,19 @@ function deleteAttraction(contentId) {
 
 function addToZzim(element) {
   console.log(element)
-  addZzimList(
-    userInfo.value.userId,
-    element.contentId,
-    (response) => {
-      let msg = '찜목록 등록 처리 시 문제 발생했습니다.'
-      if (response.status == 200) msg = '찜목록 등록 완료'
-      alert(msg)
-    },
-    (error) => {
-      console.log(error)
-    }
-  )
+  console.log("여기 들어와?????????: ", userInfo.value.userId)
+  // addZzimList(
+  //   userInfo.value.userId,
+  //   element.contentId,
+  //   (response) => {
+  //     let msg = '찜목록 등록 처리 시 문제 발생했습니다.'
+  //     if (response.status == 200) msg = '찜목록 등록 완료'
+  //     alert(msg)
+  //   },
+  //   (error) => {
+  //     console.log(error)
+  //   }
+  // )
 }
 </script>
 

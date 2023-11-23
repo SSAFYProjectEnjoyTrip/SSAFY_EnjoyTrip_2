@@ -122,16 +122,18 @@ function deleteAttraction(contentId) {
 
 //찜!!!!!!!!!!!!!!!!!목록 관련
 function addToZzim(element) {
-  console.log(element)
   const zzimTmp = ref({
     userId: userInfo.value.userId,
-    content_id: element.contentId,
-    first_image: element.firstImage,
+    contentId: element.contentId,
+    firstImage: element.firstImage,
     addr1: element.addr1,
-    title: element.title
+    title: element.title,
+    latitude: element.latitude,
+    longitude: element.longitude
   })
+
   addZzimList(
-    zzimTmp,
+    zzimTmp.value,
     (response) => {
       let msg = '찜목록 등록 처리 시 문제 발생했습니다.'
       if (response.status == 200) msg = '찜목록 등록 완료'
@@ -159,7 +161,7 @@ function searchZzimList() {
 function deleteZzimList(element) {
   deleteZzim(
     userInfo.value.userId,
-    element.content_id,
+    element.contentId,
     (response) => {
       let msg = '찜목록 삭제 처리 시 문제 발생했습니다.'
       if (response.status == 200) msg = '찜목록 삭제 완료'
@@ -283,10 +285,37 @@ function deleteZzimList(element) {
             </table>
             <!-- 찜목록 -->
             <table v-else>
-              <div v-for="(zzim, index) in zzimList" :key="index">
-                User ID: {{ zzim.user_id }}, Content ID: {{ zzim.content_id }}
-                <button @click="deleteZzimList(zzim)">삭제</button>
-              </div>
+              <draggable
+                class="dragArea list-group"
+                :list="zzimList"
+                :group="{ name: 'people', pull: 'clone', put: false }"
+                @change="log"
+                item-key="contentId"
+              >
+              <div
+                  class="list-group-item bg-gray-300 m-1 p-3 rounded-md text-center"
+                  v-for="element in zzimList"
+                  :key="element.contentId"
+                  @click="viewAttraction(element)"
+                >
+                  <div class="left-item-title" style="color: #265073">{{ element.title }}</div>
+                  <div>
+                    <img
+                      v-if="element.firstImage"
+                      class="rounded"
+                      :src="element.firstImage"
+                      alt="Spiral Calendar"
+                      width="200"
+                      height="150"
+                    />
+                    <img v-else :src="planeImage" alt="보이나요?" width="100" height="100" />
+                  </div>
+                  <div style="font-size: 15px; width: 200px; display: block; margin: 0 auto">
+                    {{ element.addr1 }}
+                  </div>
+                  <button @click="deleteZzimList(element)">삭제</button>
+                </div>
+              </draggable>
             </table>
           </div>
         </div>
@@ -333,6 +362,7 @@ function deleteZzimList(element) {
           v-for="element in myList"
           :key="element.contentId"
           style="margin-bottom: 10px"
+          @click="viewAttraction(element)"
         >
           <button
             @click="deleteAttraction(element.contentId)"
