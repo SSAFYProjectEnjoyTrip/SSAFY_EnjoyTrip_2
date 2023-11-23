@@ -180,7 +180,7 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIattraction_infoQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 --
--- Table structure for table `sidocode`
+-- Table structure for table `zzim'
 --
 
 DROP TABLE IF EXISTS `zzim`;
@@ -194,6 +194,7 @@ CREATE TABLE `zzim` (
   `title` varchar(100),
   `latitude` decimal(20,17),
   `longitude` decimal(20,17),
+  
   CONSTRAINT fk_content_idmember FOREIGN KEY (contentId) REFERENCES attraction_info(content_id),
   CONSTRAINT fk_user_id FOREIGN KEY (userId) REFERENCES member(userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -201,6 +202,33 @@ CREATE TABLE `zzim` (
 
 insert into zzim (contentId, userId) values (126176, 'aa');
 select * from zzim;
+
+--
+-- Table structure for table 'myplan'
+--
+
+DROP TABLE IF EXISTS `myplan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `myplan` (
+  `contentId` int NOT NULL,
+  `userId` varchar(45) NOT NULL,
+  `firstImage` varchar(200),
+  `addr1` varchar(100),
+  `title` varchar(100),
+  `latitude` decimal(20,17),
+  `longitude` decimal(20,17),
+  `travleTime` TIMESTAMP,
+  
+  CONSTRAINT fk_content_id FOREIGN KEY (contentId) REFERENCES attraction_info(content_id),
+  CONSTRAINT fk_userId FOREIGN KEY (userId) REFERENCES member(userId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saboardboardved_cs_client */;
+
+insert into zzim (contentId, userId) values (126176, 'aa');
+select * from zzim;
+
+
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: ssafyweb

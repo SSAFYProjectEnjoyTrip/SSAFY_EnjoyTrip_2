@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineComponent, reactive } from 'vue'
+import { ref, onMounted, defineComponent, reactive, watch } from 'vue'
 import { listSido, listGugun } from '@/api/map'
 import { storeToRefs } from 'pinia'
 import { getZzimList, addZzimList, deleteZzim } from '@/api/zzim'
@@ -9,7 +9,14 @@ import VSelect from '@/components/common/VSelect.vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { Slide } from 'vue3-burger-menu'
 import { useMemberStore } from '@/stores/member'
+import { useRouter } from 'vue-router';
 import planeImage from '@/assets/map/planeImage.png'
+
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+const router = useRouter();
+const selectedDate = ref();
 
 const leftMenuOpen = ref(false)
 const rightMenuOpen = ref(false)
@@ -42,14 +49,32 @@ const selected = ref({
 //찜 목록을 위한 변수
 const zzimList = ref([])
 
+//뷰 draggable을 위한 변수
 const draggable = defineComponent(VueDraggableNext)
 
+//찜 버튼 하트변환을 위한 변수
 const isClickable = reactive(attractionInfos.value.reduce((acc, cur) => ({ ...acc, [cur]: true }), {}));
-// const isClickable = ref(true);
+
+//일정 제목을 위한 변수
+const title = ref('');
+const showView = ref(false);
+
+const changeView = () => {
+  showView.value = true;
+};
+
+const editTitle = () => {
+  showView.value = false;
+};
 
 const log = (event) => {
   console.log(event)
 }
+
+
+// watch(selectedDate, (newVal, oldVal) => {
+//   console.log(newVal);
+// });
 
 onMounted(() => {
   getSidoList()
@@ -181,6 +206,14 @@ function deleteZzimList(element) {
     }
   )
 }
+
+const goToTheMyPlanView = () => {
+  if (!myList.value || myList.value.length === 0) {
+    alert("마이플랜이 비어있습니다");
+  } else {
+    router.push({ name: 'myplan', params: { myList: myList } });
+  }
+};
 </script>
 
 <template>
@@ -360,6 +393,18 @@ function deleteZzimList(element) {
           height="100"
         />
       </div>
+      <div>
+    <input
+      v-model="title"
+      type="text"
+      id="myListTitleInput"
+      placeholder="제목을 입력하세요"
+      @keyup.enter="changeView"
+      v-if="!showView"
+    >
+    <div id="myListTitleDisplay" v-if="showView" @click="editTitle">{{ title }}</div>
+  </div>
+
       <hr style="margin-right: 20px" />
       <draggable
         class="dragArea list-group"
@@ -381,7 +426,7 @@ function deleteZzimList(element) {
             style="border: none; background-color: white; margin-left: 90%"
           >
             <img
-              :src="heartImage"
+            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Cross%20Mark.png"
               alt="Cross Mark"
               width="20"
               height="20"
@@ -412,9 +457,12 @@ function deleteZzimList(element) {
             "
           >
             {{ element.addr1 }}
+            <!-- 여기가 바로 날짜!!!!!!!!!!!!!!!!!!!!!!!!1 -->
+          <VueDatePicker v-model="element.selectedDate" :enable-time-picker="false"></VueDatePicker>
           </div>
         </div>
       </draggable>
+      <button id="myListSubmitBtn" @click="goToTheMyPlanView(myList)">계획 완성</button>
     </Slide>
   </div>
 </template>
@@ -494,5 +542,40 @@ function deleteZzimList(element) {
 
 .active {
   background-color: #ddd;
+}
+
+#myListTitleInput {
+  width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+}
+
+#myListTitleDisplay {
+  padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 18px;
+    color: #333;
+}
+
+#myListSubmitBtn {
+  display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 18px;
+    color: #fff;
+    background-color: #5CCF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
 }
 </style>
