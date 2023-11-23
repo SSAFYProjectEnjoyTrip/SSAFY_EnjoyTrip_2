@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineComponent } from 'vue'
+import { ref, onMounted, defineComponent, reactive } from 'vue'
 import { listSido, listGugun } from '@/api/map'
 import { storeToRefs } from 'pinia'
 import { getZzimList, addZzimList, deleteZzim } from '@/api/zzim'
@@ -43,6 +43,9 @@ const selected = ref({
 const zzimList = ref([])
 
 const draggable = defineComponent(VueDraggableNext)
+
+const isClickable = reactive(attractionInfos.value.reduce((acc, cur) => ({ ...acc, [cur]: true }), {}));
+// const isClickable = ref(true);
 
 const log = (event) => {
   console.log(event)
@@ -121,7 +124,10 @@ function deleteAttraction(contentId) {
 }
 
 //찜!!!!!!!!!!!!!!!!!목록 관련
-function addToZzim(element) {
+function addToZzim(element) {  
+
+  isClickable[element.contentId] = !isClickable[element.contentId];
+
   const zzimTmp = ref({
     userId: userInfo.value.userId,
     contentId: element.contentId,
@@ -159,6 +165,8 @@ function searchZzimList() {
 }
 
 function deleteZzimList(element) {
+  isClickable[element.contentId] = !isClickable[element.contentId];
+
   deleteZzim(
     userInfo.value.userId,
     element.contentId,
@@ -279,7 +287,11 @@ function deleteZzimList(element) {
                   <div style="font-size: 15px; width: 200px; display: block; margin: 0 auto">
                     {{ element.addr1 }}
                   </div>
-                  <button @click="addToZzim(element)">찜</button>
+                  <button @click="addToZzim(element)">
+                    <img v-if="!isClickable[element.contentId]" src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Black%20Heart.png" alt="Black Heart" width="25" height="25" />
+                    <img v-else src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Beating%20Heart.png" alt="Beating Heart" width="25" height="25" >
+                    찜
+                  </button>
                 </div>
               </draggable>
             </table>
@@ -369,7 +381,7 @@ function deleteZzimList(element) {
             style="border: none; background-color: white; margin-left: 90%"
           >
             <img
-              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Cross%20Mark.png"
+              :src="heartImage"
               alt="Cross Mark"
               width="20"
               height="20"
