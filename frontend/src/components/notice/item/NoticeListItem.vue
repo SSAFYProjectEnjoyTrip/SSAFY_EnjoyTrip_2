@@ -10,7 +10,7 @@ defineProps({ notice: Object })
         :to="{ name: 'noticeDetail', params: { articleNo: notice.articleNo } }"
         class="article-title link-dark"
       >
-        {{ notice.subject }}
+        <b>{{ notice.subject }}</b>
       </router-link>
     </td>
     <td>{{ notice.userId }}</td>

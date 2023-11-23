@@ -96,7 +96,7 @@ public class CommentController {
 //		logger.debug("등록할 때 userId 뜨나? : {})", mDto.getUserId());
 		// TODO : setUserId 바꾸기
 		cDto.setUserId("admin");
-		cDto.setCommentNo(commentService.listComment(cDto.getArticleNo()).size()+1);
+		// cDto.setCommentNo(commentService.listComment(cDto.getArticleNo()).size()+1);
 		
 		commentService.writeComment(cDto);
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);

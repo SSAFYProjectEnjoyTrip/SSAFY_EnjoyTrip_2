@@ -103,7 +103,7 @@ public class BoardRestController {
 		System.out.println("별점" + bDto.getStar());
 
 		// TODO : setUserId 바꾸기
-		bDto.setUserId("ssafy");
+//		bDto.setUserId("ssafy");
 		System.out.println(bDto);
 		boardService.writeArticle(bDto);
 

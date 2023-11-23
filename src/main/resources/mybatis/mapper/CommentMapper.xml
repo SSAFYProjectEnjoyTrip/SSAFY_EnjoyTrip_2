@@ -20,8 +20,8 @@
 	
 	<!-- 댓글 작성 -->
 	<insert id = "writeComment" parameterType="CommentDto">
-		insert into comment (commentNo, articleNo, userId, commentContent)
-		values (#{commentNo}, #{articleNo}, #{userId}, #{commentContent})
+		insert into comment (articleNo, userId, commentContent)
+		values (#{articleNo}, #{userId}, #{commentContent})
 	</insert>
 	
 	<!-- 댓글 삭제 -->

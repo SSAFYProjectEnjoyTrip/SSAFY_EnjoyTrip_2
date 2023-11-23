@@ -62,15 +62,24 @@ function onPageChange(value) {
   params.pageNo = value
   searchNoticeList()
 }
+
+// // 로그인한사람이 admin인지 확인
+const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
+
+var isAdmin = false;
+if (loginUser == "admin") {
+  isAdmin = true;
+} 
 </script>
 
 <template>
-  <div class="col-6">
-    <button class="btn btn-outline-primary" @click="moveHandler">등록</button>
-  </div>
   <div v-if="notices.length > 0">
-    <h3>등록된 글 목록</h3>
-    <div class="row">
+    <div class="board-title">Notice</div>
+    <div class="title-info">공지사항입니다 :)</div>
+    <div class="regi-btn-box" v-if="isAdmin">
+      <button class="btn btn-success" @click="moveHandler">등록</button>
+    </div>
+    <div class="row search-box">
       <div class="col-6">
         <div class="input-group">
           <span class="input-group-text">검색조건</span>
@@ -113,7 +122,40 @@ function onPageChange(value) {
   <div v-else>
     <h3>등록된 게시물 정보가 없습니다</h3>
   </div>
+  <div style="height: 50px"></div>
   <PageNavigation :currentPage="currentPage" :totalPage="totalPage" @page-change="onPageChange" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.board-title {
+margin-top: 50px;
+font-size: 50px;
+font-weight: bold;
+font-family: 'Times New Roman', Times, serif;
+text-shadow: 0 0 5px gray;
+}
+.title-info {
+margin-top: 10px;
+margin-bottom: 50px;
+color: #a8a8a8;
+font-weight: bold;
+font-size: 14px;
+}
+.regi-btn-box {
+display: flex;
+justify-content: right;
+margin-top: 20px;
+}
+.input-group {
+margin-bottom: 40px;
+}
+</style>
+
+<!-- <tbody>
+  searchNoticeList
+  <NoticeListItem
+    v-for="notice in notices"
+    :key="notice.articleNo"
+    :notice="notice"
+  ></NoticeListItem>
+</tbody> -->

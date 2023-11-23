@@ -62,6 +62,10 @@ function onPageChange(value) {
   params.pageNo = value
   searchList()
 }
+
+// // 로그인한사람있으면 확인
+const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
+
 </script>
 
 <template>
@@ -69,8 +73,11 @@ function onPageChange(value) {
     <div v-if="articles.length > 0">
       <div class="board-title">Review Board</div>
       <div class="title-info">여러분의 여행을 공유해주세요 :)</div>
-      <div class="regi-btn-box">
+      <div class="regi-btn-box" v-if="loginUser">
         <button class="btn btn-success" @click="moveHandler">등록</button>
+      </div>
+      <div class="regi-btn-box" v-else>
+        <div style="font-size: 13px; font-weight: bold;">로그인해야 작성하실 수 있습니다 !</div>
       </div>
       <div class="row search-box">
         <div class="col-6">
