@@ -16,7 +16,16 @@ const openInNewTab = (url) => {
       />
     </div>
   </div>
-  <div class="line">
+  <div style="border: 2px solid pink; height: 300px; margin-bottom: 200px">
+    나냐냔냐냐냐냐ㅑ냐냐냔 꾸밀거임
+  </div>
+  <div
+    class="line"
+    v-motion
+    :initial="{ opacity: 0, y: 100 }"
+    :visible="{ opacity: 1, y: 0, scale: 1 }"
+    :delay="200"
+  >
     <div class="img1">
       <img src=" https://source.unsplash.com/random/?seoul" width="100%" height="300" />
       <a
@@ -48,7 +57,13 @@ const openInNewTab = (url) => {
       <div class="under">Busan</div>
     </div>
   </div>
-  <div class="line">
+  <div
+    class="line"
+    v-motion
+    :initial="{ opacity: 0, y: 100 }"
+    :visible="{ opacity: 1, y: 0, scale: 1 }"
+    :delay="200"
+  >
     <div class="img1">
       <img src=" https://source.unsplash.com/random/?eastsea" width="100%" height="300" />
       <a

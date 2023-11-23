@@ -15,7 +15,7 @@ const { userInfo, isLogin, isValidToken } = storeToRefs(memberStore)
 // const { getUserInfo } = memberStore
 const isReadonly = ref(true)
 
-console.log(userInfo.value.userId);
+console.log(userInfo.value.userId)
 
 // 기본 상태를 정의하는 함수
 const getDefaultState = () => ({
@@ -81,7 +81,6 @@ function moveMain() {
 }
 
 function modifyPassword() {
-
   // 입력 값 가져오기 user.emailId
   const userId = userInfo.value.userId
   const curPw = document.getElementById('curPw').value
@@ -124,7 +123,6 @@ function modifyPassword() {
 }
 
 function modifyEmail() {
-
   // 입력 값 가져오기
   const userId = userInfo.value.userId
   const curPw = document.getElementById('curPw').value
@@ -139,7 +137,7 @@ function modifyEmail() {
     emailDomain: emaildomain
   }
 
-  updateEmail (
+  updateEmail(
     param,
     (response) => {
       if (response.data === 'SUCCESS') {
@@ -159,7 +157,6 @@ function modifyEmail() {
       alert('이메일 정보 변경에 실패했습니다.')
     }
   )
-  
 }
 </script>
 
@@ -253,7 +250,15 @@ function modifyEmail() {
       </div>
     </div>
     <!-- 모달 start -->
-    <div class="modal fade" id="for-update" tabindex="-1">
+    <div
+      class="modal fade"
+      id="for-update"
+      tabindex="-1"
+      v-motion
+      :initial="{ opacity: 0, y: 100 }"
+      :visible="{ opacity: 1, y: 0, scale: 1 }"
+      :delay="200"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -295,7 +300,15 @@ function modifyEmail() {
     </div>
     <!-- 모달 end -->
     <!-- 모달 start -->
-    <div class="modal fade" id="for-email-update" tabindex="-1">
+    <div
+      class="modal fade"
+      id="for-email-update"
+      tabindex="-1"
+      v-motion
+      :initial="{ opacity: 0, y: 100 }"
+      :visible="{ opacity: 1, y: 0, scale: 1 }"
+      :delay="200"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -361,7 +374,15 @@ function modifyEmail() {
     </div>
     <!-- 모달 end -->
     <!-- 모달 start -->
-    <div class="modal fade" id="for-delete" tabindex="-1">
+    <div
+      class="modal fade"
+      id="for-delete"
+      tabindex="-1"
+      v-motion
+      :initial="{ opacity: 0, y: 100 }"
+      :visible="{ opacity: 1, y: 0, scale: 1 }"
+      :delay="200"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

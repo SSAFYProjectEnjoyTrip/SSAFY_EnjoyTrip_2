@@ -42,7 +42,16 @@ const login = async () => {
 
 <template>
   <main class="container box">
-    <div class="login-page" style="margin-top: 100px">
+    <div
+      class="login-page"
+      style="margin-top: 100px"
+      v-motion
+      :initial="{ opacity: 0, y: 100 }"
+      :enter="{ opacity: 1, y: 0, scale: 1 }"
+      :variants="{ custom: { scale: 1 } }"
+      :hovered="{ scale: 1.1 }"
+      :delay="200"
+    >
       <div class="title">
         <img src="@/assets/et.png" class="login-logo" />
       </div>
