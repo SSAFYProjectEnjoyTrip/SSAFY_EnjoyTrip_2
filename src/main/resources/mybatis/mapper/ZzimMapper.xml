@@ -6,21 +6,21 @@
 	<!-- 찜목록 등록 -->
 	<insert id="addZzimList" parameterType="ZzimDto">
 		insert into
-		zzim(content_id, user_id, first_image, addr1, title)
-		values(#{content_id},#{user_id}, #{first_image}, #{addr1}, #{title})
+		zzim(contentId, userId, firstImage, addr1, title, latitude, longitude)
+		values(#{contentId},#{userId}, #{firstImage}, #{addr1}, #{title}, #{latitude}, #{longitude})
 	</insert>
 	
 	<!-- 찜목록 삭제 -->
 	<delete id="deleteZzim" parameterType="ZzimDto">
 		delete from zzim
-		where content_id = #{content_id} and user_id = #{user_id}
+		where contentId = #{contentId} and userId = #{userId}
 	</delete>
 	
 	<!-- 찜목록 리스트 -->
 	<select id="zzimList" parameterType="String" resultType="ZzimDto">
 		select *
 		from zzim
-		where user_id = #{user_id}
-		order by content_id desc
+		where userId = #{userId}
+		order by contentId desc
 	</select>
 </mapper>

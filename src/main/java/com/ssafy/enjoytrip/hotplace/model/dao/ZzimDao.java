@@ -15,5 +15,5 @@ public interface ZzimDao {
 	
 	void addZzimList(ZzimDto zzimDto) throws SQLException;
 
-	void deleteZzim(String user_id, int content_id) throws SQLException;
+	void deleteZzim(String userId, int contentId) throws SQLException;
 }

@@ -30,9 +30,9 @@ public class ZzimServiceImpl implements ZzimService{
 	}
 
 	@Override
-	public void deleteZzim(String user_id, int content_id) {
+	public void deleteZzim(String userId, int contentId) {
 		try {
-			dao.deleteZzim(user_id, content_id);
+			dao.deleteZzim(userId, contentId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

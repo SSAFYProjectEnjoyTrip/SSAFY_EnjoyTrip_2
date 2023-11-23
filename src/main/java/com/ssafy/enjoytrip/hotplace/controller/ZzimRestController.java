@@ -41,9 +41,9 @@ public class ZzimRestController {
 	
 	@ApiOperation(value="아이디에 따른 찜 목록", notes = "아이디에 따른 찜 리스트")
 	@ApiResponse(code = 200, message = "success")
-	@GetMapping("/{user_id}")
-	public ResponseEntity<?> getZzimList(@PathVariable String user_id) {
-		List<ZzimDto> list = zzimService.zzimList(user_id);
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getZzimList(@PathVariable String userId) {
+		List<ZzimDto> list = zzimService.zzimList(userId);
 		
 		if(list != null) {
 			return new ResponseEntity(list, HttpStatus.OK);
@@ -64,9 +64,9 @@ public class ZzimRestController {
 	
 	@ApiOperation(value = "게시글 정보 삭제", notes = "게시글 정보를 삭제한다. ")
 	@ApiResponse(code = 200, message = "success")
-	@DeleteMapping("/{user_id}/{content_id}")
-	public ResponseEntity<String> deleteZzim(@PathVariable String user_id, @PathVariable int content_id) {
-		zzimService.deleteZzim(user_id, content_id);
+	@DeleteMapping("/{userId}/{contentId}")
+	public ResponseEntity<String> deleteZzim(@PathVariable String userId, @PathVariable String contentId) {
+		zzimService.deleteZzim(userId, Integer.parseInt(contentId));
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 }
