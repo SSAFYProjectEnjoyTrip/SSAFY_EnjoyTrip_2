@@ -92,7 +92,6 @@ defineProps({ article: Object })
       </router-link>
     </td>
     <td>{{ article.userId }}</td>
-    <td>{{ article.hit }}</td>
   </tr>
 </template>
 

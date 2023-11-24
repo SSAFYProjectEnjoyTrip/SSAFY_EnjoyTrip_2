@@ -64,12 +64,12 @@ function onPageChange(value) {
 }
 
 // // 로그인한사람이 admin인지 확인
-const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
+const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
 
-var isAdmin = false;
-if (loginUser == "admin") {
-  isAdmin = true;
-} 
+var isAdmin = false
+if (loginUser == 'admin') {
+  isAdmin = true
+}
 </script>
 
 <template>
@@ -98,16 +98,14 @@ if (loginUser == "admin") {
     <table class="table table-hover">
       <thead>
         <colgroup>
-          <col width="10%" />
-          <col width="30%" />
-          <col width="30%" />
-          <col width="30%" />
+          <col width="33%" />
+          <col width="33%" />
+          <col width="33%" />
         </colgroup>
         <tr class="text-center">
           <th>게시글 번호</th>
           <th>제목</th>
-          <th>저자</th>
-          <th>조회수</th>
+          <th>글쓴이</th>
         </tr>
       </thead>
       <tbody>
@@ -128,26 +126,26 @@ if (loginUser == "admin") {
 
 <style scoped>
 .board-title {
-margin-top: 50px;
-font-size: 50px;
-font-weight: bold;
-font-family: 'Times New Roman', Times, serif;
-text-shadow: 0 0 5px gray;
+  margin-top: 50px;
+  font-size: 50px;
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+  text-shadow: 0 0 5px gray;
 }
 .title-info {
-margin-top: 10px;
-margin-bottom: 50px;
-color: #a8a8a8;
-font-weight: bold;
-font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  color: #a8a8a8;
+  font-weight: bold;
+  font-size: 14px;
 }
 .regi-btn-box {
-display: flex;
-justify-content: right;
-margin-top: 20px;
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
 }
 .input-group {
-margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 </style>
 

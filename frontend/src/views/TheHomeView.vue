@@ -6,8 +6,8 @@ const openInNewTab = (url) => {
 
 <template>
   <div class="main-title">
-    <div class="title-text">
-      어디로 !!!!!!!!!! 떠나시겠슴니까!!!!!!
+    <div class="title-text" style="margin-right: 150px">
+      Enjoy Trip
       <img
         src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Ghost.png"
         alt="Ghost"
@@ -16,8 +16,17 @@ const openInNewTab = (url) => {
       />
     </div>
   </div>
-  <div style="border: 2px solid pink; height: 300px; margin-bottom: 200px">
-    나냐냔냐냐냐냐ㅑ냐냐냔 꾸밀거임
+  <div class="gogo" style="margin-left: 130px">최고의 여행을 만들어보세요 :)</div>
+  <div class="son">
+    Click !
+    <a class="nav-link" href="/hotplaceburger">
+      <img
+        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Backhand%20Index%20Pointing%20Right%20Light%20Skin%20Tone.png"
+        alt="Backhand Index Pointing Right Light Skin Tone"
+        width="120"
+        height="120"
+      />
+    </a>
   </div>
   <div
     class="line"
@@ -95,6 +104,44 @@ const openInNewTab = (url) => {
       <div class="under">Gangwondo</div>
     </div>
   </div>
+  <div
+    class="line"
+    v-motion
+    :initial="{ opacity: 0, y: 100 }"
+    :visible="{ opacity: 1, y: 0, scale: 1 }"
+    :delay="200"
+  >
+    <div class="img1">
+      <img src=" https://source.unsplash.com/random/?danyang" width="100%" height="300" />
+      <a
+        href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=단양+여행"
+        target="_blank"
+      >
+        <div class="img-info">단양</div></a
+      >
+      <div class="under">Danyang</div>
+    </div>
+    <div class="img1">
+      <img src=" https://source.unsplash.com/random/?gyeongju" width="100%" height="300" />
+      <a
+        href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=경주+여행"
+        target="_blank"
+      >
+        <div class="img-info">경주</div>
+      </a>
+      <div class="under">Gyeongju</div>
+    </div>
+    <div class="img1">
+      <img src=" https://source.unsplash.com/random/?jeonju" width="100%" height="300" />
+      <a
+        href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=전주+여행"
+        target="_blank"
+      >
+        <div class="img-info">전주</div></a
+      >
+      <div class="under">Jeonju</div>
+    </div>
+  </div>
 
   <!-- <img src=" https://source.unsplash.com/random/?seoul" width="33%" height="400" />
   <img src=" https://source.unsplash.com/random/?jeju" width="33%" height="400" />
@@ -103,9 +150,19 @@ const openInNewTab = (url) => {
   <img src=" https://source.unsplash.com/random/?gyeongbokgung" width="33%" height="400" />
   <img src=" https://source.unsplash.com/random/?gangwondo" width="33%" height="400" /> -->
   <div class="bottom"></div>
+  <div class="bg"></div>
 </template>
 
 <style scoped>
+.bg {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  background-color: #ffeed9;
+}
 .main-title {
   padding-top: 100px;
   display: flex;
@@ -113,15 +170,17 @@ const openInNewTab = (url) => {
   margin-bottom: 100px;
 }
 .title-text {
-  font-size: 40px;
+  font-size: 100px;
   font-weight: bold;
-  color: #80b3ff;
+  color: #ff9130;
+  font-family: 'Times New Roman', Times, serif;
+  text-shadow: 0 0 5px #fecda6;
 }
 .line {
   display: flex;
   justify-content: center;
   gap: 2%;
-  margin-bottom: 50px;
+  margin-bottom: 120px;
 }
 .img1 {
   border: 1px solid gray;
@@ -131,6 +190,7 @@ const openInNewTab = (url) => {
   border-radius: 30px;
   overflow: hidden;
   box-shadow: 0 0 2px;
+  background-color: white;
 }
 .img1:hover {
   border: 2px solid rgb(168, 167, 167);
@@ -157,5 +217,26 @@ const openInNewTab = (url) => {
 }
 a {
   text-decoration: none;
+}
+/** 최고여행 */
+.gogo {
+  text-align: center;
+  height: 100px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #427d9d;
+  margin-bottom: 30px;
+}
+
+.son {
+  display: flex;
+  justify-content: right;
+  padding-right: 200px;
+  margin-bottom: 100px;
+
+  font-size: 40px;
+  font-weight: bold;
+  color: #87c4ff;
+  font-family: 'Times New Roman', Times, serif;
 }
 </style>

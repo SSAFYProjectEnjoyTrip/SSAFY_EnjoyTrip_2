@@ -14,7 +14,6 @@ defineProps({ notice: Object })
       </router-link>
     </td>
     <td>{{ notice.userId }}</td>
-    <td>{{ notice.hit }}</td>
   </tr>
 </template>
 

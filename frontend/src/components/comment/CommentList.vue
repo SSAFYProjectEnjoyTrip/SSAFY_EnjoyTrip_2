@@ -35,11 +35,21 @@ function searchList() {
 
 <template>
   <div>
-    <h3>댓글</h3>
+    <div class="re">댓글</div>
+    <hr />
     <CommentListItem v-for="comment in commentList" :key="comment.commentNo" :comment="comment" />
   </div>
   <div>
-    <h3>댓글 입력</h3>
+    <hr />
     <CommentFormItem type="regist"></CommentFormItem>
   </div>
 </template>
+
+<style>
+.re {
+  color: gray;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 40px;
+}
+</style>

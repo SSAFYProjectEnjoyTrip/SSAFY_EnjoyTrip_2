@@ -29,11 +29,17 @@ function removeComment() {
   console.log('제발 .. ' + comment)
   deleteComment(comment, (response) => {
     let msg = '댓글 삭제 시 문제 발생했습니다.'
-    if (response.status == 200) msg = '댓글 삭제가 완료되었습니다.'
-    alert(msg)
-    location.reload()
+    if (response.status == 200) {
+      msg = '댓글 삭제가 완료되었습니다.'
+      alert(msg)
+      window.location.reload()
+    }
   })
 }
+// // 로그인한사람있으면 확인
+const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
+
+const isSameUser = props.comment.userId === loginUser
 </script>
 
 <template>
@@ -44,10 +50,10 @@ function removeComment() {
       <div class="comment-date">{{ comment.registerTime }}</div>
       <div class="comment-content">{{ comment.commentContent }}</div>
     </div>
-    <tr>
+    <tr v-if="isSameUser">
       <td colspan="2" class="text-center">
-        <button @click="editComment" v-if="isUseId">수정</button>
-        <button @click="removeComment" v-if="isUseId">삭제</button>
+        <button class="submit-button" @click="editComment" v-if="isUseId">수정</button>
+        <button class="submit-button" @click="removeComment" v-if="isUseId">삭제</button>
       </td>
     </tr>
   </div>
@@ -62,11 +68,12 @@ body {
 }
 
 .comment-container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: 20px auto;
   background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -87,5 +94,17 @@ body {
 .comment-content {
   margin-top: 10px;
   color: #555;
+}
+
+.submit-button {
+  border: 2px solid #eef5ff;
+  border-radius: 10px;
+  background-color: #9ad0c2;
+  font-weight: bold;
+  width: 80px;
+  height: 35px;
+}
+.submit-button:hover {
+  background-color: #f2ffe9;
 }
 </style>

@@ -94,8 +94,6 @@ public class CommentController {
 	public ResponseEntity<?> writeComment(@RequestBody CommentDto cDto, @ApiIgnore HttpSession session){
 		MemberDto mDto = (MemberDto) session.getAttribute("loginUser");
 //		logger.debug("등록할 때 userId 뜨나? : {})", mDto.getUserId());
-		// TODO : setUserId 바꾸기
-		cDto.setUserId("admin");
 		// cDto.setCommentNo(commentService.listComment(cDto.getArticleNo()).size()+1);
 		
 		commentService.writeComment(cDto);
