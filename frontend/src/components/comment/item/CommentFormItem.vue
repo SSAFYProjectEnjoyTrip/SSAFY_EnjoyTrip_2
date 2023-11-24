@@ -64,12 +64,14 @@ function onSubmit() {
 function writeComment() {
   console.log('댓글 등록하자!!', comment.value)
   comment.value.articleNo = articleNo
+  comment.value.userId = JSON.parse(sessionStorage.getItem('loginUser'))
   registComment(
     comment.value,
     (response) => {
       let msg = '댓글 등록 처리 시 문제 발생했습니다.'
       if (response.status == 200) msg = '댓글 등록이 완료되었습니다.'
       alert(msg)
+      window.location.reload()
       // moveList()
       // moveReload()
     },
@@ -88,6 +90,8 @@ function updateComment() {
       let msg = '댓글 수정 시 문제 발생했습니다.'
       if (response.status == 200) msg = '댓글 수정이 완료되었습니다.'
       alert(msg)
+      window.location.reload()
+
       // moveList()
       // moveReload()
     },
@@ -98,16 +102,22 @@ function updateComment() {
 // function moveReload() {
 //   location.reload()
 // }
+
+// // 로그인한사람있으면 확인
+const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
 </script>
 
 <template>
   <form @submit.prevent="onSubmit">
-    <div class="comment-container">
+    <div class="comment-container" v-if="loginUser">
       <div class="comment">
         <div class="comment-author">{{ comment.userId }}</div>
         <div class="comment-date">{{ comment.registerTime }}</div>
         <div class="comment-content">
-          <label for="content" class="form-label">댓글 내용 : </label>
+          <div class="re-author">
+            <b>{{ loginUser }}</b>
+          </div>
+          <input type="hidden" v-model="comment.userId" />
           <input type="text" class="form-control" v-model="comment.commentContent" />
         </div>
       </div>
@@ -123,6 +133,9 @@ function updateComment() {
         <button type="submit" class="submit-button" v-else onclick="updateComment()">수정</button>
       </div>
     </div>
+    <div class="comment-container" v-else>
+      <div>로그인해야 이용하실 수 있습니다.</div>
+    </div>
   </form>
 </template>
 
@@ -135,11 +148,12 @@ body {
 }
 
 .comment-container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: 20px auto;
   background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -160,5 +174,25 @@ body {
 .comment-content {
   margin-top: 10px;
   color: #555;
+}
+.re-author {
+  text-align: left;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.form-control {
+  height: 100px;
+}
+.submit-button {
+  border: 2px solid #eef5ff;
+  border-radius: 10px;
+  background-color: #9ad0c2;
+  font-weight: bold;
+  width: 80px;
+  height: 35px;
+}
+.submit-button:hover {
+  background-color: #f2ffe9;
 }
 </style>
