@@ -22,7 +22,9 @@ public class MyPlanDto {
 	private double latitude;
 	private double longitude;
 	private String mlevel;
-	private String travelDate;
+	private String travelTime;
+	
+	
 	
 	public int getContentId() {
 		return contentId;
@@ -136,17 +138,17 @@ public class MyPlanDto {
 		this.mlevel = mlevel;
 	}
 	
-	public String getTravelDate() {
-		return travelDate;
+	public String getTravelTime() {
+		return travelTime;
 	}
 
-	public void setTravelDate(String travelDate) {
-		this.travelDate = travelDate;
+	public void setTravelTime(String travelTime) {
+		this.travelTime = travelTime;
 	}
 
 	public MyPlanDto(int contentId, int contentTypeId, String title, String addr1, String addr2, String zipcode,
 			String tel, String firstImage, String userId, int readcount, int sidoCode, int gugunCode, double latitude,
-			double longitude, String mlevel, String travelDate) {
+			double longitude, String mlevel, String travelTime) {
 		super();
 		this.contentId = contentId;
 		this.contentTypeId = contentTypeId;
@@ -163,7 +165,7 @@ public class MyPlanDto {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.mlevel = mlevel;
-		this.travelDate = travelDate;
+		this.travelTime = travelTime;
 	}
 
 	@Override
@@ -172,6 +174,10 @@ public class MyPlanDto {
 				+ ", addr1=" + addr1 + ", addr2=" + addr2 + ", zipcode=" + zipcode + ", tel=" + tel + ", firstImage="
 				+ firstImage + ", userId=" + userId + ", readcount=" + readcount + ", sidoCode=" + sidoCode
 				+ ", gugunCode=" + gugunCode + ", latitude=" + latitude + ", longitude=" + longitude + ", mlevel="
-				+ mlevel + ", travelDate=" + travelDate + "]";
+				+ mlevel + ", travelTime=" + travelTime + "]";
+	}
+
+	public MyPlanDto() {
+		super();
 	}
 }

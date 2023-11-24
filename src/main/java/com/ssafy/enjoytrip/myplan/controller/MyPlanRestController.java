@@ -42,8 +42,10 @@ public class MyPlanRestController {
 	@ApiResponse(code = 200, message = "success")
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getPlanList(@PathVariable String userId) {
-		List<MyPlanDto> list = myPlanService.getPlanList(userId);
+		String isReal = "aa";
+		List<MyPlanDto> list = myPlanService.getPlanList(isReal);
 
+		
 		if (list != null && !list.isEmpty()) {
 			return new ResponseEntity(list, HttpStatus.OK);
 		} else {
@@ -55,6 +57,7 @@ public class MyPlanRestController {
 	@ApiResponse(code = 200, message = "success")
 	@PostMapping
 	public ResponseEntity<?> addPlan(@RequestBody MyPlanDto mpDto){
+		mpDto.setUserId("aa");
 		myPlanService.addPlan(mpDto);
 		
 		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);

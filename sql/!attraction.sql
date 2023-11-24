@@ -225,8 +225,8 @@ CREATE TABLE `myplan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saboardboardved_cs_client */;
 
-insert into zzim (contentId, userId) values (126176, 'aa');
-select * from zzim;
+-- insert into myplan (contentId, userId) values (126176, 'aa'); 
+select * from myplan;
 
 
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)

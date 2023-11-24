@@ -11,12 +11,13 @@ import { Slide } from 'vue3-burger-menu'
 import { useMemberStore } from '@/stores/member'
 import { useRouter } from 'vue-router';
 import planeImage from '@/assets/map/planeImage.png'
+import { addPlan } from '@/api/myplan'
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { el } from 'date-fns/locale'
 
 const router = useRouter();
-const selectedDate = ref();
 
 const leftMenuOpen = ref(false)
 const rightMenuOpen = ref(false)
@@ -207,13 +208,55 @@ function deleteZzimList(element) {
   )
 }
 
+//마이 플랜 관련!!!!!!!!!!!!!!!!!!!!
 const goToTheMyPlanView = () => {
   if (!myList.value || myList.value.length === 0) {
     alert("마이플랜이 비어있습니다");
   } else {
-    router.push({ name: 'myplan', params: { myList: myList } });
+    insertPlan();
+    router.push({ name: 'myplan' });
   }
 };
+
+const planTmp = ref({
+    userId: userInfo.value.userId,
+    contentId: 0,
+    firstImage: '',
+    addr1: '',
+    title: '',
+    latitude: 0.0,
+    longitude: 0.0,
+    travelTime: ''
+  })
+
+const insertPlan = () => {
+  myList.value.forEach((element) => {
+  console.log("어케 나오는건데!!!", element); // 예시: 콘솔에 원소 출력
+  planTmp.value.contentId = element.contentId;
+  planTmp.value.firstImage = element.firstImage;
+  planTmp.value.addr1 = element.addr1;
+  planTmp.value.title = element.title;
+  planTmp.value.latitude = element.latitude;
+  planTmp.value.longitude = element.longitude;
+  planTmp.value.travelTime = element.selectedDate;
+
+  console.log("엥??", planTmp);
+
+  addPlan(
+    planTmp,
+        (response) => {
+      let msg = '마이플랜 등록 시 문제 발생했습니다.'
+      if (response.status == 200) msg = '마이플랜 등록 완료'
+      alert(msg)
+    },
+    (error) => {
+      console.log(error)
+    }
+    )
+}
+
+);
+  }
 </script>
 
 <template>

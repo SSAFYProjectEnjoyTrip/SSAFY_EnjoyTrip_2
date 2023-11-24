@@ -5,20 +5,18 @@
 <mapper
 	namespace="com.ssafy.enjoytrip.myplan.model.dao.MyPlanDao">
 	
-	
-		<insert id="joinMember" parameterType="MemberDto">
-		insert into member(userId,
-		userName, userPwd, emailId, emailDomain)
-		values(#{userId}, #{userName},
-		#{userPwd}, #{emailId}, #{emailDomain})
+		<insert id="addPlan" parameterType="MyPlanDto">
+		insert into myplan(contentId,
+		userId, firstImage, addr1, title, latitude, longitude, travelTime)
+		values(#{contentId}, #{userId}, #{firstImage}, #{addr1}, #{title}, #{latitude}, #{longitude}, #{travelTime})
 	</insert>
 
-	<select id="getMemberById" parameterType="String"
-		resultType="MemberDto">
-		select userId, userName, userPwd, emailId, emailDomain,
-		joinDate
-		from member
-		where userId=#{id}
+	<select id="getPlanList" parameterType="String"
+		resultType="MyPlanDto">
+		select *
+		from myplan
+		where userId=#{userId}
+		order by travelTime
 	</select>
 	
 </mapper>
