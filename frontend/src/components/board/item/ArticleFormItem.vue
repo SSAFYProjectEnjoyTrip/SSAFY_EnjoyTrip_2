@@ -129,7 +129,9 @@ watch(
 )
 
 function writeArticle() {
-  console.log('글등록하자!!', article.value)
+  // console.log('글등록하자!!', sessionStorage.getItem("loginUser"))
+  console.log('글등록하자!!', article.value.subject)
+  article.value.userId = JSON.parse(sessionStorage.getItem("loginUser"))
   // 서버로 formData 전송하는 로직
   registArticle(
     article.value,
@@ -174,8 +176,6 @@ function moveList() {
           height="100"
         />
       </div>
-
-      <!-- <form action="#" name="rb" id="rb" method="post" enctype="multipart/form-data"> -->
       <div class="stars">만족하셨나요?</div>
       <div class="form-group">
         <select class="form-control" id="sel1" name="star" v-model="article.star">
@@ -186,6 +186,11 @@ function moveList() {
           <option value="1">★</option>
         </select>
       </div>
+
+      <input
+        type="hidden" 
+        v-model="article.userId"
+      />
 
       <div class="share">사진을 공유해주세요</div>
       <div class="image">
@@ -298,7 +303,6 @@ textarea {
   width: 100%;
   text-align: center;
   margin-top: 30px;
-  margin-bottom: 50px;
   font-size: 35px;
   font-weight: bold;
   color: #64ccc5;

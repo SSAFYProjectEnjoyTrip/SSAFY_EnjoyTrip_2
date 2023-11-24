@@ -1,7 +1,11 @@
 <script setup>
-import { RouterView } from 'vue-router'
-import TheHeadingNavBar from '@/components/layout/TheHeadingNavbar.vue'
-import TheFooter from '@/components/layout/TheFooter.vue'
+import { ref, onMounted, provide } from 'vue';
+import { RouterView } from 'vue-router';
+import TheHeadingNavBar from '@/components/layout/TheHeadingNavbar.vue';
+import TheFooter from '@/components/layout/TheFooter.vue';
+
+
+// 채널톡을 위한......... 근데 너무 길다
 ;(function () {
   var w = window
   if (w.ChannelIO) {
@@ -40,6 +44,8 @@ import TheFooter from '@/components/layout/TheFooter.vue'
 ChannelIO('boot', {
   pluginKey: '5c78b295-da5d-453b-87a8-e336385d6e44'
 })
+
+
 </script>
 
 <template>
