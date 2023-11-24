@@ -60,6 +60,11 @@ function moveList() {
 function moveModify() {
   router.push({ name: 'modify', params: { articleNo } })
 }
+
+// // 로그인한사람있으면 확인
+const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
+
+const isSameUser = article.userId === loginUser
 </script>
 
 <template>
@@ -168,10 +173,10 @@ function moveModify() {
           </div>
         </div>
       </div>
-      <div class="date">작성일 : {{ article.registerTime }} (조회수 : {{ article.hit }})</div>
+      <div class="date">작성일 : {{ article.registerTime }}</div>
     </div>
   </div>
-  <div>
+  <div v-if="isSameUser">
     <button class="btn btn-outline-success m-1" @click="moveModify">수정</button>
     <button class="btn btn-outline-success m-1" @click="moveList">목록</button>
     <button class="btn btn-outline-success m-1" @click="onDeleteArticle">삭제</button>

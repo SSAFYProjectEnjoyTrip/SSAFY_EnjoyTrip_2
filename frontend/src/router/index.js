@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TheHomeView from '@/views/TheHomeView.vue'
 import TheHotplaceView from '@/views/TheHotplaceView.vue'
 import TheHotplaceBurgerView from '@/views/TheHotplaceBurgerView.vue'
+import TheMyPlanView from '@/views/TheMyPlanView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,12 @@ const router = createRouter({
       name: 'hotplaceburger',
       // beforeEnter: onlyAuthUser,
       component: TheHotplaceBurgerView
+    },
+    {
+      path: '/myplan',
+      name: 'myplan',
+      component: TheMyPlanView,
+      props: true
     },
     {
       path: '/user',

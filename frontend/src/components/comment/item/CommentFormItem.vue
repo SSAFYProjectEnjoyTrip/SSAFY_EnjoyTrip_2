@@ -73,7 +73,6 @@ function writeComment() {
       alert(msg)
       window.location.reload()
       // moveList()
-      // moveReload()
     },
     (error) => console.log(error)
   )
@@ -99,12 +98,11 @@ function updateComment() {
   )
 }
 
-// function moveReload() {
-//   location.reload()
-// }
-
 // // 로그인한사람있으면 확인
 const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
+function moveReload() {
+  location.reload()
+}
 </script>
 
 <template>
@@ -122,15 +120,8 @@ const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
         </div>
       </div>
       <div class="btn-div">
-        <button
-          type="submit"
-          class="submit-button"
-          v-if="type == 'regist'"
-          onclick="writeComment()"
-        >
-          등록
-        </button>
-        <button type="submit" class="submit-button" v-else onclick="updateComment()">수정</button>
+        <button type="submit" class="submit-button" v-if="type == 'regist'">등록</button>
+        <button type="submit" class="submit-button" v-else>수정</button>
       </div>
     </div>
     <div class="comment-container" v-else>

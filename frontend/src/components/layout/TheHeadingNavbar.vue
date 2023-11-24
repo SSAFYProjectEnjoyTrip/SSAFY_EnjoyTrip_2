@@ -76,6 +76,9 @@ onMounted(() => {
             <a class="nav-link" href="/hotplaceburger"><b>버거버거</b></a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/myplan"><b>마이플랜</b></a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/hotplace"><b>계획세우기</b></a>
           </li>
           <li class="nav-item">

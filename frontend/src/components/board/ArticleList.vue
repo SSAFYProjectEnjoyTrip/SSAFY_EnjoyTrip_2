@@ -64,8 +64,7 @@ function onPageChange(value) {
 }
 
 // // 로그인한사람있으면 확인
-const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
-
+const loginUser = JSON.parse(sessionStorage.getItem('loginUser'))
 </script>
 
 <template>
@@ -77,7 +76,7 @@ const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
         <button class="btn btn-success" @click="moveHandler">등록</button>
       </div>
       <div class="regi-btn-box" v-else>
-        <div style="font-size: 13px; font-weight: bold;">로그인해야 작성하실 수 있습니다 !</div>
+        <div style="font-size: 13px; font-weight: bold">로그인해야 작성하실 수 있습니다 !</div>
       </div>
       <div class="row search-box">
         <div class="col-6">
@@ -98,18 +97,16 @@ const loginUser = JSON.parse(sessionStorage.getItem("loginUser"))
       <table class="table table-hover">
         <thead>
           <colgroup>
-            <col width="10%" />
-            <col width="15%" />
+            <col width="25%" />
             <col width="25%" />
             <col width="25%" />
             <col width="25%" />
           </colgroup>
           <tr class="text-center">
-            <th width="12%">리뷰번호</th>
-            <th width="30%">별점</th>
-            <th width="31%">제목</th>
-            <th width="15%">글쓴이</th>
-            <th width="12%">조회수</th>
+            <th width="25%">리뷰번호</th>
+            <th width="25%">별점</th>
+            <th width="25%">제목</th>
+            <th width="25%">글쓴이</th>
           </tr>
         </thead>
         <tbody>
