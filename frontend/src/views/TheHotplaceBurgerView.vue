@@ -232,18 +232,18 @@ const planTmp = ref({
 const insertPlan = () => {
   myList.value.forEach((element) => {
   console.log("어케 나오는건데!!!", element); // 예시: 콘솔에 원소 출력
-  planTmp.value.contentId = element.contentId;
-  planTmp.value.firstImage = element.firstImage;
-  planTmp.value.addr1 = element.addr1;
-  planTmp.value.title = element.title;
-  planTmp.value.latitude = element.latitude;
-  planTmp.value.longitude = element.longitude;
-  planTmp.value.travelTime = element.selectedDate;
+  // planTmp.value.contentId = element.contentId;
+  // planTmp.value.firstImage = element.firstImage;
+  // planTmp.value.addr1 = element.addr1;
+  // planTmp.value.title = element.title;
+  // planTmp.value.latitude = element.latitude;
+  // planTmp.value.longitude = element.longitude;
+  // planTmp.value.travelTime = element.selectedDate;
 
-  console.log("엥??", planTmp);
+  // console.log("엥??", planTmp);
 
   addPlan(
-    planTmp,
+    element,
         (response) => {
       let msg = '마이플랜 등록 시 문제 발생했습니다.'
       if (response.status == 200) msg = '마이플랜 등록 완료'

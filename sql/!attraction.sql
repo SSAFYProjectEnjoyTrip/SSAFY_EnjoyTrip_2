@@ -218,14 +218,14 @@ CREATE TABLE `myplan` (
   `title` varchar(100),
   `latitude` decimal(20,17),
   `longitude` decimal(20,17),
-  `travleTime` TIMESTAMP,
-  
-  CONSTRAINT fk_content_id FOREIGN KEY (contentId) REFERENCES attraction_info(content_id),
+  `travelTime` TIMESTAMP,
+
   CONSTRAINT fk_userId FOREIGN KEY (userId) REFERENCES member(userId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saboardboardved_cs_client */;
 
 -- insert into myplan (contentId, userId) values (126176, 'aa'); 
+delete from myplan where userId='ssafy';
 select * from myplan;
 
 

@@ -34,16 +34,6 @@
   import { useMemberStore } from '@/stores/member'
   import { getPlanList } from '@/api/myplan'
 
-  import { defineProps } from 'vue';
-
-  const props = defineProps({
-  title: {
-    Type: String,
-    default: '',
-  },
-})
-
-const title = ref(props.title)
 
   const memberStore = useMemberStore()
   const { userInfo } = storeToRefs(memberStore)
@@ -51,8 +41,6 @@ const title = ref(props.title)
   const myPlanList = ref([])
 
   onMounted(() => {
-    console.log(props.title)
-    console.log(props.data)
     // console.log(props.data.title)
     getPlan()
   })
